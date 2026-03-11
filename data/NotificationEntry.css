@@ -3,6 +3,8 @@ notification .card {
     padding: 6px;
     /* Box shadow is clipped to the margin area */
     margin: 0.75em 1em;
+    /*Make sure notification always fills width*/
+    min-width: calc(360px - 1em);
 }
 
 notification .title {
@@ -46,7 +48,7 @@ notification .close {
         inset 0 -1px 0 0 alpha(#fff, 0.01),
         0 0 0 1px alpha(#000, 0.7),
         0 1px 2px alpha(#000, 0.16),
-        0 2px 3px alpha #000, 0.23);
+        0 2px 3px alpha(#000, 0.23);
     margin: 3px;
 }
 

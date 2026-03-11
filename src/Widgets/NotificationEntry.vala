@@ -209,7 +209,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         overlay.add_overlay (delete_revealer);
 
         var carousel = new Hdy.Carousel () {
-            hexpand = true,
             allow_scroll_wheel = false,
             // Eliminate race between packing widgets and page_changed
             reveal_duration = 0
