@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-15 20:48+0000\n"
-"PO-Revision-Date: 2023-09-14 19:08+0000\n"
-"Last-Translator: DutchVipperloid <svenroelof@e.email>\n"
-"Language-Team: Dutch <https://l10n.elementary.io/projects/wingpanel/"
+"PO-Revision-Date: 2026-01-03 13:55+0000\n"
+"Last-Translator: Bas Ernst <50556177+ErnstBas@users.noreply.github.com>\n"
+"Language-Team: Dutch <https://l10n.elementaryos.org/projects/wingpanel/"
 "indicator-notifications-extra/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: data/notifications.metainfo.xml.in:11
 msgid "Notifications Indicator"
@@ -60,15 +60,15 @@ msgstr "Verwijder notificatie uit lijst als de bubbel is afgewezen"
 
 #: data/notifications.metainfo.xml.in:62
 msgid "Ensure accurate count in tooltip"
-msgstr ""
+msgstr "Zorgen voor een nauwkeurige telling in de tooltip"
 
 #: data/notifications.metainfo.xml.in:84
 msgid "Fixes:"
-msgstr ""
+msgstr "Reparaties:"
 
 #: data/notifications.metainfo.xml.in:86
 msgid "Clear All button no longer leaves undeletable notifications"
-msgstr ""
+msgstr "De knop Alles wissen laat niet langer onwisbare meldingen achter"
 
 #, fuzzy
 #~| msgid "Fix issues with disappearing notifications"

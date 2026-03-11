@@ -3,16 +3,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-15 20:48+0000\n"
-"PO-Revision-Date: 2022-07-21 09:52+0000\n"
-"Last-Translator: colindemian <colindemian@outlook.com>\n"
-"Language-Team: Chinese (Simplified) <https://l10n.elementary.io/projects/"
-"wingpanel/wingpanel-indicator-notifications/zh_Hans/>\n"
+"PO-Revision-Date: 2025-08-10 04:55+0000\n"
+"Last-Translator: JieXu <xujie0739@qq.com>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"l10n.elementaryos.org/projects/wingpanel/wingpanel-indicator-notifications/"
+"zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 5.11.4\n"
 "X-Launchpad-Export-Date: 2017-03-14 07:32+0000\n"
 
 #: src/Indicator.vala:53
@@ -61,12 +62,10 @@ msgid_plural "%u notifications"
 msgstr[0] "%u 条通知"
 
 #: src/Indicator.vala:256
-#, fuzzy, c-format
-#| msgid "%i app"
-#| msgid_plural "%i apps"
+#, c-format
 msgid "%u app"
 msgid_plural "%u apps"
-msgstr[0] "%i 个应用"
+msgstr[0] "%u 个应用程序"
 
 #: src/Widgets/NotificationsList.vala:33
 msgid "No Notifications"
@@ -87,11 +86,11 @@ msgstr "清除所有 %s 通知"
 
 #: src/Widgets/AppEntry.vala:116
 msgid "Show less"
-msgstr ""
+msgstr "显示更少"
 
 #: src/Widgets/AppEntry.vala:116
 msgid "Show more"
-msgstr ""
+msgstr "显示更多"
 
 #~ msgid "now"
 #~ msgstr "现在"
