@@ -2,8 +2,7 @@ notification .card {
     border-radius: 6px;
     padding: 6px;
     /* Box shadow is clipped to the margin area */
-    /* Dont' use em here it messes up carousel */
-    margin: 9px 12px;
+    margin: 0.75em 1em;
 }
 
 notification .title {
