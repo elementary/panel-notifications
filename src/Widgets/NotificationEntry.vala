@@ -67,8 +67,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                     pixel_size = ICON_SIZE_PRIMARY,
                     overflow = HIDDEN
                 };
-                masked_image.add_css_class (Granite.STYLE_CLASS_CARD);
-                masked_image.add_css_class (Granite.STYLE_CLASS_ROUNDED);
+                masked_image.add_css_class (Granite.CssClass.CARD);
 
                 app_image.pixel_size = ICON_SIZE_SECONDARY;
                 app_image.halign = app_image.valign = END;
@@ -118,13 +117,13 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         var time_label = new Gtk.Label (Granite.DateTime.get_relative_datetime (notification.timestamp)) {
             margin_end = 6
         };
-        time_label.add_css_class (Granite.STYLE_CLASS_DIM_LABEL);
+        time_label.add_css_class (Granite.CssClass.DIM);
 
         var grid = new Gtk.Grid () {
             hexpand = true,
             column_spacing = 6
         };
-        grid.add_css_class (Granite.STYLE_CLASS_CARD);
+        grid.add_css_class (Granite.CssClass.CARD);
 
 
         var delete_button = new Gtk.Button.from_icon_name ("window-close-symbolic") {
@@ -287,7 +286,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             var image = new Gtk.Image.from_icon_name ("edit-delete-symbolic");
 
             var label = new Gtk.Label (_("Delete"));
-            label.add_css_class (Granite.STYLE_CLASS_SMALL_LABEL);
+            label.add_css_class (Granite.CssClass.SMALL);
 
             var delete_internal_grid = new Gtk.Grid () {
                 halign = alignment,

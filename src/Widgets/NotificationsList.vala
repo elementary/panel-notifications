@@ -40,7 +40,7 @@ public class Notifications.NotificationsList : Granite.Bin {
             visible = true
         };
         placeholder.add_css_class (Granite.STYLE_CLASS_H2_LABEL);
-        placeholder.add_css_class (Granite.STYLE_CLASS_DIM_LABEL);
+        placeholder.add_css_class (Granite.CssClass.DIM);
 
         listbox = new Gtk.ListBox () {
             activate_on_single_click = true,
