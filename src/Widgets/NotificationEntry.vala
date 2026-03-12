@@ -208,18 +208,18 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         overlay.add_overlay (delete_revealer);
 
-        var deck = new Hdy.Deck () {
-            can_swipe_back = true,
-            can_swipe_forward = true,
-            transition_type = Hdy.DeckTransitionType.SLIDE
+        var carousel = new Hdy.Carousel () {
+            allow_scroll_wheel = false,
+            // Eliminate race between packing widgets and page_changed
+            reveal_duration = 0
         };
-        deck.add (delete_left);
-        deck.add (overlay);
-        deck.add (delete_right);
-        deck.visible_child = overlay;
+        carousel.add (delete_left);
+        carousel.add (overlay);
+        carousel.add (delete_right);
+        carousel.scroll_to (overlay);
 
         revealer = new Gtk.Revealer () {
-            child = deck,
+            child = carousel,
             reveal_child = true,
             transition_duration = 200,
             transition_type = SLIDE_UP
@@ -252,14 +252,8 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             return GLib.Source.CONTINUE;
         });
 
-        deck.notify["visible-child"].connect (() => {
-            if (deck.transition_running == false && deck.visible_child != overlay) {
-                clear ();
-            }
-        });
-
-        deck.notify["transition-running"].connect (() => {
-            if (deck.transition_running == false && deck.visible_child != overlay) {
+        carousel.page_changed.connect (() => {
+            if (carousel.position != 1) {
                 clear ();
             }
         });
@@ -285,11 +279,15 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         }
     }
 
-    private class DeleteAffordance : Gtk.Bin {
+    private class DeleteAffordance : Gtk.Box {
         public Gtk.Align alignment { get; construct; }
 
         public DeleteAffordance (Gtk.Align alignment) {
             Object (alignment: alignment);
+        }
+
+        class construct {
+           set_css_name ("delete-affordance");
         }
 
         construct {
@@ -298,19 +296,16 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             var label = new Gtk.Label (_("Delete"));
             label.get_style_context ().add_class (Granite.STYLE_CLASS_SMALL_LABEL);
 
-            var delete_internal_grid = new Gtk.Grid () {
+            var box = new Gtk.Box (VERTICAL, 3) {
                 halign = alignment,
                 hexpand = true,
-                row_spacing = 3,
                 valign = CENTER,
                 vexpand = true
             };
-            delete_internal_grid.attach (image, 0, 0);
-            delete_internal_grid.attach (label, 0, 1);
+            box.add (image);
+            box.add (label);
 
-            child = delete_internal_grid;
-
-            get_style_context ().add_class ("delete-affordance");
+            add (box);
         }
     }
 
