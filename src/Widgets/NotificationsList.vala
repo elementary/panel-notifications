@@ -28,6 +28,12 @@ public class Notifications.NotificationsList : Gtk.Bin {
 
     private Gtk.ListBox listbox;
 
+    private static Settings settings;
+
+    static construct {
+        settings = new Settings ("io.elementary.wingpanel.notifications");
+    }
+
     construct {
         app_entries = new Gee.HashMap<string, AppEntry> ();
         table = new HashTable<string, int> (str_hash, str_equal);
@@ -86,7 +92,7 @@ public class Notifications.NotificationsList : Gtk.Bin {
         Idle.add (add_entry.callback);
         yield;
 
-        if (add_to_session) { // If notification was obtained from session do not write it back
+        if (add_to_session && settings.get_boolean ("keep-notifications")) { // If notification was obtained from session do not write it back
             Session.get_instance ().add_notification (notification);
         }
 

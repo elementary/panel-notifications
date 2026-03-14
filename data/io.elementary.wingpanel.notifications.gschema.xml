@@ -6,5 +6,10 @@
     <summary>The expanded state of the headers</summary>
     <description>The expanded state of the headers</description>
   </key>
+  <key name="keep-notifications" type="b">
+    <default>true</default>
+    <summary>Whether to keep notifications</summary>
+    <description>Whether notifications are saved to persist accross reboots</description>
+  </key>
 </schema>
 </schemalist>
