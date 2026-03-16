@@ -8,7 +8,7 @@
 You'll need the following dependencies:
 
 * libadwaita-1-dev
-* libgdk-pixbuf2.0-dev
+* libgdk-pixbuf-2.0-dev
 * libglib2.0-dev
 * libgranite-7-dev >= 7.7.0
 * libgtk-4-dev
