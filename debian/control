@@ -6,11 +6,11 @@ Build-Depends: debhelper (>= 10.5.1),
                gettext,
                gobject-introspection,
                libadwaita-1-dev,
-               libgdk-pixbuf2.0-dev,
+               libgdk-pixbuf-2.0-dev,
                libglib2.0-dev,
                libgranite-7-dev,
                libgtk-4-dev,
-               libwingpanel-8-dev,
+               libwingpanel-9-dev,
                meson,
                valac (>= 0.28)
 Standards-Version: 4.1.1
