@@ -212,13 +212,10 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         var carousel = new Adw.Carousel () {
             allow_scroll_wheel = false,
-            // Eliminate race between packing widgets and page_changed
-            reveal_duration = 0
         };
-        carousel.append (delete_left);
         carousel.append (overlay);
+        carousel.prepend (delete_left);
         carousel.append (delete_right);
-        carousel.scroll_to (overlay, false);
 
         revealer = new Gtk.Revealer () {
             child = carousel,
