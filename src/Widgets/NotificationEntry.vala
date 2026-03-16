@@ -68,6 +68,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                     overflow = HIDDEN
                 };
                 masked_image.add_css_class (Granite.CssClass.CARD);
+                masked_image.add_css_class (Granite.CssClass.CHECKERBOARD);
 
                 app_image.pixel_size = ICON_SIZE_SECONDARY;
                 app_image.halign = app_image.valign = END;

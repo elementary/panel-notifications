@@ -1,4 +1,4 @@
-notification .card {
+notification grid.card {
     border-radius: 6px;
     padding: 6px;
     /* Box shadow is clipped to the margin area */
