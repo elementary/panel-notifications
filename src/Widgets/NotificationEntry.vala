@@ -211,7 +211,9 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         overlay.add_overlay (delete_revealer);
 
         var carousel = new Adw.Carousel () {
-            allow_scroll_wheel = false
+            allow_scroll_wheel = false,
+            // Eliminate race between packing widgets and page_changed
+            reveal_duration = 0
         };
         carousel.append (delete_left);
         carousel.append (overlay);
@@ -282,25 +284,26 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             Object (alignment: alignment);
         }
 
+        class construct {
+           set_css_name ("delete-affordance");
+        }
+
         construct {
             var image = new Gtk.Image.from_icon_name ("edit-delete-symbolic");
 
             var label = new Gtk.Label (_("Delete"));
             label.add_css_class (Granite.CssClass.SMALL);
 
-            var delete_internal_grid = new Gtk.Grid () {
+            var box = new Gtk.Box (VERTICAL, 3) {
                 halign = alignment,
                 hexpand = true,
-                row_spacing = 3,
                 valign = CENTER,
                 vexpand = true
             };
-            delete_internal_grid.attach (image, 0, 0);
-            delete_internal_grid.attach (label, 0, 1);
+            box.append (image);
+            box.append (label);
 
-            child = delete_internal_grid;
-
-            add_css_class ("delete-affordance");
+            child = box;
         }
     }
 
