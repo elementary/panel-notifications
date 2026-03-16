@@ -131,7 +131,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         app_entry.clear.disconnect (clear_app_entry);
         app_entries.unset (app_entry.app_id);
         app_entry.clear_all_notification_entries ();
-        app_entry.destroy ();
+        listbox.remove (app_entry);
 
         if (app_entries.size == 0) {
             Session.get_instance ().clear ();

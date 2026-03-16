@@ -257,11 +257,11 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         Source.remove (timeout_id);
 
         if (!revealer.child_revealed) {
-            destroy ();
+            ((Gtk.ListBox) parent).remove (this);
         } else {
             revealer.notify["child-revealed"].connect (() => {
                 if (!revealer.child_revealed) {
-                    destroy ();
+                    ((Gtk.ListBox) parent).remove (this);
                 }
             });
             revealer.reveal_child = false;
