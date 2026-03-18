@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 20:48+0000\n"
+"POT-Creation-Date: 2026-03-18 16:56+0000\n"
 "PO-Revision-Date: 2024-12-19 15:16+0000\n"
 "Last-Translator: David M <rbndavid@gmail.com>\n"
 "Language-Team: Catalan <https://l10n.elementary.io/projects/wingpanel/"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 5.8.4\n"
 "X-Launchpad-Export-Date: 2017-04-05 07:46+0000\n"
 
-#: src/Indicator.vala:53
+#: src/Indicator.vala:52
 msgid "Updating notifications…"
 msgstr "S'actualitzen les notificacions…"
 
@@ -31,65 +31,65 @@ msgstr "Neteja totes les notificacions"
 msgid "Notifications Settings…"
 msgstr "Paràmetres de les notificacions…"
 
-#: src/Indicator.vala:237
+#: src/Indicator.vala:235
 msgid "Middle-click to disable Do Not Disturb"
 msgstr "Clic del mig per inhabilitar el mode de no empipar"
 
-#: src/Indicator.vala:239
+#: src/Indicator.vala:237
 msgid "Middle-click to enable Do Not Disturb"
 msgstr "Clic del mig per habilitar el mode de no empipar"
 
-#: src/Indicator.vala:246
+#: src/Indicator.vala:244
 msgid "No notifications"
 msgstr "Sense notificacions"
 
-#: src/Indicator.vala:249
+#: src/Indicator.vala:247
 msgid "1 notification"
 msgstr "1 notificació"
 
 #. / TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
 #. / e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
-#: src/Indicator.vala:254
+#: src/Indicator.vala:252
 #, c-format
 msgid "%s from %s"
 msgstr "%s de %s"
 
-#: src/Indicator.vala:255
+#: src/Indicator.vala:253
 #, c-format
 msgid "%u notification"
 msgid_plural "%u notifications"
 msgstr[0] "%u notificació"
 msgstr[1] "%u notificacions"
 
-#: src/Indicator.vala:256
+#: src/Indicator.vala:254
 #, c-format
 msgid "%u app"
 msgid_plural "%u apps"
 msgstr[0] "%u aplicació"
 msgstr[1] "%u aplicacions"
 
-#: src/Widgets/NotificationsList.vala:33
+#: src/Widgets/NotificationsList.vala:35
 msgid "No Notifications"
 msgstr "No hi ha notificacions"
 
-#: src/Widgets/NotificationEntry.vala:310
+#: src/Widgets/NotificationEntry.vala:292
 msgid "Delete"
 msgstr "Suprimeix"
 
-#: src/Widgets/AppEntry.vala:53
+#: src/Widgets/AppEntry.vala:57
 msgid "Other"
 msgstr "Altres"
 
-#: src/Widgets/AppEntry.vala:80
+#: src/Widgets/AppEntry.vala:83
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Neteja totes les notificacions: %s"
 
-#: src/Widgets/AppEntry.vala:116
+#: src/Widgets/AppEntry.vala:118
 msgid "Show less"
 msgstr "Mostra'n menys"
 
-#: src/Widgets/AppEntry.vala:116
+#: src/Widgets/AppEntry.vala:118
 msgid "Show more"
 msgstr "Mostra'n més"
 

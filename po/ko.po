@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 20:48+0000\n"
+"POT-Creation-Date: 2026-03-18 16:56+0000\n"
 "PO-Revision-Date: 2022-08-06 10:54+0000\n"
 "Last-Translator: Jung-Kyu Park <bagjunggyu@gmail.com>\n"
 "Language-Team: Korean <https://l10n.elementary.io/projects/wingpanel/"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 4.4.2\n"
 "X-Launchpad-Export-Date: 2017-03-14 07:32+0000\n"
 
-#: src/Indicator.vala:53
+#: src/Indicator.vala:52
 msgid "Updating notifications…"
 msgstr "업데이트 알림…"
 
@@ -31,36 +31,36 @@ msgstr "모든 알림 정리"
 msgid "Notifications Settings…"
 msgstr "알림 설정…"
 
-#: src/Indicator.vala:237
+#: src/Indicator.vala:235
 msgid "Middle-click to disable Do Not Disturb"
 msgstr "마우스 가운데 버튼 클릭으로 방해 금지 비활성화"
 
-#: src/Indicator.vala:239
+#: src/Indicator.vala:237
 msgid "Middle-click to enable Do Not Disturb"
 msgstr "마우스 가운데 버튼 클릭으로 방해 금지 활성화"
 
-#: src/Indicator.vala:246
+#: src/Indicator.vala:244
 msgid "No notifications"
 msgstr "알림 없음"
 
-#: src/Indicator.vala:249
+#: src/Indicator.vala:247
 msgid "1 notification"
 msgstr "알림 1개"
 
 #. / TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
 #. / e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
-#: src/Indicator.vala:254
+#: src/Indicator.vala:252
 #, c-format
 msgid "%s from %s"
 msgstr "%s 에서 %s"
 
-#: src/Indicator.vala:255
+#: src/Indicator.vala:253
 #, c-format
 msgid "%u notification"
 msgid_plural "%u notifications"
 msgstr[0] "%u 알림"
 
-#: src/Indicator.vala:256
+#: src/Indicator.vala:254
 #, fuzzy, c-format
 #| msgid "%i app"
 #| msgid_plural "%i apps"
@@ -68,28 +68,28 @@ msgid "%u app"
 msgid_plural "%u apps"
 msgstr[0] "%i 앱"
 
-#: src/Widgets/NotificationsList.vala:33
+#: src/Widgets/NotificationsList.vala:35
 msgid "No Notifications"
 msgstr "알림 없음"
 
-#: src/Widgets/NotificationEntry.vala:310
+#: src/Widgets/NotificationEntry.vala:292
 msgid "Delete"
 msgstr "삭제"
 
-#: src/Widgets/AppEntry.vala:53
+#: src/Widgets/AppEntry.vala:57
 msgid "Other"
 msgstr "기타"
 
-#: src/Widgets/AppEntry.vala:80
+#: src/Widgets/AppEntry.vala:83
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "모든 %s 알림 정리"
 
-#: src/Widgets/AppEntry.vala:116
+#: src/Widgets/AppEntry.vala:118
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:116
+#: src/Widgets/AppEntry.vala:118
 msgid "Show more"
 msgstr ""
 

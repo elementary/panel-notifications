@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 20:48+0000\n"
+"POT-Creation-Date: 2026-03-18 16:56+0000\n"
 "PO-Revision-Date: 2024-08-07 18:16+0000\n"
 "Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Danish <https://l10n.elementary.io/projects/wingpanel/"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 "X-Launchpad-Export-Date: 2017-03-19 06:49+0000\n"
 
-#: src/Indicator.vala:53
+#: src/Indicator.vala:52
 #, fuzzy
 #| msgid "No Notifications"
 msgid "Updating notifications…"
@@ -33,21 +33,21 @@ msgstr "Ryd alle notifikationer"
 msgid "Notifications Settings…"
 msgstr "Notifikationsindstillinger…"
 
-#: src/Indicator.vala:237
+#: src/Indicator.vala:235
 msgid "Middle-click to disable Do Not Disturb"
 msgstr ""
 
-#: src/Indicator.vala:239
+#: src/Indicator.vala:237
 msgid "Middle-click to enable Do Not Disturb"
 msgstr ""
 
-#: src/Indicator.vala:246
+#: src/Indicator.vala:244
 #, fuzzy
 #| msgid "No Notifications"
 msgid "No notifications"
 msgstr "Ingen notifikationer"
 
-#: src/Indicator.vala:249
+#: src/Indicator.vala:247
 #, fuzzy
 #| msgid "No Notifications"
 msgid "1 notification"
@@ -55,12 +55,12 @@ msgstr "Ingen notifikationer"
 
 #. / TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
 #. / e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
-#: src/Indicator.vala:254
+#: src/Indicator.vala:252
 #, c-format
 msgid "%s from %s"
 msgstr ""
 
-#: src/Indicator.vala:255
+#: src/Indicator.vala:253
 #, fuzzy, c-format
 #| msgid "No Notifications"
 msgid "%u notification"
@@ -68,36 +68,36 @@ msgid_plural "%u notifications"
 msgstr[0] "Ingen notifikationer"
 msgstr[1] "Ingen notifikationer"
 
-#: src/Indicator.vala:256
+#: src/Indicator.vala:254
 #, c-format
 msgid "%u app"
 msgid_plural "%u apps"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Widgets/NotificationsList.vala:33
+#: src/Widgets/NotificationsList.vala:35
 msgid "No Notifications"
 msgstr "Ingen notifikationer"
 
-#: src/Widgets/NotificationEntry.vala:310
+#: src/Widgets/NotificationEntry.vala:292
 msgid "Delete"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:53
+#: src/Widgets/AppEntry.vala:57
 msgid "Other"
 msgstr "Anden"
 
-#: src/Widgets/AppEntry.vala:80
+#: src/Widgets/AppEntry.vala:83
 #, fuzzy, c-format
 #| msgid "Clear All Notifications"
 msgid "Clear all %s notifications"
 msgstr "Ryd alle notifikationer"
 
-#: src/Widgets/AppEntry.vala:116
+#: src/Widgets/AppEntry.vala:118
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:116
+#: src/Widgets/AppEntry.vala:118
 msgid "Show more"
 msgstr ""
 
