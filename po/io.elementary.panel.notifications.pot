@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the notifications-indicator package.
+# This file is distributed under the same license as the io.elementary.panel.notifications package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: notifications-indicator\n"
+"Project-Id-Version: io.elementary.panel.notifications\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 20:48+0000\n"
+"POT-Creation-Date: 2026-03-18 16:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/Indicator.vala:53
+#: src/Indicator.vala:52
 msgid "Updating notifications…"
 msgstr ""
 
@@ -34,64 +34,64 @@ msgstr ""
 msgid "Notifications Settings…"
 msgstr ""
 
-#: src/Indicator.vala:237
+#: src/Indicator.vala:235
 msgid "Middle-click to disable Do Not Disturb"
 msgstr ""
 
-#: src/Indicator.vala:239
+#: src/Indicator.vala:237
 msgid "Middle-click to enable Do Not Disturb"
 msgstr ""
 
-#: src/Indicator.vala:246
+#: src/Indicator.vala:244
 msgid "No notifications"
 msgstr ""
 
-#: src/Indicator.vala:249
+#: src/Indicator.vala:247
 msgid "1 notification"
 msgstr ""
 
 #. / TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
 #. / e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
-#: src/Indicator.vala:254
+#: src/Indicator.vala:252
 #, c-format
 msgid "%s from %s"
 msgstr ""
 
-#: src/Indicator.vala:255
+#: src/Indicator.vala:253
 #, c-format
 msgid "%u notification"
 msgid_plural "%u notifications"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Indicator.vala:256
+#: src/Indicator.vala:254
 #, c-format
 msgid "%u app"
 msgid_plural "%u apps"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Widgets/NotificationsList.vala:33
+#: src/Widgets/NotificationsList.vala:35
 msgid "No Notifications"
 msgstr ""
 
-#: src/Widgets/NotificationEntry.vala:310
+#: src/Widgets/NotificationEntry.vala:292
 msgid "Delete"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:53
+#: src/Widgets/AppEntry.vala:57
 msgid "Other"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:80
+#: src/Widgets/AppEntry.vala:83
 #, c-format
 msgid "Clear all %s notifications"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:116
+#: src/Widgets/AppEntry.vala:118
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:116
+#: src/Widgets/AppEntry.vala:118
 msgid "Show more"
 msgstr ""
