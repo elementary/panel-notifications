@@ -22,7 +22,7 @@
   <url type="donation">https://elementary.io/get-involved#funding</url>
   <url type="help">https://github.com/elementary/panel-notifications/discussions/categories/q-a</url>
   <url type="homepage">https://elementary.io/</url>
-  <url type="translate">https://l10n.elementary.io/projects/wingpanel/wingpanel-indicator-notifications/</url>
+  <url type="translate">https://l10n.elementary.io/projects/wingpanel/notifications/</url>
 
   <developer id="org.elementaryos">
     <name>elementary, Inc.</name>
