@@ -5,9 +5,6 @@
     <file compressed="true">indicator.css</file>
     <file compressed="true">NotificationEntry.css</file>
   </gresource>
-  <gresource prefix="/io/elementary/notifications">
-    <file alias="image-mask.svg" compressed="true" preprocess="xml-stripblanks">image-mask.svg</file>
-  </gresource>
   <gresource prefix="org/elementary/wingpanel/icons">
     <file alias="24x24/status/notification-disabled-10-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-10.svg</file>
     <file alias="24x24/status/notification-disabled-20-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-20.svg</file>

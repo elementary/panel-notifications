@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-<schema path="/io/elementary/wingpanel/notifications/" id="io.elementary.wingpanel.notifications">
+<schema path="/io/elementary/panel/notifications/" id="io.elementary.panel.notifications">
   <key name="headers" type="a{sb}">
     <default>{}</default>
     <summary>The expanded state of the headers</summary>

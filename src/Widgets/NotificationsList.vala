@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Notifications.NotificationsList : Gtk.Bin {
+public class Notifications.NotificationsList : Granite.Bin {
     public signal void close_popover ();
     public signal void items_changed ();
 
@@ -39,10 +39,8 @@ public class Notifications.NotificationsList : Gtk.Bin {
             margin_end = 12,
             visible = true
         };
-
-        unowned Gtk.StyleContext placeholder_style_context = placeholder.get_style_context ();
-        placeholder_style_context.add_class (Granite.STYLE_CLASS_H2_LABEL);
-        placeholder_style_context.add_class (Gtk.STYLE_CLASS_DIM_LABEL);
+        placeholder.add_css_class (Granite.STYLE_CLASS_H2_LABEL);
+        placeholder.add_css_class (Granite.CssClass.DIM);
 
         listbox = new Gtk.ListBox () {
             activate_on_single_click = true,
@@ -51,7 +49,6 @@ public class Notifications.NotificationsList : Gtk.Bin {
         listbox.set_placeholder (placeholder);
 
         child = listbox;
-        show_all ();
 
         insert_action_group (ACTION_GROUP_PREFIX, new NotificationsMonitor ().notifications_action_group);
 
@@ -81,7 +78,6 @@ public class Notifications.NotificationsList : Gtk.Bin {
             table.insert (app_entry.app_id, 0);
         }
 
-        show_all ();
 
         Idle.add (add_entry.callback);
         yield;
@@ -135,7 +131,7 @@ public class Notifications.NotificationsList : Gtk.Bin {
         app_entry.clear.disconnect (clear_app_entry);
         app_entries.unset (app_entry.app_id);
         app_entry.clear_all_notification_entries ();
-        app_entry.destroy ();
+        listbox.remove (app_entry);
 
         if (app_entries.size == 0) {
             Session.get_instance ().clear ();
@@ -149,8 +145,10 @@ public class Notifications.NotificationsList : Gtk.Bin {
             unowned var notification_entry = (NotificationEntry) row;
 
             if (notification_entry.notification.default_action != null) {
-                unowned var action_group = get_action_group (ACTION_GROUP_PREFIX);
-                action_group.activate_action (notification_entry.notification.default_action, null);
+                activate_action (
+                    ACTION_PREFIX + notification_entry.notification.default_action,
+                    null
+                );
                 close_popover ();
             } else {
                 try {

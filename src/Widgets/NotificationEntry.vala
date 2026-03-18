@@ -36,8 +36,8 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         var provider = new Gtk.CssProvider ();
         provider.load_from_resource ("io/elementary/wingpanel/notifications/NotificationEntry.css");
 
-        Gtk.StyleContext.add_provider_for_screen (
-            Gdk.Screen.get_default (),
+        Gtk.StyleContext.add_provider_for_display (
+            Gdk.Display.get_default (),
             provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         );
@@ -63,10 +63,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         if (notification.image_path != null && notification.image_path != "") {
             try {
-                var scale = get_style_context ().get_scale ();
-                var pixbuf = new Gdk.Pixbuf.from_file_at_size (notification.image_path, ICON_SIZE_PRIMARY * scale, ICON_SIZE_PRIMARY * scale);
-
-                var masked_image = new Notifications.MaskedImage (pixbuf);
+                var masked_image = new Gtk.Image.from_file (notification.image_path) {
+                    pixel_size = ICON_SIZE_PRIMARY,
+                    overflow = HIDDEN
+                };
+                masked_image.add_css_class (Granite.CssClass.CARD);
+                masked_image.add_css_class (Granite.CssClass.CHECKERBOARD);
 
                 app_image.pixel_size = ICON_SIZE_SECONDARY;
                 app_image.halign = app_image.valign = END;
@@ -84,7 +86,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             image_overlay.child = app_image;
 
             if (notification.badge_icon != null) {
-                var badge_image = new Gtk.Image.from_gicon (notification.badge_icon, Gtk.IconSize.LARGE_TOOLBAR) {
+                var badge_image = new Gtk.Image.from_gicon (notification.badge_icon) {
                     halign = END,
                     valign = END,
                     pixel_size = ICON_SIZE_SECONDARY
@@ -111,31 +113,32 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             use_markup = true,
             xalign = 0
         };
-        title_label.get_style_context ().add_class ("title");
+        title_label.add_css_class ("title");
 
         var time_label = new Gtk.Label (Granite.DateTime.get_relative_datetime (notification.timestamp)) {
             margin_end = 6
         };
-        time_label.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
+        time_label.add_css_class (Granite.CssClass.DIM);
 
         var grid = new Gtk.Grid () {
             hexpand = true,
             column_spacing = 6
         };
-        grid.get_style_context ().add_class (Granite.STYLE_CLASS_CARD);
+        grid.add_css_class (Granite.CssClass.CARD);
 
 
         var delete_button = new Gtk.Button.from_icon_name ("window-close-symbolic") {
             halign = START,
             valign = START
         };
-        delete_button.get_style_context ().add_class ("close");
+        delete_button.add_css_class ("close");
 
         var delete_revealer = new Gtk.Revealer () {
             child = delete_button,
             halign = START,
             valign = START,
             reveal_child = false,
+            overflow = VISIBLE,
             transition_duration = Granite.TRANSITION_DURATION_CLOSE,
             transition_type = CROSSFADE
         };
@@ -185,7 +188,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             grid.attach (action_area, 0, 2, 3);
 
             foreach (var button in notification.buttons) {
-                action_area.pack_end (button);
+                action_area.append (button);
             };
         }
 
@@ -194,29 +197,26 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             margin_top = 9,
             margin_bottom = 9
         };
-        delete_left.get_style_context ().add_class ("left");
+        delete_left.add_css_class ("left");
 
         var delete_right = new DeleteAffordance (START) {
             // Have to match with the grid
             margin_top = 9,
             margin_bottom = 9
         };
-        delete_right.get_style_context ().add_class ("right");
+        delete_right.add_css_class ("right");
 
         var overlay = new Gtk.Overlay () {
             child = grid
         };
         overlay.add_overlay (delete_revealer);
 
-        var carousel = new Hdy.Carousel () {
+        var carousel = new Adw.Carousel () {
             allow_scroll_wheel = false,
-            // Eliminate race between packing widgets and page_changed
-            reveal_duration = 0
         };
-        carousel.add (delete_left);
-        carousel.add (overlay);
-        carousel.add (delete_right);
-        carousel.scroll_to (overlay);
+        carousel.append (overlay);
+        carousel.prepend (delete_left);
+        carousel.append (delete_right);
 
         revealer = new Gtk.Revealer () {
             child = carousel,
@@ -225,27 +225,21 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             transition_type = SLIDE_UP
         };
 
-        var eventbox = new Gtk.EventBox ();
-        eventbox.events |= Gdk.EventMask.ENTER_NOTIFY_MASK &
-                           Gdk.EventMask.LEAVE_NOTIFY_MASK;
-
-        eventbox.add (revealer);
-
-        child = eventbox;
-
-        show_all ();
+        child = revealer;
 
         delete_button.clicked.connect (() => clear ());
 
-        eventbox.enter_notify_event.connect ((event) => {
+        var motion_controller = new Gtk.EventControllerMotion ();
+
+        motion_controller.enter.connect (() => {
             delete_revealer.reveal_child = true;
-            return Gdk.EVENT_STOP;
         });
 
-        eventbox.leave_notify_event.connect ((event) => {
+        motion_controller.leave.connect (() => {
             delete_revealer.reveal_child = false;
-            return Gdk.EVENT_STOP;
         });
+
+        revealer.add_controller (motion_controller);
 
         timeout_id = Timeout.add_seconds_full (Priority.DEFAULT, 60, () => {
             time_label.label = Granite.DateTime.get_relative_datetime (notification.timestamp);
@@ -263,23 +257,25 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         Source.remove (timeout_id);
 
         if (!revealer.child_revealed) {
-            destroy ();
+            ((Gtk.ListBox) parent).remove (this);
         } else {
             revealer.notify["child-revealed"].connect (() => {
                 if (!revealer.child_revealed) {
-                    destroy ();
+                    ((Gtk.ListBox) parent).remove (this);
                 }
             });
             revealer.reveal_child = false;
         }
 
         if (notification.server_id > 0) {
-            unowned var action_group = get_action_group (NotificationsList.ACTION_GROUP_PREFIX);
-            action_group.activate_action ("close", new Variant.array (VariantType.UINT32, { notification.server_id }));
+            activate_action_variant (
+                NotificationsList.ACTION_PREFIX + "close",
+                new Variant.array (VariantType.UINT32, { notification.server_id })
+            );
         }
     }
 
-    private class DeleteAffordance : Gtk.Box {
+    private class DeleteAffordance : Granite.Bin {
         public Gtk.Align alignment { get; construct; }
 
         public DeleteAffordance (Gtk.Align alignment) {
@@ -291,10 +287,10 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         }
 
         construct {
-            var image = new Gtk.Image.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.MENU);
+            var image = new Gtk.Image.from_icon_name ("edit-delete-symbolic");
 
             var label = new Gtk.Label (_("Delete"));
-            label.get_style_context ().add_class (Granite.STYLE_CLASS_SMALL_LABEL);
+            label.add_css_class (Granite.CssClass.SMALL);
 
             var box = new Gtk.Box (VERTICAL, 3) {
                 halign = alignment,
@@ -302,10 +298,10 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                 valign = CENTER,
                 vexpand = true
             };
-            box.add (image);
-            box.add (label);
+            box.append (image);
+            box.append (label);
 
-            add (box);
+            child = box;
         }
     }
 

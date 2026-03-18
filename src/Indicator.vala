@@ -12,13 +12,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private GLib.Settings notify_settings;
 
     private Gtk.Box? main_box = null;
-    private Gtk.ModelButton clear_all_btn;
+    private Wingpanel.PopoverMenuItem clear_all_btn;
     private Gtk.Spinner? dynamic_icon = null;
     private NotificationsList nlist;
 
     private List<Notification> previous_session = null;
     private NotificationsMonitor monitor;
-    private Gtk.GestureMultiPress gesture_click;
 
     public Indicator () {
         Object (
@@ -42,17 +41,17 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             var provider = new Gtk.CssProvider ();
             provider.load_from_resource ("io/elementary/wingpanel/notifications/indicator.css");
 
-            Gtk.StyleContext.add_provider_for_screen (
-                Gdk.Screen.get_default (),
+            Gtk.StyleContext.add_provider_for_display (
+                Gdk.Display.get_default (),
                 provider,
                 Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
             );
 
             dynamic_icon = new Gtk.Spinner () {
-                active = true,
+                spinning = true,
                 tooltip_markup = _("Updating notifications…")
             };
-            dynamic_icon.get_style_context ().add_class ("notification-icon");
+            dynamic_icon.add_css_class ("notification-icon");
 
             nlist = new NotificationsList ();
 
@@ -70,7 +69,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 set_display_icon_name ();
             });
 
-            gesture_click = new Gtk.GestureMultiPress (dynamic_icon) {
+            var gesture_click = new Gtk.GestureClick () {
                 button = Gdk.BUTTON_MIDDLE
             };
 
@@ -79,6 +78,8 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 gesture_click.set_state (CLAIMED);
                 gesture_click.reset ();
             });
+
+            dynamic_icon.add_controller (gesture_click);
 
             previous_session = Session.get_instance ().get_session_notifications ();
             Timeout.add (2000, () => { // Do not block animated drawing of wingpanel
@@ -103,14 +104,14 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     public override Gtk.Widget? get_widget () {
         if (main_box == null) {
             var not_disturb_switch = new Granite.SwitchModelButton (_("Do Not Disturb"));
-            not_disturb_switch.get_style_context ().add_class (Granite.STYLE_CLASS_H4_LABEL);
+            not_disturb_switch.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
 
             var dnd_switch_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
                 margin_top = 3,
                 margin_bottom = 3
             };
 
-            var scrolled = new Gtk.ScrolledWindow (null, null) {
+            var scrolled = new Gtk.ScrolledWindow () {
                 child = nlist,
                 hscrollbar_policy = NEVER,
                 max_content_height = 500,
@@ -122,24 +123,23 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 margin_bottom = 3
             };
 
-            clear_all_btn = new Gtk.ModelButton () {
+            clear_all_btn = new Wingpanel.PopoverMenuItem () {
                 text = _("Clear All Notifications")
             };
 
-            var settings_btn = new Gtk.ModelButton () {
+            var settings_btn = new Wingpanel.PopoverMenuItem () {
                 text = _("Notifications Settings…")
             };
 
             main_box = new Gtk.Box (VERTICAL, 0) {
                 width_request = 360
             };
-            main_box.add (not_disturb_switch);
-            main_box.add (dnd_switch_separator);
-            main_box.add (scrolled);
-            main_box.add (clear_all_btn_separator);
-            main_box.add (clear_all_btn);
-            main_box.add (settings_btn);
-            main_box.show_all ();
+            main_box.append (not_disturb_switch);
+            main_box.append (dnd_switch_separator);
+            main_box.append (scrolled);
+            main_box.append (clear_all_btn_separator);
+            main_box.append (clear_all_btn);
+            main_box.append (settings_btn);
 
             notify_settings.bind ("do-not-disturb", not_disturb_switch, "active", GLib.SettingsBindFlags.DEFAULT);
 
@@ -203,15 +203,14 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void set_display_icon_name () {
-        unowned var dynamic_icon_style_context = dynamic_icon.get_style_context ();
         if (notify_settings.get_boolean ("do-not-disturb")) {
-            dynamic_icon_style_context.add_class ("disabled");
+            dynamic_icon.add_css_class ("disabled");
         } else if (nlist != null && nlist.app_entries.size > 0) {
-            dynamic_icon_style_context.remove_class ("disabled");
-            dynamic_icon_style_context.add_class ("new");
+            dynamic_icon.remove_css_class ("disabled");
+            dynamic_icon.add_css_class ("new");
         } else {
-            dynamic_icon_style_context.remove_class ("disabled");
-            dynamic_icon_style_context.remove_class ("new");
+            dynamic_icon.remove_css_class ("disabled");
+            dynamic_icon.remove_css_class ("new");
         }
         update_tooltip ();
     }

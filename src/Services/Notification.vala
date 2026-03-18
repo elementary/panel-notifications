@@ -123,7 +123,7 @@ public class Notifications.Notification : Object {
             image_path = image_path.replace ("-symbolic", "");
 
             // GLib.Notification also sends icon names via this hint
-            if (Gtk.IconTheme.get_default ().has_icon (image_path) && image_path != app_icon) {
+            if (Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).has_icon (image_path) && image_path != app_icon) {
                 badge_icon = new ThemedIcon (image_path);
             }
 

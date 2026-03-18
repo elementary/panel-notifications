@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2019–2023 elementary, Inc. <contact@elementary.io> -->
 <component type="addon">
-  <id>io.elementary.wingpanel.notifications</id>
-  <translation type="gettext">notifications-indicator</translation>
+  <id>io.elementary.panel.notifications</id>
+  <translation type="gettext">io.elementary.panel.notifications</translation>
   <extends>io.elementary.wingpanel</extends>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
@@ -14,13 +14,13 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/elementary/wingpanel-indicator-notifications/7.1.1/data/screenshot.png</image>
+      <image>https://raw.githubusercontent.com/elementary/panel-notifications/7.1.1/data/screenshot.png</image>
     </screenshot>
   </screenshots>
 
-  <url type="bugtracker">https://github.com/elementary/wingpanel-indicator-notifications/issues</url>
+  <url type="bugtracker">https://github.com/elementary/panel-notifications/issues</url>
   <url type="donation">https://elementary.io/get-involved#funding</url>
-  <url type="help">https://github.com/elementary/wingpanel-indicator-notifications/discussions/categories/q-a</url>
+  <url type="help">https://github.com/elementary/panel-notifications/discussions/categories/q-a</url>
   <url type="homepage">https://elementary.io/</url>
   <url type="translate">https://l10n.elementary.io/projects/wingpanel/wingpanel-indicator-notifications/</url>
 
@@ -50,7 +50,7 @@
         </ul>
       </description>
       <issues>
-        <issue url="https://github.com/elementary/wingpanel-indicator-notifications/issues/9">Replacing a bubble gives two notification entries</issue>
+        <issue url="https://github.com/elementary/panel-notifications/issues/9">Replacing a bubble gives two notification entries</issue>
       </issues>
     </release>
 
@@ -64,9 +64,9 @@
         </ul>
       </description>
       <issues>
-        <issue url="https://github.com/elementary/wingpanel-indicator-notifications/issues/58">The character ' is not rendered correctly</issue>
-        <issue url="https://github.com/elementary/wingpanel-indicator-notifications/issues/168">Indicator width changes when there are no notifications</issue>
-        <issue url="https://github.com/elementary/wingpanel-indicator-notifications/issues/251">Update indicator animation</issue>
+        <issue url="https://github.com/elementary/panel-notifications/issues/58">The character ' is not rendered correctly</issue>
+        <issue url="https://github.com/elementary/panel-notifications/issues/168">Indicator width changes when there are no notifications</issue>
+        <issue url="https://github.com/elementary/panel-notifications/issues/251">Update indicator animation</issue>
       </issues>
     </release>
 
