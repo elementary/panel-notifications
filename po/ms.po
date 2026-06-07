@@ -3,16 +3,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-18 16:56+0000\n"
-"PO-Revision-Date: 2016-12-14 14:03+0000\n"
-"Last-Translator: Timothy <timothy.wong@rocketmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-06-08 05:56+0000\n"
+"Last-Translator: Automatic translation add-on <noreply-addon-"
+"autotranslate@weblate.org>\n"
+"Language-Team: Malay <https://l10n.elementaryos.org/projects/wingpanel/"
+"notifications/ms/>\n"
+"Language: ms\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.5\n"
 "X-Launchpad-Export-Date: 2017-03-14 07:32+0000\n"
-"X-Generator: Launchpad (build 18331)\n"
 
 #: src/Indicator.vala:52
 #, fuzzy
@@ -84,7 +86,7 @@ msgstr ""
 
 #: src/Widgets/AppEntry.vala:57
 msgid "Other"
-msgstr ""
+msgstr "Lain-lain"
 
 #: src/Widgets/AppEntry.vala:83
 #, fuzzy, c-format
