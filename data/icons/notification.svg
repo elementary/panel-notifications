@@ -1,18 +1,91 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   height="24"
-   width="24"
-   version="1.1"
-   id="svg6"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs10" />
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state-names='state0 state1 state2'
+        gpa:state='0'
+        width='24'
+        height='24'>
+  <line
+          id='1'
+          class='transparent-fill'
+          visibility='hidden'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='1.25'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='4'
+          x1='6.045'
+          y1='5.42123'
+          x2='19.2458'
+          y2='18.6085'
+          gpa:stroke-minwidth='25%'
+          gpa:stroke-maxwidth='200%'
+          gpa:states='state2'
+          gpa:transition-type='animate'
+          gpa:transition-easing='ease-in-out'
+          gpa:transition-duration='200ms'>
+  </line>
   <path
-     color="#bebebe"
-     d="M 12,5 A 1,1 0 0 0 11,6 V 6.01 C 9.236,6.466 8.002,8.178 8,10 8,10 8,15 6.34,15.621 6.324,15.632 6.317,15.652 6.3,15.664 A 0.726,0.726 0 0 0 6.139,15.84 C 6.121,15.867 6.1,15.888 6.086,15.916 A 0.738,0.738 0 0 0 6,16.25 C 6,16.666 6.335,17 6.75,17 h 10.5 C 17.666,17 18,16.666 18,16.25 A 0.738,0.738 0 0 0 17.914,15.916 C 17.9,15.888 17.879,15.866 17.862,15.84 A 0.725,0.725 0 0 0 17.7,15.664 C 17.684,15.652 17.677,15.632 17.66,15.621 16,15.001 16,10 16,10 15.998,8.177 14.765,6.465 13,6.01 V 6 A 1,1 0 0 0 12,5 Z M 10.067,18 A 2,2 0 0 0 12,19.5 2,2 0 0 0 13.936,18 Z"
-     fill="#666"
-     overflow="visible"
-     style="font-variation-settings:normal;opacity:1;isolation:auto;mix-blend-mode:normal;vector-effect:none;fill:#555761;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;marker:none;stop-color:#000000"
-     id="path2" />
+          class=''
+          style='isolation: auto'
+          color='rgb(190,190,190)'
+          fill='url(#gpa:foreground) rgb(0,0,0)'
+          fill-opacity='1'
+          fill-rule='nonzero'
+          overflow='visible'
+          d='M 12 5 A 1 1 0 0 0 11 6 L 11 6.01 C 9.236 6.466, 8.002 8.178, 8 10 C 8 10, 8 15, 6.34 15.621 C 6.324 15.632, 6.317 15.652, 6.3 15.664 A 0.726 0.726 0 0 0 6.139 15.84 C 6.121 15.867, 6.1 15.888, 6.086 15.916 A 0.738 0.738 0 0 0 6 16.25 C 6 16.666, 6.335 17, 6.75 17 L 17.25 17 C 17.666 17, 18 16.666, 18 16.25 A 0.738 0.738 0 0 0 17.914 15.916 C 17.9 15.888, 17.879 15.866, 17.862 15.84 A 0.725 0.725 0 0 0 17.7 15.664 C 17.684 15.652, 17.677 15.632, 17.66 15.621 C 16 15.001, 16 10, 16 10 C 15.998 8.177, 14.765 6.465, 13 6.01 L 13 6 A 1 1 0 0 0 12 5 Z M 10.067 18 A 2 2 0 0 0 12 19.5 A 2 2 0 0 0 13.936 18 Z'
+          gpa:states='state0'
+          gpa:animation-repeat='0'
+          gpa:animation-segment='0'>
+  </path>
+  <path
+          class=''
+          style='mix-blend-mode: normal; isolation: auto'
+          visibility='hidden'
+          opacity='0.5'
+          color='rgb(190,190,190)'
+          fill='url(#gpa:foreground) rgb(0,0,0)'
+          fill-opacity='1'
+          fill-rule='nonzero'
+          d='M 11.545 5.7422 C 10.3276 6.07355, 9.2715 6.9714, 8.7735 8.1699 C 8.7735 8.1699, 6.8592 12.79, 5.088 12.7285 C 5.069 12.7325, 5.05557 12.7474, 5.03527 12.7519 C 4.95817 12.7735, 4.88444 12.8082, 4.81847 12.8535 C 4.79147 12.8716, 4.76394 12.8818, 4.74034 12.9023 C 4.65044 12.9766, 4.57966 13.0708, 4.53331 13.1777 C 4.37412 13.562, 4.55616 13.9994, 4.93956 14.1582 L 14.6408 18.1758 C 15.0251 18.335, 15.4601 18.1558, 15.6193 17.7715 C 15.6622 17.6631, 15.6791 17.5457, 15.6681 17.4297 C 15.6661 17.3985, 15.6544 17.3704, 15.6486 17.3398 C 15.6338 17.2609, 15.6063 17.185, 15.5666 17.1152 C 15.5564 17.098, 15.5586 17.0772, 15.547 17.0606 C 14.7747 16.3408, 15.1436 14.418, 15.5666 12.9747 A 5 5 0 0 1 11.0002 8.00005 A 5 5 0 0 1 11.5451 5.74225 Z M 10.4063 17.5042 C 10.4799 18.4422, 11.2082 19.2256, 12.1778 19.3323 C 12.7475 19.3946, 13.2852 19.2081, 13.6895 18.8636 Z'
+          gpa:states='state1'
+          gpa:animation-repeat='0'
+          gpa:animation-segment='0'>
+  </path>
+  <path
+          class=''
+          style='mix-blend-mode: normal; isolation: auto'
+          visibility='hidden'
+          opacity='0.5'
+          fill='url(#gpa:foreground) rgb(0,0,0)'
+          fill-opacity='1'
+          fill-rule='nonzero'
+          d='M 12 5 A 1 1 0 0 0 11 6 L 11 6.00977 C 9.774 6.32669, 8.8045 7.25087, 8.3262 8.39647 L 16.9297 17 L 17.25 17 C 17.666 17, 18 16.666, 18 16.25 A 0.738 0.738 0 0 0 17.9141 15.916 C 17.9001 15.888, 17.8783 15.8658, 17.8613 15.8398 A 0.725 0.725 0 0 0 17.6992 15.664 C 17.6832 15.652, 17.6772 15.6321, 17.6602 15.6211 C 16.0002 15.0011, 16 9.99997, 16 9.99997 C 15.998 8.17697, 14.765 6.46477, 13 6.00977 L 13 6 A 1 1 0 0 0 12 5 Z M 8.0059 9.8418 C 8.00377 9.89459, 8.0001 9.947, 8.00004 10 C 8.00004 10, 7.99988 15.0001, 6.33984 15.6211 C 6.32384 15.6321, 6.31778 15.6521, 6.30078 15.6641 A 0.726 0.726 0 0 0 6.13867 15.8399 C 6.12067 15.8668, 6.09993 15.888, 6.08593 15.916 A 0.738 0.738 0 0 0 6 16.25 C 6 16.666, 6.335 17, 6.75 17 L 15.1641 17 Z M 10.0664 18 A 2 2 0 0 0 12 19.5 A 2 2 0 0 0 13.9355 18 Z'
+          gpa:states='state2'
+          gpa:animation-repeat='0'
+          gpa:animation-segment='0'>
+  </path>
+  <path
+          class=''
+          style='mix-blend-mode: normal; isolation: auto'
+          visibility='hidden'
+          transform='scale(1, 1)'
+          color='rgb(190,190,190)'
+          fill='url(#gpa:error) rgb(204,0,0)'
+          fill-opacity='1'
+          fill-rule='nonzero'
+          stroke='none'
+          overflow='visible'
+          d='M 20 8 A 4 4 0 0 1 12 8 A 4 4 0 1 1 20 8 Z'
+          gpa:states='state1'
+          gpa:transition-type='animate'
+          gpa:transition-easing='ease-in-out'
+          gpa:transition-duration='200ms'
+          gpa:animation-repeat='0'
+          gpa:animation-segment='0'>
+  </path>
 </svg>

@@ -3,8 +3,6 @@
   <gresource prefix="/io/elementary/wingpanel/notifications">
     <file compressed="true">AppEntry.css</file>
     <file compressed="true">NotificationEntry.css</file>
-  </gresource>
-  <gresource prefix="org/elementary/wingpanel/icons">
-      <file alias="scalable/status/demo-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/demo.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">icons/notification.svg</file>
   </gresource>
 </gresources>
