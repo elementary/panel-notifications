@@ -51,7 +51,7 @@ shared_module(
         dependency('glib-2.0'),
         dependency('gobject-2.0'),
         dependency('granite-7', version: '>=7.7.0'),
-        dependency('gtk4'),
+        dependency('gtk4', version: '>=4.22'),
         dependency('libadwaita-1'),
         wingpanel_dep
     ],

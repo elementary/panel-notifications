@@ -1,0 +1,218 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        width='16'
+        height='16'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>bell ringinging ring alarm</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+          id='path0'
+          fill='none'
+          stroke='none'
+          d='M 7.6266 2 Q 8 2.03941, 8.3734 2'
+          gpa:states='0 1'>
+    <set
+            id='gpa:out-of-state:path0'
+            attributeName='visibility'
+            begin='gpa:states(0 1, 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63)'
+            end='gpa:states(2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0 1)'
+            to='hidden'/>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'/>
+    <animate
+            id='gpa:animation:path0-stroke-dasharray'
+            attributeName='stroke-dasharray'
+            begin='gpa:states(2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0 1); 0ms'
+            end='gpa:states(0 1, 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63)'
+            dur='400ms'
+            repeatCount='indefinite'
+            values='0 2; 1 0; 0 2'
+            keySplines='0.42 0 0.58 1; 0.42 0 0.58 1'
+            keyTimes='0; 0.5; 1'
+            calcMode='spline'/>
+    <animate
+            id='gpa:animation:path0-stroke-dashoffset'
+            attributeName='stroke-dashoffset'
+            begin='gpa:states(2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0 1); 0ms'
+            end='gpa:states(0 1, 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63)'
+            dur='400ms'
+            repeatCount='indefinite'
+            values='-1; 0; -1'
+            keySplines='0.42 0 0.58 1; 0.42 0 0.58 1'
+            keyTimes='0; 0.5; 1'
+            calcMode='spline'/>
+  </path>
+  <path
+          id='path1'
+          fill='none'
+          stroke='none'
+          d='M 7.00144 13.1985 Q 8 13.2479, 8.99856 13.1985'
+          gpa:states='0 1'>
+    <set
+            id='gpa:out-of-state:path1'
+            attributeName='visibility'
+            begin='gpa:states(0 1, 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63)'
+            end='gpa:states(2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0 1)'
+            to='hidden'/>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'/>
+    <animate
+            id='gpa:animation:path1-stroke-dasharray'
+            attributeName='stroke-dasharray'
+            begin='gpa:states(2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0 1); 0ms'
+            end='gpa:states(0 1, 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63)'
+            dur='600ms'
+            repeatCount='indefinite'
+            values='0 2; 1 0; 0 2'
+            keySplines='0.42 0 0.58 1; 0.42 0 0.58 1'
+            keyTimes='0; 0.5; 1'
+            calcMode='spline'/>
+    <animate
+            id='gpa:animation:path1-stroke-dashoffset'
+            attributeName='stroke-dashoffset'
+            begin='gpa:states(2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0 1); 0ms'
+            end='gpa:states(0 1, 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63)'
+            dur='600ms'
+            repeatCount='indefinite'
+            values='-1; 0; -1'
+            keySplines='0.42 0 0.58 1; 0.42 0 0.58 1'
+            keyTimes='0; 0.5; 1'
+            calcMode='spline'/>
+  </path>
+  <path
+          id='path2'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='butt'
+          stroke-linejoin='round'
+          d='M 9.25503 13 C 9.25503 13.4698, 9.0044 13.9039, 8.59755 14.1388 C 8.1907 14.3737, 7.68943 14.3737, 7.28258 14.1388 C 6.87573 13.9039, 6.6251 13.4698, 6.6251 13'
+          gpa:stroke='foreground'
+          gpa:states='1'>
+    <set
+            id='gpa:out-of-state:path2'
+            attributeName='visibility'
+            begin='gpa:states(1, 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63); 0ms'
+            end='gpa:states(0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 1)'
+            to='hidden'/>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'/>
+    <animateMotion
+            id='gpa:attachment:path2'
+            begin='0ms'
+            end='0.001ms'
+            dur='0.001ms'
+            fill='freeze'
+            keyTimes='0; 1'
+            calcMode='linear'
+            keyPoints='0; 0'
+            rotate='auto'>
+      <mpath href='path1'/>
+    </animateMotion>
+    <animateMotion
+            id='gpa:attachment-animation:path2'
+            begin='gpa:animation:path1-stroke-dasharray.begin'
+            end='gpa:animation:path1-stroke-dasharray.end'
+            dur='600ms'
+            fill='freeze'
+            keySplines='0.42 0 0.58 1; 0.42 0 0.58 1'
+            keyTimes='0; 0.5; 1'
+            calcMode='spline'
+            keyPoints='1; 0; 1'
+            rotate='auto'>
+      <mpath href='path1'/>
+    </animateMotion>
+  </path>
+  <path
+          id='path3'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 3 13 L 13 13 L 12 13 L 12 7 C 12 4.79086, 10.2091 3, 8 3 C 5.79086 3, 4 4.79086, 4 7 L 4 13 Z'
+          gpa:stroke='foreground'
+          gpa:states='1'>
+    <set
+            id='gpa:out-of-state:path3'
+            attributeName='visibility'
+            begin='gpa:states(1, 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63); 0ms'
+            end='gpa:states(0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 1)'
+            to='hidden'/>
+    <set
+            id='gpa:path-length'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'/>
+    <animateMotion
+            id='gpa:attachment:path3'
+            begin='0ms'
+            end='0.001ms'
+            dur='0.001ms'
+            fill='freeze'
+            keyTimes='0; 1'
+            calcMode='linear'
+            keyPoints='0; 0'
+            rotate='auto'>
+      <mpath href='path0'/>
+    </animateMotion>
+    <animateMotion
+            id='gpa:attachment-animation:path3'
+            begin='gpa:animation:path0-stroke-dasharray.begin'
+            end='gpa:animation:path0-stroke-dasharray.end'
+            dur='400ms'
+            fill='freeze'
+            keySplines='0.42 0 0.58 1; 0.42 0 0.58 1'
+            keyTimes='0; 0.5; 1'
+            calcMode='spline'
+            keyPoints='1; 0; 1'
+            rotate='auto'>
+      <mpath href='path0'/>
+    </animateMotion>
+  </path>
+  <path
+          id='path4'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 9.25503 12 C 9.25503 12.4698, 9.0044 12.9039, 8.59755 13.1388 C 8.1907 13.3737, 7.68943 13.3737, 7.28258 13.1388 C 6.87573 12.9039, 6.6251 12.4698, 6.6251 12 M 3 12 L 13 12 L 12 12 L 12 6 C 12 3.79086, 10.2091 2, 8 2 C 5.79086 2, 4 3.79086, 4 6 L 4 12 Z'
+          gpa:stroke='foreground'
+          gpa:states='0'>
+    <set
+            id='gpa:out-of-state:path4'
+            attributeName='visibility'
+            begin='gpa:states(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63)'
+            end='gpa:states(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+            to='hidden'/>
+  </path>
+</svg>

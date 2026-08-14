@@ -8,12 +8,16 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private const string CHILD_PATH = "/io/elementary/notifications/applications/%s/";
     private const string REMEMBER_KEY = "remember";
 
+    private const int ICON_STATE_NORMAL = 0;
+    private const int ICON_STATE_NEW = 1;
+    private const int ICON_STATE_DISABLED = 2;
+
     private Gee.HashMap<string, Settings> app_settings_cache;
     private GLib.Settings notify_settings;
 
     private Gtk.Box? main_box = null;
     private Wingpanel.PopoverMenuItem clear_all_btn;
-    private Gtk.Spinner? dynamic_icon = null;
+    private Gtk.Svg? dynamic_icon = null;
     private NotificationsList nlist;
 
     private List<Notification> previous_session = null;
@@ -38,20 +42,11 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     public override Gtk.Widget get_display_widget () {
         if (dynamic_icon == null) {
-            var provider = new Gtk.CssProvider ();
-            provider.load_from_resource ("io/elementary/wingpanel/notifications/indicator.css");
+            dynamic_icon = new Gtk.Svg.from_resource ("resource:///org/elementary/wingpanel/icons/scalable/status/demo-symbolic.svg");
 
-            Gtk.StyleContext.add_provider_for_display (
-                Gdk.Display.get_default (),
-                provider,
-                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-            );
-
-            dynamic_icon = new Gtk.Spinner () {
-                spinning = true,
+            var image = new Gtk.Image.from_paintable (svg) {
                 tooltip_markup = _("Updating notifications…")
             };
-            dynamic_icon.add_css_class ("notification-icon");
 
             nlist = new NotificationsList ();
 
@@ -92,7 +87,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             });
         }
 
-        return dynamic_icon;
+        return image;
     }
 
     private async void load_session_notifications () {
@@ -204,13 +199,11 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
-            dynamic_icon.add_css_class ("disabled");
+            dynamic_icon.state = ICON_STATE_DISABLED;
         } else if (nlist != null && nlist.app_entries.size > 0) {
-            dynamic_icon.remove_css_class ("disabled");
-            dynamic_icon.add_css_class ("new");
+            dynamic_icon.state = ICON_STATE_NEW;
         } else {
-            dynamic_icon.remove_css_class ("disabled");
-            dynamic_icon.remove_css_class ("new");
+            dynamic_icon.state = ICON_STATE_NORMAL;
         }
         update_tooltip ();
     }
