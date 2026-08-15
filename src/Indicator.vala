@@ -50,6 +50,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 tooltip_markup = _("Updating notifications…")
             };
 
+            image.realize.connect (() => {
+                dynamic_icon.set_frame_clock (image.get_frame_clock ());
+                dynamic_icon.play ();
+            });
+
+
             nlist = new NotificationsList ();
 
             monitor.notification_received.connect (on_notification_received);
