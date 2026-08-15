@@ -17,8 +17,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private Gtk.Box? main_box = null;
     private Wingpanel.PopoverMenuItem clear_all_btn;
-    private Gtk.Svg? dynamic_icon = null;
-    private Gtk.Image image;
+    private Granite.Symbol? dynamic_icon = null;
     private NotificationsList nlist;
 
     private List<Notification> previous_session = null;
@@ -43,18 +42,10 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     public override Gtk.Widget get_display_widget () {
         if (dynamic_icon == null) {
-            dynamic_icon = new Gtk.Svg.from_resource ("/io/elementary/wingpanel/notifications/icons/notification.svg");
-
-            image = new Gtk.Image.from_paintable (dynamic_icon) {
+            dynamic_icon = new Granite.Symbol ("/io/elementary/wingpanel/notifications/icons/notification.svg") {
                 pixel_size = 24,
                 tooltip_markup = _("Updating notifications…")
             };
-
-            image.realize.connect (() => {
-                dynamic_icon.set_frame_clock (image.get_frame_clock ());
-                dynamic_icon.play ();
-            });
-
 
             nlist = new NotificationsList ();
 
@@ -82,7 +73,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 gesture_click.reset ();
             });
 
-            image.add_controller (gesture_click);
+            dynamic_icon.add_controller (gesture_click);
 
             previous_session = Session.get_instance ().get_session_notifications ();
             Timeout.add (2000, () => { // Do not block animated drawing of wingpanel
@@ -95,7 +86,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             });
         }
 
-        return image;
+        return dynamic_icon;
     }
 
     private async void load_session_notifications () {
@@ -257,7 +248,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 break;
         }
 
-        image.tooltip_markup = "%s\n%s".printf (description, accel_label);
+        dynamic_icon.tooltip_markup = "%s\n%s".printf (description, accel_label);
     }
 }
 
