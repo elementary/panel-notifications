@@ -22,15 +22,14 @@ public class Notifications.NotificationsList : Granite.Bin {
     public const string ACTION_GROUP_PREFIX = "notifications-list";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
+    private GLib.HashTable<string, GLib.DateTime> app_datetime;
     public Gee.HashMap<string, AppEntry> app_entries { get; private set; }
-
-    private HashTable<string, int> table;
 
     private Gtk.ListBox listbox;
 
     construct {
         app_entries = new Gee.HashMap<string, AppEntry> ();
-        table = new HashTable<string, int> (str_hash, str_equal);
+        app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
 
         var placeholder = new Gtk.Label (_("No Notifications")) {
             margin_top = 24,
@@ -47,25 +46,89 @@ public class Notifications.NotificationsList : Granite.Bin {
             selection_mode = NONE
         };
         listbox.set_placeholder (placeholder);
+        listbox.set_sort_func (sort_func);
 
         child = listbox;
 
         insert_action_group (ACTION_GROUP_PREFIX, new NotificationsMonitor ().notifications_action_group);
 
         listbox.row_activated.connect (on_row_activated);
+
+        var previous_session = Session.get_instance ().get_session_notifications ();
+        // Do not block animated drawing of wingpanel
+        Idle.add_once (() => {
+            foreach (unowned var notification in previous_session) {
+                unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
+                if (time == null || time.compare (notification.timestamp) <= 0) {
+                    app_datetime[notification.desktop_id] = notification.timestamp;
+                }
+
+                add_entry (notification);
+            }
+        });
     }
 
-    public async void add_entry (Notification notification, bool add_to_session = true) {
+    private int sort_func (Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
+        if (row1 is NotificationEntry && row2 is NotificationEntry) {
+            var a = ((NotificationEntry) row1).notification;
+            var b = ((NotificationEntry) row2).notification;
+            if (a.desktop_id == b.desktop_id) {
+                return Notification.compare (a, b);
+            }
+        }
+
+        unowned string? app_id_a = null;
+        unowned string? app_id_b = null;
+        unowned GLib.DateTime? time_a = null;
+        unowned GLib.DateTime? time_b = null;
+
+        if (row1 is AppEntry) {
+            var a = ((AppEntry) row1);
+            app_id_a = a.app_id;
+            time_a = app_datetime[a.app_id];
+        } else {
+            var a = ((NotificationEntry) row1).notification;
+            app_id_a = a.desktop_id;
+            time_a = app_datetime[a.desktop_id];
+        }
+
+        if (row2 is AppEntry) {
+            var b = ((AppEntry) row2);
+            app_id_b = b.app_id;
+            time_b = app_datetime[b.app_id];
+        } else {
+            var b = ((NotificationEntry) row2).notification;
+            app_id_b = b.desktop_id;
+            time_b = app_datetime[b.desktop_id];
+        }
+
+        if (app_id_a == app_id_b) {
+            if (row1 is AppEntry) {
+                return -1;
+            } else if (row2 is AppEntry) {
+                return 1;
+            }
+        }
+
+        if (time_a != null && time_b != null) {
+            return time_b.compare (time_a);
+        } else if (time_a != null) {
+            return -1;
+        } else if (time_b != null) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public async void add_entry (Notification notification) {
         var entry = new NotificationEntry (notification);
+        listbox.append (entry);
 
         if (app_entries[notification.desktop_id] != null) {
             var app_entry = app_entries[notification.desktop_id];
-
-            resort_app_entry (app_entry);
             app_entry.add_notification_entry (entry);
 
-            int insert_pos = table.get (app_entry.app_id);
-            listbox.insert (entry, insert_pos + 1);
         } else {
             var app_entry = new AppEntry (notification.app_info);
             app_entry.add_notification_entry (entry);
@@ -73,19 +136,18 @@ public class Notifications.NotificationsList : Granite.Bin {
 
             app_entries[notification.desktop_id] = app_entry;
 
-            listbox.prepend (app_entry);
-            listbox.insert (entry, 1);
-            table.insert (app_entry.app_id, 0);
+            listbox.append (app_entry);
         }
 
+        unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
+        if (time == null || time.compare (notification.timestamp) <= 0) {
+            app_datetime[notification.desktop_id] = notification.timestamp;
+        }
 
         Idle.add (add_entry.callback);
         yield;
 
-        if (add_to_session) { // If notification was obtained from session do not write it back
-            Session.get_instance ().add_notification (notification);
-        }
-
+        listbox.invalidate_sort ();
         items_changed ();
     }
 
@@ -114,17 +176,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
 
         close_popover ();
-    }
-
-    private void resort_app_entry (AppEntry app_entry) {
-        if (listbox.get_row_at_index (0) != app_entry) {
-            listbox.remove (app_entry);
-            listbox.prepend (app_entry);
-            app_entry.app_notifications.foreach ((notification_entry) => {
-                listbox.remove (notification_entry);
-                listbox.insert (notification_entry, 1);
-            });
-        }
     }
 
     private void clear_app_entry (AppEntry app_entry) {

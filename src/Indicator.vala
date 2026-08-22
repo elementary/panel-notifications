@@ -15,8 +15,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private Wingpanel.PopoverMenuItem clear_all_btn;
     private Gtk.Spinner? dynamic_icon = null;
     private NotificationsList nlist;
-
-    private List<Notification> previous_session = null;
     private NotificationsMonitor monitor;
 
     public Indicator () {
@@ -54,6 +52,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             dynamic_icon.add_css_class ("notification-icon");
 
             nlist = new NotificationsList ();
+            nlist.items_changed.connect (set_display_icon_name);
 
             monitor.notification_received.connect (on_notification_received);
             monitor.notification_closed.connect (on_notification_closed);
@@ -80,25 +79,9 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             });
 
             dynamic_icon.add_controller (gesture_click);
-
-            previous_session = Session.get_instance ().get_session_notifications ();
-            Timeout.add (2000, () => { // Do not block animated drawing of wingpanel
-                load_session_notifications.begin (() => { // load asynchromously so spinner continues to rotate
-                    set_display_icon_name ();
-                    nlist.items_changed.connect (set_display_icon_name);
-                });
-
-                return Source.REMOVE;
-            });
         }
 
         return dynamic_icon;
-    }
-
-    private async void load_session_notifications () {
-        foreach (var notification in previous_session) {
-            yield nlist.add_entry (notification, false); // This is slow as NotificationEntry is complex
-        }
     }
 
     public override Gtk.Widget? get_widget () {
@@ -177,7 +160,9 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         }
 
         if (app_settings == null || app_settings.get_boolean (REMEMBER_KEY)) {
-            nlist.add_entry.begin (notification, true);
+            nlist.add_entry.begin (notification);
+
+            Session.get_instance ().add_notification (notification);
         }
 
         set_display_icon_name ();
