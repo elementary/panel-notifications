@@ -47,6 +47,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         };
         listbox.set_placeholder (placeholder);
         listbox.set_sort_func (sort_func);
+        listbox.set_header_func (header_func);
 
         child = listbox;
 
@@ -69,46 +70,14 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private int sort_func (Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
-        if (row1 is NotificationEntry && row2 is NotificationEntry) {
-            var a = ((NotificationEntry) row1).notification;
-            var b = ((NotificationEntry) row2).notification;
-            if (a.desktop_id == b.desktop_id) {
-                return Notification.compare (a, b);
-            }
+        var a = ((NotificationEntry) row1).notification;
+        var b = ((NotificationEntry) row2).notification;
+        if (a.desktop_id == b.desktop_id) {
+            return Notification.compare (a, b);
         }
 
-        unowned string? app_id_a = null;
-        unowned string? app_id_b = null;
-        unowned GLib.DateTime? time_a = null;
-        unowned GLib.DateTime? time_b = null;
-
-        if (row1 is AppEntry) {
-            var a = ((AppEntry) row1);
-            app_id_a = a.app_id;
-            time_a = app_datetime[a.app_id];
-        } else {
-            var a = ((NotificationEntry) row1).notification;
-            app_id_a = a.desktop_id;
-            time_a = app_datetime[a.desktop_id];
-        }
-
-        if (row2 is AppEntry) {
-            var b = ((AppEntry) row2);
-            app_id_b = b.app_id;
-            time_b = app_datetime[b.app_id];
-        } else {
-            var b = ((NotificationEntry) row2).notification;
-            app_id_b = b.desktop_id;
-            time_b = app_datetime[b.desktop_id];
-        }
-
-        if (app_id_a == app_id_b) {
-            if (row1 is AppEntry) {
-                return -1;
-            } else if (row2 is AppEntry) {
-                return 1;
-            }
-        }
+        unowned GLib.DateTime? time_a = app_datetime[a.desktop_id];
+        unowned GLib.DateTime? time_b = app_datetime[b.desktop_id];
 
         if (time_a != null && time_b != null) {
             return time_b.compare (time_a);
@@ -119,6 +88,19 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
 
         return 0;
+    }
+
+    private void header_func (Gtk.ListBoxRow row, Gtk.ListBoxRow? before) {
+        unowned var row_entry = (NotificationEntry) row;
+        unowned NotificationEntry? before_entry = (NotificationEntry) before;
+        unowned string row_app_id = row_entry.notification.desktop_id;
+
+        if (before != null && row_app_id == before_entry.notification.desktop_id) {
+            row.set_header (null);
+            return;
+        }
+
+        row.set_header (app_entries[row_app_id]);
     }
 
     public async void add_entry (Notification notification) {
@@ -135,8 +117,6 @@ public class Notifications.NotificationsList : Granite.Bin {
             app_entry.clear.connect (clear_app_entry);
 
             app_entries[notification.desktop_id] = app_entry;
-
-            listbox.append (app_entry);
         }
 
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
