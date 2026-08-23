@@ -59,11 +59,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         // Do not block animated drawing of wingpanel
         Idle.add_once (() => {
             foreach (unowned var notification in previous_session) {
-                unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
-                if (time == null || time.compare (notification.timestamp) <= 0) {
-                    app_datetime[notification.desktop_id] = notification.timestamp;
-                }
-
                 add_entry (notification);
             }
         });
