@@ -25,7 +25,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     private GLib.HashTable<string, GLib.DateTime> app_datetime;
     public Gee.HashMap<string, AppEntry> app_entries { get; private set; }
 
-    private Gtk.ListBox listbox;
+    private ListStore list_store;
 
     construct {
         app_entries = new Gee.HashMap<string, AppEntry> ();
@@ -41,12 +41,14 @@ public class Notifications.NotificationsList : Granite.Bin {
         placeholder.add_css_class (Granite.STYLE_CLASS_H2_LABEL);
         placeholder.add_css_class (Granite.CssClass.DIM);
 
-        listbox = new Gtk.ListBox () {
+        list_store = new GLib.ListStore (typeof (NotificationEntry));
+
+        var listbox = new Gtk.ListBox () {
             activate_on_single_click = true,
             selection_mode = NONE
         };
+        listbox.bind_model (list_store, (object) => (NotificationEntry) object);
         listbox.set_placeholder (placeholder);
-        listbox.set_sort_func (sort_func);
         listbox.set_header_func (header_func);
 
         child = listbox;
@@ -54,6 +56,8 @@ public class Notifications.NotificationsList : Granite.Bin {
         insert_action_group (ACTION_GROUP_PREFIX, new NotificationsMonitor ().notifications_action_group);
 
         listbox.row_activated.connect (on_row_activated);
+
+        list_store.items_changed.connect (() => items_changed ());
 
         var previous_session = Session.get_instance ().get_session_notifications ();
         // Do not block animated drawing of wingpanel
@@ -64,9 +68,9 @@ public class Notifications.NotificationsList : Granite.Bin {
         });
     }
 
-    private int sort_func (Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
-        var a = ((NotificationEntry) row1).notification;
-        var b = ((NotificationEntry) row2).notification;
+    private int sort_func (Object obj1, Object obj2) {
+        var a = ((NotificationEntry) obj1).notification;
+        var b = ((NotificationEntry) obj2).notification;
         if (a.desktop_id == b.desktop_id) {
             return Notification.compare (a, b);
         }
@@ -95,24 +99,22 @@ public class Notifications.NotificationsList : Granite.Bin {
             return;
         }
 
+        var app_entry = app_entries[row_app_id];
+        if (app_entry == null) {
+            app_entry = new AppEntry (row_entry.notification.app_info);
+            app_entry.clear.connect (clear_app_entry);
+
+            app_entries[row_app_id] = app_entry;
+        }
+
+        app_entry.add_notification_entry (row_entry);
+
         row.set_header (app_entries[row_app_id]);
     }
 
     public async void add_entry (Notification notification) {
         var entry = new NotificationEntry (notification);
-        listbox.append (entry);
-
-        if (app_entries[notification.desktop_id] != null) {
-            var app_entry = app_entries[notification.desktop_id];
-            app_entry.add_notification_entry (entry);
-
-        } else {
-            var app_entry = new AppEntry (notification.app_info);
-            app_entry.add_notification_entry (entry);
-            app_entry.clear.connect (clear_app_entry);
-
-            app_entries[notification.desktop_id] = app_entry;
-        }
+        list_store.insert_sorted (entry, sort_func);
 
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
         if (time == null || time.compare (notification.timestamp) <= 0) {
@@ -121,25 +123,11 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         Idle.add (add_entry.callback);
         yield;
-
-        listbox.invalidate_sort ();
-        items_changed ();
     }
 
-    public uint count_notifications (out uint number_of_apps) {
-        var count = 0;
-        var n_apps = 0;
-
-        for (int i = 0; listbox.get_row_at_index (i) != null; i++) {
-            if (listbox.get_row_at_index (i) is NotificationEntry) {
-                count++;
-            } else if (listbox.get_row_at_index (i) is AppEntry) {
-                n_apps++;
-            }
-        }
-
-        number_of_apps = n_apps;
-        return count;
+    public uint count_notifications (out int number_of_apps) {
+        number_of_apps = app_entries.size;
+        return list_store.n_items;
     }
 
     public void clear_all () {
@@ -150,6 +138,7 @@ public class Notifications.NotificationsList : Granite.Bin {
             clear_app_entry (entry);
         }
 
+        list_store.remove_all ();
         close_popover ();
     }
 
@@ -157,13 +146,10 @@ public class Notifications.NotificationsList : Granite.Bin {
         app_entry.clear.disconnect (clear_app_entry);
         app_entries.unset (app_entry.app_id);
         app_entry.clear_all_notification_entries ();
-        listbox.remove (app_entry);
 
         if (app_entries.size == 0) {
             Session.get_instance ().clear ();
         }
-
-        items_changed ();
     }
 
     private void on_row_activated (Gtk.ListBoxRow row) {
