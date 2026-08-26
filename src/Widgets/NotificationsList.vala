@@ -99,8 +99,8 @@ public class Notifications.NotificationsList : Granite.Bin {
             return;
         }
 
-        if (app_entries[row_entry.notification.desktop_id] != null) {
-            var app_entry = app_entries[row_entry.notification.desktop_id];
+        var app_entry = app_entries[row_entry.notification.desktop_id];
+        if (app_entry != null) {
             app_entry.add_notification_entry (row_entry);
 
         } else {
