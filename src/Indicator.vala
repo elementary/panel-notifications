@@ -17,7 +17,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private Gtk.Box? main_box = null;
     private Wingpanel.PopoverMenuItem clear_all_btn;
-    private Granite.Symbol? dynamic_icon = null;
+    private NotificationsIndicator.Symbol? dynamic_icon = null;
     private NotificationsList nlist;
 
     private List<Notification> previous_session = null;
@@ -42,7 +42,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     public override Gtk.Widget get_display_widget () {
         if (dynamic_icon == null) {
-            dynamic_icon = new Granite.Symbol ("/io/elementary/wingpanel/notifications/icons/notification.svg") {
+            dynamic_icon = new NotificationsIndicator.Symbol ("/io/elementary/wingpanel/notifications/icons/notification.svg") {
                 pixel_size = 24,
                 tooltip_markup = _("Updating notifications…")
             };
@@ -198,11 +198,11 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
-            dynamic_icon.state = ICON_STATE_DISABLED;
+            dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
         } else if (nlist != null && nlist.app_entries.size > 0) {
-            dynamic_icon.state = ICON_STATE_NEW;
+            dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
-            dynamic_icon.state = ICON_STATE_NORMAL;
+            dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
         }
         update_tooltip ();
     }
