@@ -14,6 +14,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     private const int ICON_SIZE_PRIMARY = 48;
     private const int ICON_SIZE_SECONDARY = 24;
 
+    private static Settings settings;
     private static Regex entity_regex;
     private static Regex tag_regex;
 
@@ -28,6 +29,8 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         } catch (Error e) {
             warning ("Invalid regex: %s", e.message);
         }
+
+        settings = new Settings ("io.elementary.panel.notifications");
     }
 
     class construct {
@@ -238,6 +241,18 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         motion_controller.leave.connect (() => {
             delete_revealer.reveal_child = false;
         });
+
+        settings.bind_with_mapping (
+            "headers", revealer, "reveal-child", GET,
+            (value, variant, user_data) => {
+                var app_id = ((Variant) user_data).get_string ();
+                var headers_table = (HashTable<string, bool>) variant;
+                value.set_boolean (headers_table[app_id ]);
+                return true;
+            },
+            () => false,
+            new Variant.string (notification.desktop_id), null
+        );
 
         revealer.add_controller (motion_controller);
 
