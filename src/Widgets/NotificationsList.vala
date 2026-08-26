@@ -110,15 +110,15 @@ public class Notifications.NotificationsList : Granite.Bin {
         app_entry.expander.bind_property ("active", row_entry.revealer, "reveal-child", SYNC_CREATE);
 
         row_entry.clear.connect (() => {
-            int nofication_entries = 0;
+            int entries = 0;
             for (int i = 0; i < list_store.n_items; i++) {
                 var entry = (NotificationEntry) list_store.get_item (i);
                 if (entry.notification.desktop_id == row_app_id) {
-                    nofication_entries++;
+                    entries++;
                 }
             }
 
-            if (nofication_entries == 0) {
+            if (entries == 0) {
                 clear_app_entry (app_entry);
             }
         });
