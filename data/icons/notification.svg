@@ -27,23 +27,9 @@
               fill='freeze'
               to='1'
               keyTimes='0; 1'/>
-      <path
-              id='bell'
-              display='inline'
-              transform-origin='55% 45%'
-              color='rgb(190,190,190)'
-              fill='url(#gpa:foreground) rgb(0,0,0)'
-              fill-opacity='1'
-              fill-rule='nonzero'
-              stroke='none'
-              overflow='visible'
-              d='M 12 5 C 11.4477 5, 11 5.44772, 11 6 L 11 6.01 C 9.236 6.466, 8.002 8.178, 8 10 C 8 10, 8 15, 6.34 15.621 C 6.324 15.632, 6.317 15.652, 6.3 15.664 C 6.237 15.7134, 6.1826 15.7729, 6.139 15.84 C 6.121 15.867, 6.1 15.888, 6.086 15.916 C 6.03136 16.019, 6.00188 16.1334, 6 16.25 C 6 16.666, 6.335 17, 6.75 17 L 17.25 17 C 17.666 17, 18 16.666, 18 16.25 C 17.9981 16.1334, 17.9686 16.019, 17.914 15.916 C 17.9 15.888, 17.879 15.866, 17.862 15.84 C 17.8181 15.7728, 17.7634 15.7133, 17.7 15.664 C 17.684 15.652, 17.677 15.632, 17.66 15.621 C 16 15.001, 16 10, 16 10 C 15.998 8.177, 14.765 6.465, 13 6.01 L 13 6 C 13 5.44772, 12.5523 5, 12 5 Z'
-              class='foreground foreground-fill'
-              style='isolation: auto'
-              gpa:fill='foreground'
-              gpa:states='normal active disabled'
-              gpa:animation-repeat='0'
-              gpa:animation-segment='0'>
+      <g
+              id='bell-group'
+              transform-origin='55% 45%'>
         <animateTransform
                 attributeName='transform'
                 begin='gpa:states(normal disabled, active)'
@@ -65,7 +51,43 @@
                 to='0 0 0'
                 keyTimes='0; 1'
                 type='rotate'/>
-      </path>
+        <path
+                id='bell'
+                display='inline'
+                color='rgb(190,190,190)'
+                fill='url(#gpa:foreground) rgb(0,0,0)'
+                fill-opacity='1'
+                fill-rule='nonzero'
+                stroke='none'
+                overflow='visible'
+                d='M 12 5 C 11.4477 5, 11 5.44772, 11 6 L 11 6.01 C 9.236 6.466, 8.002 8.178, 8 10 C 8 10, 8 15, 6.34 15.621 C 6.324 15.632, 6.317 15.652, 6.3 15.664 C 6.237 15.7134, 6.1826 15.7729, 6.139 15.84 C 6.121 15.867, 6.1 15.888, 6.086 15.916 C 6.03136 16.019, 6.00188 16.1334, 6 16.25 C 6 16.666, 6.335 17, 6.75 17 L 17.25 17 C 17.666 17, 18 16.666, 18 16.25 C 17.9981 16.1334, 17.9686 16.019, 17.914 15.916 C 17.9 15.888, 17.879 15.866, 17.862 15.84 C 17.8181 15.7728, 17.7634 15.7133, 17.7 15.664 C 17.684 15.652, 17.677 15.632, 17.66 15.621 C 16 15.001, 16 10, 16 10 C 15.998 8.177, 14.765 6.465, 13 6.01 L 13 6 C 13 5.44772, 12.5523 5, 12 5 Z'
+                class='foreground foreground-fill'
+                style='isolation: auto'
+                gpa:fill='foreground'
+                gpa:states='normal active disabled'
+                gpa:animation-repeat='0'
+                gpa:animation-segment='0'>
+        </path>
+        <mask
+                id='bell-mask'
+                opacity='1'>
+          <rect
+                  id='bg'
+                  fill='rgb(255,255,255)'
+                  x='0'
+                  y='0'
+                  width='100%'
+                  height='100%'>
+          </rect>
+          <path
+                  id='bell-clip'
+                  fill='rgb(0,0,0)'
+                  d='M 11.9043 4.00391 C 11.1395 4.02787, 10.4298 4.54272, 10.1445 5.24805 C 8.07491 6.06098, 6.84457 8.32281, 6.98474 10.499 C 6.87252 11.8923, 6.854 13.4185, 6.0625 14.623 C 4.91296 15.1045, 4.60014 16.856, 5.65919 17.6164 C 6.6065 18.3067, 7.86266 17.8822, 8.95 18 C 11.8333 17.9785, 14.721 18.0427, 17.6016 17.9688 C 18.9765 17.7536, 19.4893 15.8079, 18.4004 14.9492 C 18.0165 14.6939, 17.6532 14.3926, 17.5509 13.8967 C 16.9411 12.2694, 17.1431 10.5023, 16.8594 8.82182 C 16.5016 7.23099, 15.3268 5.8553, 13.8477 5.2207 C 13.5202 4.46552, 12.7321 3.95117, 11.9043 4.00391 Z'
+                  style='isolation: auto'
+                  gpa:states='normal active disabled'>
+          </path>
+        </mask>
+      </g>
       <path
               id='alert'
               display='inline'
@@ -87,6 +109,7 @@
               gpa:transition-duration='100ms'
               gpa:animation-type='automatic'
               gpa:animation-direction='in-out-alternate'
+              
               gpa:animation-easing='ease-in-out'
               gpa:animation-duration='200ms'
               gpa:animation-repeat='0'
@@ -116,9 +139,11 @@
       <path
               id='clapper'
               display='inline'
+              mask='url(#bell-mask)'
               fill='url(#gpa:foreground) rgb(0,0,0)'
               fill-opacity='1'
               fill-rule='nonzero'
+              stroke='none'
               d='M 14 17.5 A 2 2 0 0 1 12 19.5 A 2 2 0 0 1 10 17.5 A 2 2 0 0 1 12 15.5 A 2 2 0 0 1 14 17.5 Z'
               class='foreground foreground-fill'
               style='isolation: auto'
@@ -166,7 +191,6 @@
     <line
             id='slash-clip'
             visibility='hidden'
-            clip-path='url(#clipPath1)'
             stroke='rgb(0,0,0)'
             stroke-opacity='1'
             stroke-width='1.25'
