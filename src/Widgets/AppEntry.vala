@@ -20,13 +20,12 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
 
     public string app_id { get; private set; }
     public AppInfo? app_info { get; construct; default = null; }
-    public List<NotificationEntry> app_notifications;
 
     private static Gtk.CssProvider provider;
     private static Settings settings;
     private static HashTable<string, bool> headers;
 
-    private Gtk.ToggleButton expander;
+    public Gtk.ToggleButton expander { get; private set; }
 
     static construct {
         provider = new Gtk.CssProvider ();
@@ -46,8 +45,6 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
     }
 
     construct {
-        app_notifications = new List<NotificationEntry> ();
-
         unowned string name;
         if (app_info != null) {
             app_id = app_info.get_id ();
@@ -117,37 +114,5 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
             targetval = (bool) srcval ? _("Show less") : _("Show more");
             return true;
         });
-    }
-
-    public void add_notification_entry (NotificationEntry entry) {
-        app_notifications.prepend (entry);
-        entry.clear.connect (remove_notification_entry);
-
-        expander.bind_property ("active", entry.revealer, "reveal-child", SYNC_CREATE);
-    }
-
-    public void remove_notification_entry (NotificationEntry entry) {
-        app_notifications.remove (entry);
-        entry.dismiss ();
-
-        Session.get_instance ().remove_notification (entry.notification);
-        if (app_notifications.length () == 0) {
-            if (headers.remove (app_id)) {
-                settings.set_value ("headers", headers);
-            }
-
-            clear ();
-        }
-    }
-
-    public void clear_all_notification_entries () {
-        Notification[] to_remove = {};
-        app_notifications.@foreach ((entry) => {
-            entry.dismiss ();
-            to_remove += entry.notification;
-        });
-
-        app_notifications = new List<NotificationEntry> ();
-        Session.get_instance ().remove_notifications (to_remove);
     }
 }

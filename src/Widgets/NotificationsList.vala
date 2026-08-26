@@ -25,7 +25,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     private GLib.HashTable<string, GLib.DateTime> app_datetime;
     public Gee.HashMap<string, AppEntry> app_entries { get; private set; }
 
-    private ListStore list_store;
+    public ListStore list_store { get; private set; }
 
     construct {
         app_entries = new Gee.HashMap<string, AppEntry> ();
@@ -107,13 +107,31 @@ public class Notifications.NotificationsList : Granite.Bin {
             app_entries[row_app_id] = app_entry;
         }
 
-        app_entry.add_notification_entry (row_entry);
+        app_entry.expander.bind_property ("active", row_entry.revealer, "reveal-child", SYNC_CREATE);
 
+        row_entry.clear.connect (() => {
+            int nofication_entries = 0;
+            for (int i = 0; i < list_store.n_items; i++) {
+                var entry = (NotificationEntry) list_store.get_item (i);
+                if (entry.notification.desktop_id == row_app_id) {
+                    nofication_entries++;
+                }
+            }
+
+            if (nofication_entries == 0) {
+                clear_app_entry (app_entry);
+            }
+        });
         row.set_header (app_entries[row_app_id]);
     }
 
     public async void add_entry (Notification notification) {
         var entry = new NotificationEntry (notification);
+        entry.clear.connect (() => {
+            entry.dismiss ();
+            Session.get_instance ().remove_notification (notification);
+        });
+
         list_store.insert_sorted (entry, sort_func);
 
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
@@ -145,7 +163,23 @@ public class Notifications.NotificationsList : Granite.Bin {
     private void clear_app_entry (AppEntry app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
         app_entries.unset (app_entry.app_id);
-        app_entry.clear_all_notification_entries ();
+
+        var settings = new Settings ("io.elementary.panel.notifications");
+        var headers = (HashTable<string, bool>) settings.get_value ("headers");
+        if (headers.remove (app_entry.app_id)) {
+            settings.set_value ("headers", headers);
+        }
+
+        Notification[] to_remove = {};
+        for (int i = 0; i < list_store.n_items; i++) {
+            var entry = (NotificationEntry) list_store.get_item (i);
+            if (entry.notification.desktop_id == app_entry.app_id) {
+                entry.dismiss ();
+                to_remove += entry.notification;
+            }
+        }
+
+        Session.get_instance ().remove_notifications (to_remove);
 
         if (app_entries.size == 0) {
             Session.get_instance ().clear ();
