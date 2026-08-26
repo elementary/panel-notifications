@@ -99,16 +99,16 @@ public class Notifications.NotificationsList : Granite.Bin {
             return;
         }
 
-        var app_entry = app_entries[row_entry.notification.desktop_id];
+        var app_entry = app_entries[row_app_id];
         if (app_entry != null) {
             app_entry.add_notification_entry (row_entry);
 
         } else {
-            var app_entry = new AppEntry (row_entry.notification.app_info);
+            app_entry = new AppEntry (row_entry.notification.app_info);
             app_entry.add_notification_entry (row_entry);
             app_entry.clear.connect (clear_app_entry);
 
-            app_entries[row_entry.notification.desktop_id] = app_entry;
+            app_entries[row_app_id] = app_entry;
         }
 
         row.set_header (app_entries[row_app_id]);
