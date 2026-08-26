@@ -107,7 +107,6 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
 
         clear_btn_entry.clicked.connect (() => {
             clear_btn_image.add_css_class ("active");
-            clear_all_notification_entries ();
             GLib.Timeout.add (600, () => {
                 clear (); // Causes notification list to destroy this app entry after clearing its notification entries
                 return GLib.Source.REMOVE;
