@@ -145,7 +145,24 @@ public class Notifications.NotificationsList : Granite.Bin {
     private void clear_app_entry (AppEntry app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
         app_entries.unset (app_entry.app_id);
-        app_entry.clear_all_notification_entries ();
+        app_entry.app_notifications = new List<NotificationEntry> ();
+
+        var settings = new Settings ("io.elementary.panel.notifications");
+        var headers = (HashTable<string, bool>) settings.get_value ("headers");
+        if (headers.remove (app_entry.app_id)) {
+            settings.set_value ("headers", headers);
+        }
+
+        Notification[] to_remove = {};
+        for (int i = 0; i < list_store.n_items; i++) {
+            var entry = (NotificationEntry) list_store.get_item (i);
+            if (entry.notification.desktop_id == app_entry.app_id) {
+                entry.dismiss ();
+                to_remove += entry.notification;
+            }
+        }
+
+        Session.get_instance ().remove_notifications (to_remove);
 
         if (app_entries.size == 0) {
             Session.get_instance ().clear ();
