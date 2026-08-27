@@ -244,13 +244,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         settings.bind_with_mapping (
             "headers", revealer, "reveal-child", GET,
-            (value, variant, user_data) => {
-                var app_id = ((Variant) user_data).get_string ();
-                var headers_table = (HashTable<string, bool>) variant;
-                value.set_boolean (headers_table[app_id]);
-                return true;
-            },
-            () => false,
+            (SettingsBindGetMappingShared) get_bind_func, () => false,
             new Variant.string (notification.desktop_id), null
         );
 
@@ -266,6 +260,13 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                 clear ();
             }
         });
+    }
+
+    private static bool get_bind_func (Value value, Variant variant, void* user_data) {
+        var app_id = ((Variant) user_data).get_string ();
+        var headers_table = (HashTable<string, bool>) variant;
+        value.set_boolean (headers_table[app_id]);
+        return true;
     }
 
     public void dismiss () {
