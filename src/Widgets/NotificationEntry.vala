@@ -16,6 +16,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
     private static Regex entity_regex;
     private static Regex tag_regex;
+    private static Settings settings;
 
     public NotificationEntry (Notification notification) {
         Object (notification: notification);
@@ -28,6 +29,8 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         } catch (Error e) {
             warning ("Invalid regex: %s", e.message);
         }
+
+        settings = new Settings ("io.elementary.panel.notifications");
     }
 
     class construct {
@@ -239,6 +242,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             delete_revealer.reveal_child = false;
         });
 
+        settings.bind_with_mapping (
+            "headers", revealer, "reveal-child", GET,
+            get_bind_func, () => false,
+            new Variant.string (notification.desktop_id), null
+        );
+
         revealer.add_controller (motion_controller);
 
         timeout_id = Timeout.add_seconds_full (Priority.DEFAULT, 60, () => {
@@ -251,6 +260,13 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                 clear ();
             }
         });
+    }
+
+    private static bool get_bind_func (Value value, Variant variant, void* user_data) {
+        var app_id = ((Variant) user_data).get_string ();
+        var headers_table = (HashTable<string, bool>) variant;
+        value.set_boolean (headers_table[app_id]);
+        return true;
     }
 
     public void dismiss () {
