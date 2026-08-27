@@ -6,7 +6,7 @@
 public class Notifications.Indicator : Wingpanel.Indicator {
     private const string CHILD_SCHEMA_ID = "io.elementary.notifications.applications";
     private const string CHILD_PATH = "/io/elementary/notifications/applications/%s/";
-    private const string KEYBINDING_SCHEMA = "io.elementary.desktop.wm.keybindings";
+    private const string KEYBINDING_SCHEMA = "io.elementary.panel.keybindings";
     private const string REMEMBER_KEY = "remember";
 
     private static GLib.Settings? keybinding_settings;
@@ -230,7 +230,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         string middle_click_label = "";
 
         if (keybinding_settings != null) {
-            var raw_accels = keybinding_settings.get_strv ("panel-notifications-menu");
+            var raw_accels = keybinding_settings.get_strv ("open-menu-notifications");
             foreach (unowned string raw_accel in raw_accels) {
                 if (raw_accel != "") accels += raw_accel;
             }
