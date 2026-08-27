@@ -211,8 +211,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void update_tooltip () {
-        uint number_of_apps = 0;
-        uint number_of_notifications = nlist.count_notifications (out number_of_apps);
+        var number_of_notifications = nlist.notification_items.get_n_items ();
         string description;
         string accel_label;
 
@@ -232,11 +231,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 description = _("1 notification");
                 break;
             default:
+                var number_of_apps = nlist.app_entries.size;
                 /// TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
                 /// e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
                 description = _("%s from %s").printf (
                     dngettext (GETTEXT_PACKAGE, "%u notification", "%u notifications", number_of_notifications).printf (number_of_notifications),
-                    dngettext (GETTEXT_PACKAGE, "%u app", "%u apps", number_of_apps).printf (number_of_apps)
+                    dngettext (GETTEXT_PACKAGE, "%i app", "%i apps", number_of_apps).printf (number_of_apps)
                 );
                 break;
         }
