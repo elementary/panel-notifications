@@ -73,9 +73,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             });
 
             if (keybinding_settings != null) {
-                keybinding_settings.changed["panel-notifications-menu"].connect (() => {
-                    update_tooltip ();
-                });
+                keybinding_settings.changed["panel-notifications-menu"].connect (update_tooltip);
             }
 
             notify_settings.changed["do-not-disturb"].connect (() => {
