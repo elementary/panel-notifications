@@ -173,15 +173,11 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
-        SearchFunc<NotificationEntry, uint32> find_entry = (e, i) => {
-            return i == e.notification.server_id ? 0 : i > e.notification.server_id ? 1 : -1;
-        };
-
-        foreach (var app_entry in nlist.app_entries.values) {
-            unowned var node = app_entry.app_notifications.search (id, find_entry);
-            if (node != null) {
-                node.data.notification.server_id = 0; // Notification is now outdated
-                node.data.clear ();
+        for (int i = 0; i < nlist.notification_items.get_n_items (); i++) {
+            var entry = (NotificationEntry) nlist.notification_items.get_item (i);
+            if (id == entry.notification.server_id) {
+                entry.notification.server_id = 0; // Notification is now outdated
+                entry.clear ();
                 return;
             }
         }
