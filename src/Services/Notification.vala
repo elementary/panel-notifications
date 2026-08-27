@@ -244,4 +244,8 @@ public class Notifications.Notification : Object {
         }
         return null;
     }
+
+    public static int compare (Notification self, Notification other) {
+        return other.timestamp.compare (self.timestamp);
+    }
 }
