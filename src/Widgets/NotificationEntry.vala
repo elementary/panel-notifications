@@ -14,9 +14,9 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     private const int ICON_SIZE_PRIMARY = 48;
     private const int ICON_SIZE_SECONDARY = 24;
 
-    private static Settings settings;
     private static Regex entity_regex;
     private static Regex tag_regex;
+    private static Settings settings;
 
     public NotificationEntry (Notification notification) {
         Object (notification: notification);
@@ -247,7 +247,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             (value, variant, user_data) => {
                 var app_id = ((Variant) user_data).get_string ();
                 var headers_table = (HashTable<string, bool>) variant;
-                value.set_boolean (headers_table[app_id ]);
+                value.set_boolean (headers_table[app_id]);
                 return true;
             },
             () => false,
