@@ -244,7 +244,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         settings.bind_with_mapping (
             "headers", revealer, "reveal-child", GET,
-            (SettingsBindGetMappingShared) get_bind_func, () => false,
+            get_bind_func, () => false,
             new Variant.string (notification.desktop_id), null
         );
 
