@@ -67,7 +67,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             if (file.query_exists ()) {
                 app_icon = new FileIcon (file);
             }
-        } else {
+        } else if (notification.app_icon != "") {
             app_icon = new ThemedIcon (notification.app_icon);
         }
 
