@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: notifications-indicator\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 16:56+0000\n"
+"POT-Creation-Date: 2026-08-28 05:15+0000\n"
 "PO-Revision-Date: 2024-08-07 18:16+0000\n"
 "Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Urdu <https://l10n.elementary.io/projects/wingpanel/wingpanel-"
@@ -19,64 +19,64 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.2\n"
 
-#: src/Indicator.vala:52
+#: src/Indicator.vala:41
 msgid "Updating notifications…"
 msgstr ""
 
-#: src/Indicator.vala:106
+#: src/Indicator.vala:79
 msgid "Do Not Disturb"
 msgstr ""
 
-#: src/Indicator.vala:127
+#: src/Indicator.vala:100
 msgid "Clear All Notifications"
 msgstr ""
 
-#: src/Indicator.vala:131
+#: src/Indicator.vala:104
 msgid "Notifications Settings…"
 msgstr ""
 
-#: src/Indicator.vala:235
+#: src/Indicator.vala:203
 msgid "Middle-click to disable Do Not Disturb"
 msgstr ""
 
-#: src/Indicator.vala:237
+#: src/Indicator.vala:205
 msgid "Middle-click to enable Do Not Disturb"
 msgstr ""
 
-#: src/Indicator.vala:244
+#: src/Indicator.vala:212
 msgid "No notifications"
 msgstr ""
 
-#: src/Indicator.vala:247
+#: src/Indicator.vala:215
 msgid "1 notification"
 msgstr ""
 
 #. / TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
 #. / e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
-#: src/Indicator.vala:252
+#: src/Indicator.vala:221
 #, c-format
 msgid "%s from %s"
 msgstr ""
 
-#: src/Indicator.vala:253
+#: src/Indicator.vala:222
 #, c-format
 msgid "%u notification"
 msgid_plural "%u notifications"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Indicator.vala:254
+#: src/Indicator.vala:223
 #, c-format
-msgid "%u app"
-msgid_plural "%u apps"
+msgid "%i app"
+msgid_plural "%i apps"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Widgets/NotificationsList.vala:35
+#: src/Widgets/NotificationsList.vala:39
 msgid "No Notifications"
 msgstr ""
 
-#: src/Widgets/NotificationEntry.vala:292
+#: src/Widgets/NotificationEntry.vala:308
 msgid "Delete"
 msgstr ""
 
@@ -89,10 +89,10 @@ msgstr "دیگر"
 msgid "Clear all %s notifications"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:118
+#: src/Widgets/AppEntry.vala:117
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:118
+#: src/Widgets/AppEntry.vala:117
 msgid "Show more"
 msgstr ""

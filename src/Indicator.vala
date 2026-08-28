@@ -15,7 +15,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private Gtk.Box? main_box = null;
     private Wingpanel.PopoverMenuItem clear_all_btn;
-    private Gtk.Spinner? dynamic_icon = null;
+    private NotificationsIndicator.Symbol? dynamic_icon = null;
     private NotificationsList nlist;
     private NotificationsMonitor monitor;
 
@@ -44,20 +44,10 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     public override Gtk.Widget get_display_widget () {
         if (dynamic_icon == null) {
-            var provider = new Gtk.CssProvider ();
-            provider.load_from_resource ("io/elementary/wingpanel/notifications/indicator.css");
-
-            Gtk.StyleContext.add_provider_for_display (
-                Gdk.Display.get_default (),
-                provider,
-                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-            );
-
-            dynamic_icon = new Gtk.Spinner () {
-                spinning = true,
+            dynamic_icon = new NotificationsIndicator.Symbol ("/io/elementary/wingpanel/notifications/icons/notification.svg") {
+                pixel_size = 24,
                 tooltip_markup = _("Updating notifications…")
             };
-            dynamic_icon.add_css_class ("notification-icon");
 
             nlist = new NotificationsList ();
             nlist.items_changed.connect (set_display_icon_name);
@@ -185,15 +175,11 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
-        SearchFunc<NotificationEntry, uint32> find_entry = (e, i) => {
-            return i == e.notification.server_id ? 0 : i > e.notification.server_id ? 1 : -1;
-        };
-
-        foreach (var app_entry in nlist.app_entries.values) {
-            unowned var node = app_entry.app_notifications.search (id, find_entry);
-            if (node != null) {
-                node.data.notification.server_id = 0; // Notification is now outdated
-                node.data.clear ();
+        for (int i = 0; i < nlist.notification_items.get_n_items (); i++) {
+            var entry = (NotificationEntry) nlist.notification_items.get_item (i);
+            if (id == entry.notification.server_id) {
+                entry.notification.server_id = 0; // Notification is now outdated
+                entry.clear ();
                 return;
             }
         }
@@ -201,13 +187,11 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
-            dynamic_icon.add_css_class ("disabled");
+            dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
         } else if (nlist != null && nlist.app_entries.size > 0) {
-            dynamic_icon.remove_css_class ("disabled");
-            dynamic_icon.add_css_class ("new");
+            dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
-            dynamic_icon.remove_css_class ("disabled");
-            dynamic_icon.remove_css_class ("new");
+            dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
         }
         update_tooltip ();
     }
@@ -223,8 +207,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void update_tooltip () {
-        uint number_of_apps = 0;
-        uint number_of_notifications = nlist.count_notifications (out number_of_apps);
+        var number_of_notifications = nlist.notification_items.get_n_items ();
         string[] accels = {};
         string description;
         string middle_click_label = "";
@@ -252,11 +235,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 description = _("1 notification");
                 break;
             default:
+                var number_of_apps = nlist.app_entries.size;
                 /// TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
                 /// e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
                 description = _("%s from %s").printf (
                     dngettext (GETTEXT_PACKAGE, "%u notification", "%u notifications", number_of_notifications).printf (number_of_notifications),
-                    dngettext (GETTEXT_PACKAGE, "%u app", "%u apps", number_of_apps).printf (number_of_apps)
+                    dngettext (GETTEXT_PACKAGE, "%i app", "%i apps", number_of_apps).printf (number_of_apps)
                 );
                 break;
         }
