@@ -114,5 +114,17 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
             targetval = (bool) srcval ? _("Show less") : _("Show more");
             return true;
         });
+
+        notify["parent"].connect (() => {
+            if (parent != null) {
+                return;
+            }
+
+            if (headers.remove (app_id)) {
+                settings.set_value ("headers", headers);
+            }
+
+            clear ();
+        });
     }
 }

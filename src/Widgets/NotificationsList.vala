@@ -171,18 +171,6 @@ public class Notifications.NotificationsList : Granite.Bin {
     private void clear_notification_entry (NotificationEntry entry) {
         entry.dismiss ();
         Session.get_instance ().remove_notification (entry.notification);
-
-        int entries = 0;
-        for (int i = 0; i < list_store.n_items; i++) {
-            var notification_entry = (NotificationEntry) list_store.get_item (i);
-            if (notification_entry.notification.desktop_id == entry.notification.desktop_id) {
-                entries++;
-            }
-        }
-
-        if (entries == 0 && app_entries[entry.notification.desktop_id] != null) {
-            clear_app_entry (app_entries[entry.notification.desktop_id]);
-        }
     }
 
     private void on_row_activated (Gtk.ListBoxRow row) {
