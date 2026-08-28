@@ -107,7 +107,6 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
 
         clear_btn_entry.clicked.connect (() => {
             clear_btn_image.add_css_class ("active");
-            clear_all_notification_entries ();
             GLib.Timeout.add (600, () => {
                 clear (); // Causes notification list to destroy this app entry after clearing its notification entries
                 return GLib.Source.REMOVE;
@@ -123,8 +122,6 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
     public void add_notification_entry (NotificationEntry entry) {
         app_notifications.prepend (entry);
         entry.clear.connect (remove_notification_entry);
-
-        expander.bind_property ("active", entry.revealer, "reveal-child", SYNC_CREATE);
     }
 
     public void remove_notification_entry (NotificationEntry entry) {
@@ -139,16 +136,5 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
 
             clear ();
         }
-    }
-
-    public void clear_all_notification_entries () {
-        Notification[] to_remove = {};
-        app_notifications.@foreach ((entry) => {
-            entry.dismiss ();
-            to_remove += entry.notification;
-        });
-
-        app_notifications = new List<NotificationEntry> ();
-        Session.get_instance ().remove_notifications (to_remove);
     }
 }
