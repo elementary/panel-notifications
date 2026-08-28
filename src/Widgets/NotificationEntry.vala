@@ -129,12 +129,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         grid.add_css_class (Granite.CssClass.CARD);
 
-
         var delete_button = new Gtk.Button.from_icon_name ("window-close-symbolic") {
             halign = START,
             valign = START
         };
-        delete_button.add_css_class ("close");
+        delete_button.add_css_class (Granite.STYLE_CLASS_OSD);
+        delete_button.add_css_class (Granite.CssClass.CIRCULAR);
 
         var delete_revealer = new Gtk.Revealer () {
             child = delete_button,
@@ -225,7 +225,8 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             child = carousel,
             reveal_child = true,
             transition_duration = 200,
-            transition_type = SLIDE_UP
+            transition_type = SLIDE_UP,
+            overflow = VISIBLE
         };
 
         child = revealer;
