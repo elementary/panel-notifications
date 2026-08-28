@@ -11,7 +11,7 @@ You'll need the following dependencies:
 * libgdk-pixbuf-2.0-dev
 * libglib2.0-dev
 * libgranite-7-dev >= 7.7.0
-* libgtk-4-dev
+* libgtk-4-dev >= 4.22
 * libwingpanel-9-dev
 * meson >= 0.58.0
 * valac

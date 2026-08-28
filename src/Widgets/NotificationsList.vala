@@ -25,7 +25,12 @@ public class Notifications.NotificationsList : Granite.Bin {
     private GLib.HashTable<string, GLib.DateTime> app_datetime;
     public Gee.HashMap<string, AppEntry> app_entries { get; private set; }
 
-    public ListStore list_store { get; private set; }
+    private ListStore list_store;
+    public ListModel notification_items {
+        get {
+            return list_store;
+        }
+    }
 
     construct {
         app_entries = new Gee.HashMap<string, AppEntry> ();
@@ -141,11 +146,6 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         Idle.add (add_entry.callback);
         yield;
-    }
-
-    public uint count_notifications (out int number_of_apps) {
-        number_of_apps = app_entries.size;
-        return list_store.n_items;
     }
 
     public void clear_all () {
