@@ -2,56 +2,7 @@
 <gresources>
   <gresource prefix="/io/elementary/wingpanel/notifications">
     <file compressed="true">AppEntry.css</file>
-    <file compressed="true">indicator.css</file>
     <file compressed="true">NotificationEntry.css</file>
-  </gresource>
-  <gresource prefix="org/elementary/wingpanel/icons">
-    <file alias="24x24/status/notification-disabled-10-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-10.svg</file>
-    <file alias="24x24/status/notification-disabled-20-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-20.svg</file>
-    <file alias="24x24/status/notification-disabled-30-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-30.svg</file>
-    <file alias="24x24/status/notification-disabled-40-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-40.svg</file>
-    <file alias="24x24/status/notification-disabled-50-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-50.svg</file>
-    <file alias="24x24/status/notification-disabled-60-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-60.svg</file>
-    <file alias="24x24/status/notification-disabled-70-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-70.svg</file>
-    <file alias="24x24/status/notification-disabled-80-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-80.svg</file>
-    <file alias="24x24/status/notification-disabled-90-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-90.svg</file>
-    <file alias="24x24/status/notification-disabled-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled.svg</file>
-
-    <file alias="24x24/status/notification-new-10-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-10.svg</file>
-    <file alias="24x24/status/notification-new-20-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-20.svg</file>
-    <file alias="24x24/status/notification-new-30-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-30.svg</file>
-    <file alias="24x24/status/notification-new-40-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-40.svg</file>
-    <file alias="24x24/status/notification-new-50-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-50.svg</file>
-    <file alias="24x24/status/notification-new-60-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-60.svg</file>
-    <file alias="24x24/status/notification-new-70-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-70.svg</file>
-    <file alias="24x24/status/notification-new-80-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-80.svg</file>
-    <file alias="24x24/status/notification-new-90-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-90.svg</file>
-    <file alias="24x24/status/notification-new-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new.svg</file>
-
-    <file alias="24x24/status/notification-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/notification.svg</file>
-
-    <file alias="24x24@2/status/notification-disabled-10-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-10.svg</file>
-    <file alias="24x24@2/status/notification-disabled-20-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-20.svg</file>
-    <file alias="24x24@2/status/notification-disabled-30-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-30.svg</file>
-    <file alias="24x24@2/status/notification-disabled-40-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-40.svg</file>
-    <file alias="24x24@2/status/notification-disabled-50-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-50.svg</file>
-    <file alias="24x24@2/status/notification-disabled-60-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-60.svg</file>
-    <file alias="24x24@2/status/notification-disabled-70-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-70.svg</file>
-    <file alias="24x24@2/status/notification-disabled-80-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-80.svg</file>
-    <file alias="24x24@2/status/notification-disabled-90-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled-90.svg</file>
-    <file alias="24x24@2/status/notification-disabled-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/disabled.svg</file>
-
-    <file alias="24x24@2/status/notification-new-10-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-10.svg</file>
-    <file alias="24x24@2/status/notification-new-20-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-20.svg</file>
-    <file alias="24x24@2/status/notification-new-30-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-30.svg</file>
-    <file alias="24x24@2/status/notification-new-40-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-40.svg</file>
-    <file alias="24x24@2/status/notification-new-50-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-50.svg</file>
-    <file alias="24x24@2/status/notification-new-60-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-60.svg</file>
-    <file alias="24x24@2/status/notification-new-70-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-70.svg</file>
-    <file alias="24x24@2/status/notification-new-80-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-80.svg</file>
-    <file alias="24x24@2/status/notification-new-90-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new-90.svg</file>
-    <file alias="24x24@2/status/notification-new-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/new.svg</file>
-
-    <file alias="24x24@2/status/notification-symbolic.svg" compressed="true" preprocess="xml-stripblanks">icons/notification.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">icons/notification.svg</file>
   </gresource>
 </gresources>

@@ -13,7 +13,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private Gtk.Box? main_box = null;
     private Wingpanel.PopoverMenuItem clear_all_btn;
-    private Gtk.Spinner? dynamic_icon = null;
+    private NotificationsIndicator.Symbol? dynamic_icon = null;
     private NotificationsList nlist;
     private NotificationsMonitor monitor;
 
@@ -36,20 +36,10 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     public override Gtk.Widget get_display_widget () {
         if (dynamic_icon == null) {
-            var provider = new Gtk.CssProvider ();
-            provider.load_from_resource ("io/elementary/wingpanel/notifications/indicator.css");
-
-            Gtk.StyleContext.add_provider_for_display (
-                Gdk.Display.get_default (),
-                provider,
-                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-            );
-
-            dynamic_icon = new Gtk.Spinner () {
-                spinning = true,
+            dynamic_icon = new NotificationsIndicator.Symbol ("/io/elementary/wingpanel/notifications/icons/notification.svg") {
+                pixel_size = 24,
                 tooltip_markup = _("Updating notifications…")
             };
-            dynamic_icon.add_css_class ("notification-icon");
 
             nlist = new NotificationsList ();
             nlist.items_changed.connect (set_display_icon_name);
@@ -185,13 +175,11 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
-            dynamic_icon.add_css_class ("disabled");
+            dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
         } else if (nlist != null && nlist.app_entries.size > 0) {
-            dynamic_icon.remove_css_class ("disabled");
-            dynamic_icon.add_css_class ("new");
+            dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
-            dynamic_icon.remove_css_class ("disabled");
-            dynamic_icon.remove_css_class ("new");
+            dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
         }
         update_tooltip ();
     }
