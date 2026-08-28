@@ -42,6 +42,7 @@ shared_module(
     'src/Widgets/NotificationsList.vala',
     'src/Widgets/NotificationEntry.vala',
     'src/Widgets/AppEntry.vala',
+    'src/Widgets/Symbol.vala',
     'src/Services/NotificationsMonitor.vala',
     'src/Services/Notification.vala',
     'src/Services/Session.vala',
@@ -51,7 +52,7 @@ shared_module(
         dependency('glib-2.0'),
         dependency('gobject-2.0'),
         dependency('granite-7', version: '>=7.7.0'),
-        dependency('gtk4'),
+        dependency('gtk4', version: '>=4.22'),
         dependency('libadwaita-1'),
         wingpanel_dep
     ],
