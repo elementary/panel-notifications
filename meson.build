@@ -42,7 +42,7 @@ shared_module(
     'src/Widgets/NotificationsList.vala',
     'src/Widgets/NotificationEntry.vala',
     'src/Widgets/AppEntry.vala',
-    'src' / 'Widgets' / 'Symbol.vala',
+    'src/Widgets/Symbol.vala',
     'src/Services/NotificationsMonitor.vala',
     'src/Services/Notification.vala',
     'src/Services/Session.vala',
