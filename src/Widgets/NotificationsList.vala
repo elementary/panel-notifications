@@ -112,8 +112,6 @@ public class Notifications.NotificationsList : Granite.Bin {
             app_entries[row_app_id] = app_entry;
         }
 
-        app_entry.expander.bind_property ("active", row_entry.revealer, "reveal-child", SYNC_CREATE);
-
         row_entry.clear.connect (() => {
             int entries = 0;
             for (int i = 0; i < list_store.n_items; i++) {

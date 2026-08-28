@@ -25,7 +25,7 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
     private static Settings settings;
     private static HashTable<string, bool> headers;
 
-    public Gtk.ToggleButton expander { get; private set; }
+    private Gtk.ToggleButton expander;
 
     static construct {
         provider = new Gtk.CssProvider ();
