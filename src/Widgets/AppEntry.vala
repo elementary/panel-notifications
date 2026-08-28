@@ -59,18 +59,18 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
 
         var image = new Gtk.Image.from_icon_name ("pan-end-symbolic");
 
-        var label = new Gtk.Label (name) {
+        var label = new Granite.HeaderLabel (name) {
             hexpand = true,
-            xalign = 0
+            size = H3
         };
-        label.add_css_class (Granite.STYLE_CLASS_H3_LABEL);
 
-        var expander_content = new Gtk.Box (HORIZONTAL, 3);
+        var expander_content = new Granite.Box (HORIZONTAL, HALF);
         expander_content.append (label);
         expander_content.append (image);
 
         expander = new Gtk.ToggleButton () {
             child = expander_content,
+            has_frame = false,
             active = true
         };
         expander.add_css_class ("image-button");
@@ -85,14 +85,13 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
             has_frame = false
         };
 
-        var box = new Gtk.Box (HORIZONTAL, 6);
+        var box = new Granite.Box (HORIZONTAL, HALF);
         box.append (expander);
         box.append (clear_btn_entry);
 
         margin_start = 12;
         margin_end = 12;
-        margin_bottom = 3;
-        margin_top = 6;
+        margin_top = 3;
         can_focus = false;
         child = box;
 
