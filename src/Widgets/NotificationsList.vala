@@ -180,15 +180,8 @@ public class Notifications.NotificationsList : Granite.Bin {
             }
         }
 
-        if (entries == 0) {
-            var iter = app_entries.map_iterator ();
-            while (iter.next ()) {
-                var app_entry = iter.get_value ();
-                if (app_entry.app_id == entry.notification.desktop_id) {
-                    clear_app_entry (app_entry);
-                    return;
-                }
-            }
+        if (entries == 0 && app_entries[entry.notification.desktop_id] != null) {
+            clear_app_entry (app_entries[entry.notification.desktop_id]);
         }
     }
 
