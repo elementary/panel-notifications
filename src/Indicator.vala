@@ -8,10 +8,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private const string CHILD_PATH = "/io/elementary/notifications/applications/%s/";
     private const string REMEMBER_KEY = "remember";
 
-    private const int ICON_STATE_NORMAL = 0;
-    private const int ICON_STATE_NEW = 1;
-    private const int ICON_STATE_DISABLED = 2;
-
     private Gee.HashMap<string, Settings> app_settings_cache;
     private GLib.Settings notify_settings;
 
