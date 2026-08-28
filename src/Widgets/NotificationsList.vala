@@ -112,28 +112,12 @@ public class Notifications.NotificationsList : Granite.Bin {
             app_entries[row_app_id] = app_entry;
         }
 
-        row_entry.clear.connect (() => {
-            int entries = 0;
-            for (int i = 0; i < list_store.n_items; i++) {
-                var entry = (NotificationEntry) list_store.get_item (i);
-                if (entry.notification.desktop_id == row_app_id) {
-                    entries++;
-                }
-            }
-
-            if (entries == 0) {
-                clear_app_entry (app_entry);
-            }
-        });
         row.set_header (app_entries[row_app_id]);
     }
 
     public async void add_entry (Notification notification) {
         var entry = new NotificationEntry (notification);
-        entry.clear.connect (() => {
-            entry.dismiss ();
-            Session.get_instance ().remove_notification (notification);
-        });
+        entry.clear.connect (clear_notification_entry);
 
         list_store.insert_sorted (entry, sort_func);
 
@@ -181,6 +165,30 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         if (app_entries.size == 0) {
             Session.get_instance ().clear ();
+        }
+    }
+
+    private void clear_notification_entry (NotificationEntry entry) {
+        entry.dismiss ();
+        Session.get_instance ().remove_notification (entry.notification);
+
+        int entries = 0;
+        for (int i = 0; i < list_store.n_items; i++) {
+            var notification_entry = (NotificationEntry) list_store.get_item (i);
+            if (notification_entry.notification.desktop_id == entry.notification.desktop_id) {
+                entries++;
+            }
+        }
+
+        if (entries == 0) {
+            var iter = app_entries.map_iterator ();
+            while (iter.next ()) {
+                var app_entry = iter.get_value ();
+                if (app_entry.app_id == entry.notification.desktop_id) {
+                    clear_app_entry (app_entry);
+                    return;
+                }
+            }
         }
     }
 
