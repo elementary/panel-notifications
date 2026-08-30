@@ -6,8 +6,10 @@
 public class Notifications.Indicator : Wingpanel.Indicator {
     private const string CHILD_SCHEMA_ID = "io.elementary.notifications.applications";
     private const string CHILD_PATH = "/io/elementary/notifications/applications/%s/";
+    private const string KEYBINDING_SCHEMA = "io.elementary.panel.keybindings";
     private const string REMEMBER_KEY = "remember";
 
+    private static GLib.Settings? keybinding_settings;
     private Gee.HashMap<string, Settings> app_settings_cache;
     private GLib.Settings notify_settings;
 
@@ -22,6 +24,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             code_name: Wingpanel.Indicator.MESSAGES,
             visible: true
         );
+    }
+
+    static construct {
+        if (SettingsSchemaSource.get_default ().lookup (KEYBINDING_SCHEMA, true) != null) {
+            keybinding_settings = new GLib.Settings (KEYBINDING_SCHEMA);
+        }
     }
 
     construct {
@@ -53,6 +61,10 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                     critical ("Unable to monitor notifications bus: %s", e.message);
                 }
             });
+
+            if (keybinding_settings != null) {
+                keybinding_settings.changed["panel-notifications-menu"].connect (update_tooltip);
+            }
 
             notify_settings.changed["do-not-disturb"].connect (() => {
                 set_display_icon_name ();
@@ -196,16 +208,24 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private void update_tooltip () {
         var number_of_notifications = nlist.notification_items.get_n_items ();
+        string[] accels = {};
         string description;
-        string accel_label;
+        string middle_click_label = "";
 
-        if (notify_settings.get_boolean ("do-not-disturb")) {
-            accel_label = _("Middle-click to disable Do Not Disturb");
-        } else {
-            accel_label = _("Middle-click to enable Do Not Disturb");
+        if (keybinding_settings != null) {
+            var raw_accels = keybinding_settings.get_strv ("open-menu-notifications");
+            foreach (unowned string raw_accel in raw_accels) {
+                if (raw_accel != "") accels += raw_accel;
+            }
         }
 
-        accel_label = Granite.TOOLTIP_SECONDARY_TEXT_MARKUP.printf (accel_label);
+        if (notify_settings.get_boolean ("do-not-disturb")) {
+            middle_click_label += _("Middle-click to disable Do Not Disturb");
+        } else {
+            middle_click_label += _("Middle-click to enable Do Not Disturb");
+        }
+
+        middle_click_label = Granite.TOOLTIP_SECONDARY_TEXT_MARKUP.printf (middle_click_label);
 
         switch (number_of_notifications) {
             case 0:
@@ -225,7 +245,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 break;
         }
 
-        dynamic_icon.tooltip_markup = "%s\n%s".printf (description, accel_label);
+        dynamic_icon.tooltip_markup = "%s\n%s".printf (Granite.markup_accel_tooltip (accels, description), middle_click_label);
     }
 }
 
