@@ -47,55 +47,46 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     }
 
     construct {
-        var app_image = new Gtk.Image ();
+        var primary_image = new Gtk.Image () {
+            pixel_size = ICON_SIZE_PRIMARY,
+            overflow = HIDDEN
+        };
+        var secondary_image = new Gtk.Image () {
+            halign = END,
+            valign = END,
+            pixel_size = ICON_SIZE_SECONDARY
+        };
 
+        var image_overlay = new Gtk.Overlay () {
+            child = primary_image,
+            valign = START
+        };
+        image_overlay.add_overlay (secondary_image);
+
+
+        Icon app_icon = new ThemedIcon ("dialog-information");
         if (notification.app_icon.contains ("/")) {
             var file = File.new_for_uri (notification.app_icon);
             if (file.query_exists ()) {
-                app_image.gicon = new FileIcon (file);
-            } else {
-                app_image.icon_name = "dialog-information";
+                app_icon = new FileIcon (file);
             }
-        } else {
-            app_image.icon_name = notification.app_icon;
+        } else if (notification.app_icon != "") {
+            app_icon = new ThemedIcon (notification.app_icon);
         }
 
-        var image_overlay = new Gtk.Overlay () {
-            valign = START
-        };
-
         if (notification.image_path != null && notification.image_path != "") {
-            try {
-                var masked_image = new Gtk.Image.from_file (notification.image_path) {
-                    pixel_size = ICON_SIZE_PRIMARY,
-                    overflow = HIDDEN
-                };
-                masked_image.add_css_class (Granite.CssClass.CARD);
-                masked_image.add_css_class (Granite.CssClass.CHECKERBOARD);
-
-                app_image.pixel_size = ICON_SIZE_SECONDARY;
-                app_image.halign = app_image.valign = END;
-
-                image_overlay.child = masked_image;
-                image_overlay.add_overlay (app_image);
-            } catch (Error e) {
-                critical ("Unable to mask image: %s", e.message);
-
-                app_image.pixel_size = ICON_SIZE_PRIMARY;
-                image_overlay.child = app_image;
+            var file = File.new_for_path (notification.image_path);
+            if (file.query_exists ()) {
+                primary_image.gicon = new FileIcon (file);
+                primary_image.add_css_class (Granite.CssClass.CARD);
+                primary_image.add_css_class (Granite.CssClass.CHECKERBOARD);
+                secondary_image.gicon = app_icon;
+            } else {
+                primary_image.gicon = app_icon;
             }
         } else {
-            app_image.pixel_size = ICON_SIZE_PRIMARY;
-            image_overlay.child = app_image;
-
-            if (notification.badge_icon != null) {
-                var badge_image = new Gtk.Image.from_gicon (notification.badge_icon) {
-                    halign = END,
-                    valign = END,
-                    pixel_size = ICON_SIZE_SECONDARY
-                };
-                image_overlay.add_overlay (badge_image);
-            }
+            primary_image.gicon = app_icon;
+            secondary_image.gicon = notification.badge_icon;
         }
 
         var entry_title = notification.summary;
