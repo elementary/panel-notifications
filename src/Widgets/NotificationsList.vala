@@ -95,7 +95,11 @@ public class Notifications.NotificationsList : Granite.Bin {
         var app_entry = app_entries[row_app_id];
         if (app_entry == null) {
             app_entry = new AppEntry (row_entry.notification.app_info);
-            app_entry.clear.connect (clear_app_entry);
+            app_entry.clear.connect ((app_id) => {
+                app_entries.unset (app_id);
+                unset_app_headers (app_id);
+                dismiss_notification_for_id (app_id);
+            });
 
             app_entries[row_app_id] = app_entry;
         }
@@ -105,7 +109,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     public async void add_entry (Notification notification) {
         var entry = new NotificationEntry (notification);
-        entry.clear.connect (clear_notification_entry);
+        entry.clear.connect (() => clear_notification (notification));
 
         list_store.insert_sorted (entry, sort_func);
 
@@ -119,40 +123,38 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     public void clear_all () {
-        var iter = app_entries.map_iterator ();
-        while (iter.next ()) {
-            var entry = iter.get_value ();
-            iter.unset ();
-            clear_app_entry (entry);
-        }
-
         list_store.remove_all ();
+        app_entries = new Gee.HashMap<string, AppEntry> ();
+        new Settings ("io.elementary.panel.notifications").reset ("headers");
+        Session.get_instance ().clear ();
         close_popover ();
     }
 
-    private void clear_app_entry (AppEntry app_entry) {
-        app_entry.clear.disconnect (clear_app_entry);
-        app_entries.unset (app_entry.app_id);
-
+    private void unset_app_headers (string app_id) {
         var settings = new Settings ("io.elementary.panel.notifications");
         var headers = (HashTable<string, bool>) settings.get_value ("headers");
-        if (headers.remove (app_entry.app_id)) {
+        if (headers.remove (app_id)) {
             settings.set_value ("headers", headers);
-        }
-
-        if (app_entries.size == 0) {
-            Session.get_instance ().clear ();
         }
     }
 
-    private void clear_notification_entry (NotificationEntry entry) {
-        var app_id = entry.notification.desktop_id;
+    private void dismiss_notification_for_id (string app_id) {
+        for (int i = 0; i < list_store.n_items; i++) {
+            var _entry = (NotificationEntry) list_store.get_item (i);
+            if (_entry.notification.desktop_id == app_id) {
+                _entry.dismiss ();
+            }
+        }
+    }
+
+    private void clear_notification (Notification notification) {
+        var app_id = notification.desktop_id;
 
         var n_remaining_items = 0;
         for (int i = 0; i < list_store.n_items; i++) {
             var _entry = (NotificationEntry) list_store.get_item (i);
 
-            if (_entry.notification.internal_id == entry.notification.internal_id) {
+            if (_entry.notification.internal_id == notification.internal_id) {
                 list_store.remove (i);
                 continue;
             }
@@ -163,10 +165,10 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
 
         if (n_remaining_items == 0) {
-            clear_app_entry (app_entries[app_id]);
+            unset_app_headers (app_id);
         }
 
-        Session.get_instance ().remove_notification (entry.notification);
+        Session.get_instance ().remove_notification (notification);
     }
 
     private void on_row_activated (Gtk.ListBoxRow row) {

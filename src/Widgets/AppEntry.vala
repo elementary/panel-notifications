@@ -4,7 +4,7 @@
 */
 
 public class Notifications.AppEntry : Gtk.ListBoxRow {
-    public signal void clear ();
+    public signal void clear (string app_id);
 
     public string app_id { get; private set; }
     public AppInfo? app_info { get; construct; default = null; }
@@ -93,7 +93,7 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
         clear_btn_entry.clicked.connect (() => {
             clear_btn_image.add_css_class ("active");
             GLib.Timeout.add (600, () => {
-                clear (); // Causes notification list to destroy this app entry after clearing its notification entries
+                clear (app_id); // Causes notification list to destroy this app entry after clearing its notification entries
                 return GLib.Source.REMOVE;
             });
         });
