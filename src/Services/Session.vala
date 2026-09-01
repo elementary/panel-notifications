@@ -130,14 +130,6 @@ public class Notifications.Session : GLib.Object {
         }
     }
 
-    public void remove_notifications (Notification[] notifications) {
-        foreach (unowned var notification in notifications) {
-            remove_notification (notification, false); // Only update file once
-        }
-
-        write_contents ();
-    }
-
     public void clear () {
         try {
             FileUtils.set_contents (session_file.get_path (), "");

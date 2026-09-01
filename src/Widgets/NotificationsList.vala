@@ -100,13 +100,13 @@ public class Notifications.NotificationsList : Granite.Bin {
             app_entries[row_app_id] = app_entry;
         }
 
-        app_entry.add_notification_entry (row_entry);
-
         row.set_header (app_entries[row_app_id]);
     }
 
     public async void add_entry (Notification notification) {
         var entry = new NotificationEntry (notification);
+        entry.clear.connect (clear_notification_entry);
+
         list_store.insert_sorted (entry, sort_func);
 
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
@@ -133,7 +133,6 @@ public class Notifications.NotificationsList : Granite.Bin {
     private void clear_app_entry (AppEntry app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
         app_entries.unset (app_entry.app_id);
-        app_entry.app_notifications = new List<NotificationEntry> ();
 
         var settings = new Settings ("io.elementary.panel.notifications");
         var headers = (HashTable<string, bool>) settings.get_value ("headers");
@@ -141,20 +140,33 @@ public class Notifications.NotificationsList : Granite.Bin {
             settings.set_value ("headers", headers);
         }
 
-        Notification[] to_remove = {};
-        for (int i = 0; i < list_store.n_items; i++) {
-            var entry = (NotificationEntry) list_store.get_item (i);
-            if (entry.notification.desktop_id == app_entry.app_id) {
-                entry.dismiss ();
-                to_remove += entry.notification;
-            }
-        }
-
-        Session.get_instance ().remove_notifications (to_remove);
-
         if (app_entries.size == 0) {
             Session.get_instance ().clear ();
         }
+    }
+
+    private void clear_notification_entry (NotificationEntry entry) {
+        var app_id = entry.notification.desktop_id;
+
+        var n_remaining_items = 0;
+        for (int i = 0; i < list_store.n_items; i++) {
+            var _entry = (NotificationEntry) list_store.get_item (i);
+
+            if (_entry.notification.internal_id == entry.notification.internal_id) {
+                list_store.remove (i);
+                continue;
+            }
+
+            if (_entry.notification.desktop_id == app_id) {
+                n_remaining_items++;
+            }
+        }
+
+        if (n_remaining_items == 0) {
+            clear_app_entry (app_entries[app_id]);
+        }
+
+        Session.get_instance ().remove_notification (entry.notification);
     }
 
     private void on_row_activated (Gtk.ListBoxRow row) {

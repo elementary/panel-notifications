@@ -221,7 +221,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         child = revealer;
 
-        delete_button.clicked.connect (() => clear ());
+        delete_button.clicked.connect (dismiss);
 
         var motion_controller = new Gtk.EventControllerMotion ();
 
@@ -248,7 +248,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         carousel.page_changed.connect (() => {
             if (carousel.position != 1) {
-                clear ();
+                dismiss ();
             }
         });
     }
@@ -263,23 +263,24 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     public void dismiss () {
         Source.remove (timeout_id);
 
-        if (!revealer.child_revealed) {
-            ((Gtk.ListBox) parent).remove (this);
-        } else {
-            revealer.notify["child-revealed"].connect (() => {
-                if (!revealer.child_revealed) {
-                    ((Gtk.ListBox) parent).remove (this);
-                }
-            });
-            revealer.reveal_child = false;
-        }
-
         if (notification.server_id > 0) {
             activate_action_variant (
                 NotificationsList.ACTION_PREFIX + "close",
                 new Variant.array (VariantType.UINT32, { notification.server_id })
             );
         }
+
+        if (!revealer.child_revealed) {
+            clear ();
+            return;
+        }
+
+        revealer.notify["child-revealed"].connect (() => {
+            if (!revealer.child_revealed) {
+                clear ();
+            }
+        });
+        revealer.reveal_child = false;
     }
 
     private class DeleteAffordance : Granite.Bin {
