@@ -63,7 +63,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         image_overlay.add_overlay (secondary_image);
 
-
         Icon app_icon = new ThemedIcon ("dialog-information");
         if (notification.app_icon.contains ("/")) {
             var file = File.new_for_uri (notification.app_icon);
@@ -81,6 +80,14 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                 primary_image.add_css_class (Granite.CssClass.CARD);
                 primary_image.add_css_class (Granite.CssClass.CHECKERBOARD);
                 secondary_image.gicon = app_icon;
+
+                // Assume this is an avatar
+                if (notification.category == "im.received" ||
+                    // Hardcoding is evil but this bothers me
+                    notification.app_icon == "com.discordapp.Discord"
+                ) {
+                    primary_image.add_css_class (Granite.CssClass.CIRCULAR);
+                }
             } else {
                 primary_image.gicon = app_icon;
             }
