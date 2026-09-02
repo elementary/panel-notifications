@@ -109,7 +109,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         title_label.add_css_class ("title");
 
-        var time_label = new Gtk.Label (Granite.DateTime.get_relative_datetime (notification.timestamp)) {
+        var time_label = new Gtk.Label ("") {
             margin_end = 6
         };
         time_label.add_css_class (Granite.CssClass.DIM);
@@ -243,15 +243,16 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         revealer.add_controller (motion_controller);
 
-        timeout_id = Timeout.add_seconds_full (Priority.DEFAULT, 60, () => {
+        map.connect (() => {
             time_label.label = Granite.DateTime.get_relative_datetime (notification.timestamp);
-            return GLib.Source.CONTINUE;
+            timeout_id = Timeout.add_seconds_full (Priority.DEFAULT, 60, () => {
+                time_label.label = Granite.DateTime.get_relative_datetime (notification.timestamp);
+                return GLib.Source.CONTINUE;
+            });
         });
 
-        carousel.page_changed.connect (() => {
-            if (carousel.position != 1) {
-                dismiss ();
-            }
+        unmap.connect (() => {
+            Source.remove (timeout_id);
         });
     }
 
@@ -263,8 +264,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     }
 
     public void dismiss () {
-        Source.remove (timeout_id);
-
         if (!revealer.child_revealed) {
             remove ();
         } else {
