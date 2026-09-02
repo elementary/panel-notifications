@@ -116,10 +116,6 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
         app_notifications.remove (entry);
 
         if (app_notifications.length () == 0) {
-            if (headers.remove (app_id)) {
-                settings.set_value ("headers", headers);
-            }
-
             clear ();
         }
     }

@@ -137,12 +137,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         app_entries.unset (app_entry.app_id);
         app_entry.app_notifications = new List<NotificationEntry> ();
 
-        var settings = new Settings ("io.elementary.panel.notifications");
-        var headers = (HashTable<string, bool>) settings.get_value ("headers");
-        if (headers.remove (app_entry.app_id)) {
-            settings.set_value ("headers", headers);
-        }
-
         Notification[] to_remove = {};
         for (int i = 0; i < list_store.n_items; i++) {
             var entry = (NotificationEntry) list_store.get_item (i);
@@ -160,10 +154,26 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private void remove_notification (NotificationEntry notification_entry) {
+        var app_id = notification_entry.notification.desktop_id;
+
         uint pos = -1;
         if (list_store.find (notification_entry, out pos)) {
             list_store.remove (pos);
             Session.get_instance ().remove_notification (notification_entry.notification);
+        }
+
+        var items_for_appid = new Gtk.FilterListModel (
+            list_store, new Gtk.CustomFilter ((item) => {
+                return ((NotificationEntry) item).notification.desktop_id == app_id;
+            })
+        );
+
+        if (items_for_appid.n_items == 0) {
+            var settings = new Settings ("io.elementary.panel.notifications");
+            var headers = (HashTable<string, bool>) settings.get_value ("headers");
+            if (headers.remove (app_id)) {
+                settings.set_value ("headers", headers);
+            }
         }
     }
 
