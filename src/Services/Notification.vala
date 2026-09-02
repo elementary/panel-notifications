@@ -75,47 +75,34 @@ public class Notifications.Notification : Object {
         sender = _sender;
 
         actions = _actions;
-        buttons = validate_actions (actions);
 
         timestamp = new GLib.DateTime.from_unix_local (_unix_time);
 
         desktop_id = _desktop_id;
-        app_info = new DesktopAppInfo (desktop_id);
 
         has_temp_file = _has_temp_file;
     }
 
     public Notification.from_message (DBusMessage message, uint32 _id) {
         var body = message.get_body ();
+        var hints = body.get_child_value (Column.HINTS);
 
         app_name = get_string (body, Column.APP_NAME);
         summary = get_string (body, Column.SUMMARY);
         message_body = get_string (body, Column.BODY);
-        var hints = body.get_child_value (Column.HINTS);
         replaces_id = get_uint32 (body, Column.REPLACES_ID);
         server_id = _id;
         sender = message.get_sender ();
 
         actions = body.get_child_value (Column.ACTIONS).dup_strv ();
-        buttons = validate_actions (actions);
 
         timestamp = new GLib.DateTime.now_local ();
 
         internal_id = timestamp.to_unix ().to_string () + "." + server_id.to_string ();
 
         desktop_id = lookup_string (hints, DESKTOP_ENTRY_KEY);
-        if (desktop_id != null && desktop_id != "") {
-            if (!desktop_id.has_suffix (DESKTOP_ID_EXT)) {
-                desktop_id += DESKTOP_ID_EXT;
-            }
-
-            app_info = new DesktopAppInfo (desktop_id);
-        }
 
         app_icon = get_string (body, Column.APP_ICON);
-        if (app_icon == "" && app_info != null) {
-            app_icon = app_info.get_icon ().to_string ();
-        }
 
         // GLib.Notification.set_icon ()
         if ((image_path = lookup_string (hints, "image-path")) != "" || (image_path = lookup_string (hints, "image_path")) != "") {
@@ -141,6 +128,22 @@ public class Notifications.Notification : Object {
                 image_path = tmpfile;
                 has_temp_file = true;
             }
+        }
+    }
+
+    construct {
+        buttons = validate_actions (actions);
+
+        if (desktop_id != null && desktop_id != "") {
+            if (!desktop_id.has_suffix (DESKTOP_ID_EXT)) {
+                desktop_id += DESKTOP_ID_EXT;
+            }
+
+            app_info = new DesktopAppInfo (desktop_id);
+        }
+
+        if (app_icon == "" && app_info != null) {
+            app_icon = app_info.get_icon ().to_string ();
         }
 
         if (app_info == null) {
