@@ -190,7 +190,7 @@ public class Notifications.NotificationsList : Granite.Bin {
                 try {
                     var context = notification_entry.get_display ().get_app_launch_context ();
                     notification_entry.notification.app_info.launch (null, context);
-                    notification_entry.clear ();
+                    notification_entry.dismiss ();
                     close_popover ();
                 } catch (Error e) {
                     warning ("Unable to launch app: %s", e.message);
