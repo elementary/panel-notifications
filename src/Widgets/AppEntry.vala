@@ -114,9 +114,5 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
 
     private void remove_notification_entry (NotificationEntry entry) {
         app_notifications.remove (entry);
-
-        if (app_notifications.length () == 0) {
-            clear ();
-        }
     }
 }

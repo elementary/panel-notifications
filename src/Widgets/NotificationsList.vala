@@ -169,6 +169,8 @@ public class Notifications.NotificationsList : Granite.Bin {
         );
 
         if (items_for_appid.n_items == 0) {
+            clear_app_entry (app_entries[app_id]);
+
             var settings = new Settings ("io.elementary.panel.notifications");
             var headers = (HashTable<string, bool>) settings.get_value ("headers");
             if (headers.remove (app_id)) {
