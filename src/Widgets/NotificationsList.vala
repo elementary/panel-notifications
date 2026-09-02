@@ -100,8 +100,6 @@ public class Notifications.NotificationsList : Granite.Bin {
             app_entries[row_app_id] = app_entry;
         }
 
-        app_entry.add_notification_entry (row_entry);
-
         row.set_header (app_entries[row_app_id]);
     }
 
@@ -135,7 +133,6 @@ public class Notifications.NotificationsList : Granite.Bin {
     private void clear_app_entry (AppEntry app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
         app_entries.unset (app_entry.app_id);
-        app_entry.app_notifications = new List<NotificationEntry> ();
 
         Notification[] to_remove = {};
         for (int i = 0; i < list_store.n_items; i++) {
