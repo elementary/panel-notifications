@@ -179,7 +179,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             var entry = (NotificationEntry) nlist.notification_items.get_item (i);
             if (id == entry.notification.server_id) {
                 entry.notification.server_id = 0; // Notification is now outdated
-                entry.clear ();
+                entry.dismiss ();
                 return;
             }
         }
