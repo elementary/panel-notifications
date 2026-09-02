@@ -4,7 +4,6 @@
 */
 
 public class Notifications.NotificationEntry : Gtk.ListBoxRow {
-    public signal void clear ();
     public signal void remove ();
 
     public Notification notification { get; construct; }
@@ -222,7 +221,9 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         child = revealer;
 
-        delete_button.clicked.connect (() => clear ());
+        delete_button.clicked.connect (() => {
+            dismiss ();
+        });
 
         var motion_controller = new Gtk.EventControllerMotion ();
 
@@ -249,7 +250,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         carousel.page_changed.connect (() => {
             if (carousel.position != 1) {
-                clear ();
+                dismiss ();
             }
         });
 
