@@ -11,7 +11,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
     private GLib.HashTable<string, GLib.DateTime> app_datetime;
-    public Gee.HashMap<string, AppEntry> app_entries { get; private set; }
+    private Gee.HashMap<string, AppEntry> app_entries;
 
     private ListStore list_store;
     public ListModel notification_items {
@@ -128,6 +128,19 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         list_store.remove_all ();
         close_popover ();
+    }
+
+    public uint get_n_app_items () {
+        var app_list = new Gtk.StringList ({});
+
+        for (var i = 0; i < list_store.n_items; i++) {
+            var app_id = ((NotificationEntry) list_store.get_item (i)).notification.desktop_id;
+            if (app_list.find (app_id) == -1) {
+                app_list.append (app_id);
+            }
+        }
+
+        return app_list.n_items;
     }
 
     private void clear_app_entry (AppEntry app_entry) {

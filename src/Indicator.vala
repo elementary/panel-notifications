@@ -171,7 +171,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void update_clear_all_sensitivity () {
-        clear_all_btn.sensitive = nlist.app_entries.size > 0;
+        clear_all_btn.sensitive = nlist.get_n_app_items () > 0;
     }
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
@@ -188,7 +188,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
-        } else if (nlist != null && nlist.app_entries.size > 0) {
+        } else if (nlist != null && nlist.get_n_app_items () > 0) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
             dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
@@ -235,12 +235,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 description = _("1 notification");
                 break;
             default:
-                var number_of_apps = nlist.app_entries.size;
+                var number_of_apps = nlist.get_n_app_items ();
                 /// TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
                 /// e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
                 description = _("%s from %s").printf (
                     dngettext (GETTEXT_PACKAGE, "%u notification", "%u notifications", number_of_notifications).printf (number_of_notifications),
-                    dngettext (GETTEXT_PACKAGE, "%i app", "%i apps", number_of_apps).printf (number_of_apps)
+                    dngettext (GETTEXT_PACKAGE, "%i app", "%u apps", number_of_apps).printf (number_of_apps)
                 );
                 break;
         }
