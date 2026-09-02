@@ -252,6 +252,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                 clear ();
             }
         });
+
+        notification.notify["server-id"].connect (() => {
+            if (notification.server_id == 0) {
+                dismiss ();
+            }
+        });
     }
 
     private static bool get_bind_func (Value value, Variant variant, void* user_data) {
@@ -261,7 +267,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         return true;
     }
 
-    public void dismiss () {
+    private void dismiss () {
         Source.remove (timeout_id);
 
         if (!revealer.child_revealed) {

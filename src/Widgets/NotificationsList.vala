@@ -147,7 +147,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         for (int i = 0; i < list_store.n_items; i++) {
             var entry = (NotificationEntry) list_store.get_item (i);
             if (entry.notification.desktop_id == app_entry.app_id) {
-                entry.dismiss ();
+                entry.notification.server_id = 0;
                 to_remove += entry.notification;
             }
         }
@@ -181,7 +181,7 @@ public class Notifications.NotificationsList : Granite.Bin {
                 try {
                     var context = notification_entry.get_display ().get_app_launch_context ();
                     notification_entry.notification.app_info.launch (null, context);
-                    notification_entry.clear ();
+                    notification_entry.notification.server_id = 0;
                     close_popover ();
                 } catch (Error e) {
                     warning ("Unable to launch app: %s", e.message);
