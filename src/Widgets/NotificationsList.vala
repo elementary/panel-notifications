@@ -158,7 +158,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         Session.get_instance ().remove_notifications (to_remove);
 
-        if (app_entries.size == 0) {
+        if (get_n_app_items () == 0) {
             Session.get_instance ().clear ();
         }
     }
