@@ -107,6 +107,8 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     public async void add_entry (Notification notification) {
         var entry = new NotificationEntry (notification);
+        entry.remove.connect (remove_notification);
+
         list_store.insert_sorted (entry, sort_func);
 
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
@@ -154,6 +156,14 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         if (app_entries.size == 0) {
             Session.get_instance ().clear ();
+        }
+    }
+
+    private void remove_notification (NotificationEntry notification_entry) {
+        uint pos = -1;
+        if (list_store.find (notification_entry, out pos)) {
+            list_store.remove (pos);
+            Session.get_instance ().remove_notification (notification_entry.notification);
         }
     }
 

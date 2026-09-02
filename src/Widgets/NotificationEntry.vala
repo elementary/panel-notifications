@@ -5,6 +5,7 @@
 
 public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     public signal void clear ();
+    public signal void remove ();
 
     public Notification notification { get; construct; }
     public Gtk.Revealer revealer { get; construct; }
@@ -264,11 +265,11 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         Source.remove (timeout_id);
 
         if (!revealer.child_revealed) {
-            ((Gtk.ListBox) parent).remove (this);
+            remove ();
         } else {
             revealer.notify["child-revealed"].connect (() => {
                 if (!revealer.child_revealed) {
-                    ((Gtk.ListBox) parent).remove (this);
+                    remove ();
                 }
             });
             revealer.reveal_child = false;
