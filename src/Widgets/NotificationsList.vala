@@ -107,7 +107,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     public async void add_entry (Notification notification) {
         var entry = new NotificationEntry (notification);
-        entry.remove.connect ((_entry) => remove_notification (_entry.notification));
+        entry.remove.connect (remove_notification);
 
         list_store.insert_sorted (entry, sort_func);
 
@@ -159,13 +159,11 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
     }
 
-    private void remove_notification (Notification notification) {
-        for (int i = 0; i < list_store.n_items; i++) {
-            var _entry = (NotificationEntry) list_store.get_item (i);
-            if (_entry.notification.internal_id == notification.internal_id) {
-                list_store.remove (i);
-                break;
-            }
+    private void remove_notification (NotificationEntry notification_entry) {
+        uint pos = -1;
+        if (list_store.find (notification_entry, out pos)) {
+            list_store.remove (pos);
+            Session.get_instance ().remove_notification (notification_entry.notification);
         }
     }
 
