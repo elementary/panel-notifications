@@ -27,23 +27,24 @@ public class Notifications.Notification : Object {
     public const string DESKTOP_ID_EXT = ".desktop";
 
     public string internal_id { get; construct set; } // Format: "timestamp.server_id"
+    public uint32 server_id { get; construct set; default = 0; } // 0 means the notification is outdated i.e. not present in the server anymore
+    public GLib.Icon badge_icon { get; construct set; }
+
+    public string? default_action { get; private set; default = null; }
+    public string image_path { get; private set; default = ""; }
+    public string app_icon {get; private set; }
+    public string desktop_id { get; private set; }
+    public DesktopAppInfo? app_info { get; private set; default = null; }
+
     public string app_name;
     public string summary;
     public string message_body;
-    public string image_path { get; private set; default = ""; }
-    public string app_icon;
     public string sender;
     public string[] actions;
     public List<Gtk.Button> buttons;
-    public string? default_action { get; private set; default = null; }
     public uint32 replaces_id;
-    public uint32 server_id { get; construct set; default = 0; } // 0 means the notification is outdated i.e. not present in the server anymore
     public bool has_temp_file;
     public GLib.DateTime timestamp;
-    public GLib.Icon badge_icon { get; construct set; }
-
-    public string desktop_id;
-    public DesktopAppInfo? app_info = null;
 
     private enum Column {
         APP_NAME = 0,
