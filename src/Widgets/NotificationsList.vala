@@ -131,16 +131,16 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     public uint get_n_app_items () {
-        var app_list = new Gtk.StringList ({});
+        var app_list = new GenericSet<string> (str_hash, str_equal);
 
         for (var i = 0; i < list_store.n_items; i++) {
             var app_id = ((NotificationEntry) list_store.get_item (i)).notification.desktop_id;
-            if (app_list.find (app_id) == -1) {
-                app_list.append (app_id);
+            if (!app_list.contains (app_id)) {
+                app_list.add (app_id);
             }
         }
 
-        return app_list.n_items;
+        return app_list.length;
     }
 
     private void clear_app_entry (AppEntry app_entry) {
