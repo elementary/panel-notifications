@@ -6,9 +6,96 @@
 public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     public signal void remove ();
 
-    public Notification notification { get; construct; }
-    public Gtk.Revealer revealer { get; construct; }
+    private Notification _notification;
+    public Notification notification {
+        get {
+            return _notification;
+        }
+        set {
+            _notification = value;
 
+            Icon app_icon = new ThemedIcon ("dialog-information");
+            if (value.app_icon.contains ("/")) {
+                var file = File.new_for_uri (value.app_icon);
+                if (file.query_exists ()) {
+                    app_icon = new FileIcon (file);
+                }
+            } else if (value.app_icon != "") {
+                app_icon = new ThemedIcon (value.app_icon);
+            }
+
+            if (value.image_path != null && value.image_path != "") {
+                var file = File.new_for_path (value.image_path);
+                if (file.query_exists ()) {
+                    primary_image.gicon = new FileIcon (file);
+                    primary_image.add_css_class (Granite.CssClass.CARD);
+                    primary_image.add_css_class (Granite.CssClass.CHECKERBOARD);
+                    secondary_image.gicon = app_icon;
+                } else {
+                    primary_image.gicon = app_icon;
+                }
+            } else {
+                primary_image.gicon = app_icon;
+                secondary_image.gicon = value.badge_icon;
+            }
+
+            var entry_title = value.summary;
+
+            if (value.message_body == "") {
+                if (value.app_name == "" && value.app_info != null) {
+                    value.app_name = value.app_info.get_display_name ();
+                }
+
+                entry_title = value.app_name;
+            }
+
+            title_label.label = fix_markup (entry_title);
+
+            time_label.label = Granite.DateTime.get_relative_datetime (value.timestamp);
+
+            var entry_body = value.message_body;
+
+            if (entry_body == "") {
+                entry_body = value.summary;
+            }
+
+            var body = fix_markup (entry_body);
+
+            if ("\n" in body) {
+                string[] lines = body.split ("\n");
+                string stripped_body = lines[0] + "\n";
+                for (int i = 1; i < lines.length; i++) {
+                    stripped_body += lines[i].strip () + " ";
+                }
+
+                body_label.label = stripped_body.strip ();
+                body_label.lines = 1;
+            } else {
+                body_label.label = body;
+                body_label.lines = 2;
+            }
+
+            action_area.visible = value.buttons.length () > 0;
+
+            if (value.buttons.length () > 0) {
+                foreach (var button in value.buttons) {
+                    action_area.append (button);
+                };
+            } else {
+                while (action_area.get_first_child () != null) {
+                    action_area.remove (action_area.get_first_child ());
+                }
+            }
+        }
+    }
+
+    private Granite.Box action_area;
+    private Gtk.Image primary_image;
+    private Gtk.Image secondary_image;
+    private Gtk.Label body_label;
+    private Gtk.Label time_label;
+    private Gtk.Label title_label;
+    private Gtk.Revealer revealer;
     private uint timeout_id;
 
     private const int ICON_SIZE_PRIMARY = 48;
@@ -17,10 +104,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     private static Regex entity_regex;
     private static Regex tag_regex;
     private static Settings settings;
-
-    public NotificationEntry (Notification notification) {
-        Object (notification: notification);
-    }
 
     static construct {
         try {
@@ -47,11 +130,11 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     }
 
     construct {
-        var primary_image = new Gtk.Image () {
+        primary_image = new Gtk.Image () {
             pixel_size = ICON_SIZE_PRIMARY,
             overflow = HIDDEN
         };
-        var secondary_image = new Gtk.Image () {
+        secondary_image = new Gtk.Image () {
             halign = END,
             valign = END,
             pixel_size = ICON_SIZE_SECONDARY
@@ -63,43 +146,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         image_overlay.add_overlay (secondary_image);
 
-
-        Icon app_icon = new ThemedIcon ("dialog-information");
-        if (notification.app_icon.contains ("/")) {
-            var file = File.new_for_uri (notification.app_icon);
-            if (file.query_exists ()) {
-                app_icon = new FileIcon (file);
-            }
-        } else if (notification.app_icon != "") {
-            app_icon = new ThemedIcon (notification.app_icon);
-        }
-
-        if (notification.image_path != null && notification.image_path != "") {
-            var file = File.new_for_path (notification.image_path);
-            if (file.query_exists ()) {
-                primary_image.gicon = new FileIcon (file);
-                primary_image.add_css_class (Granite.CssClass.CARD);
-                primary_image.add_css_class (Granite.CssClass.CHECKERBOARD);
-                secondary_image.gicon = app_icon;
-            } else {
-                primary_image.gicon = app_icon;
-            }
-        } else {
-            primary_image.gicon = app_icon;
-            secondary_image.gicon = notification.badge_icon;
-        }
-
-        var entry_title = notification.summary;
-
-        if (notification.message_body == "") {
-            if (notification.app_name == "" && notification.app_info != null) {
-                notification.app_name = notification.app_info.get_display_name ();
-            }
-
-            entry_title = notification.app_name;
-        }
-
-        var title_label = new Gtk.Label (fix_markup (entry_title)) {
+        title_label = new Gtk.Label ("") {
             ellipsize = END,
             hexpand = true,
             width_chars = 27,
@@ -109,7 +156,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         title_label.add_css_class ("title");
 
-        var time_label = new Gtk.Label (Granite.DateTime.get_relative_datetime (notification.timestamp)) {
+        time_label = new Gtk.Label ("") {
             margin_end = 6
         };
         time_label.add_css_class (Granite.CssClass.DIM);
@@ -119,7 +166,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             column_spacing = 6
         };
         grid.add_css_class (Granite.CssClass.CARD);
-
 
         var delete_button = new Gtk.Button.from_icon_name ("window-close-symbolic") {
             halign = START,
@@ -137,21 +183,8 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             transition_type = CROSSFADE
         };
 
-        grid.attach (image_overlay, 0, 0, 1, 2);
-        grid.attach (title_label, 1, 0);
-        grid.attach (time_label, 2, 0);
-
-        var entry_body = notification.message_body;
-
-        if (entry_body == "") {
-            entry_body = notification.summary;
-        }
-
-        var body = fix_markup (entry_body);
-
-        var body_label = new Gtk.Label (body) {
+        body_label = new Gtk.Label ("") {
             ellipsize = END,
-            lines = 2,
             use_markup = true,
             valign = START,
             wrap_mode = WORD_CHAR,
@@ -159,32 +192,17 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             xalign = 0
         };
 
-        if ("\n" in body) {
-            string[] lines = body.split ("\n");
-            string stripped_body = lines[0] + "\n";
-            for (int i = 1; i < lines.length; i++) {
-                stripped_body += lines[i].strip () + " ";
-            }
+        action_area = new Granite.Box (HORIZONTAL, HALF) {
+            margin_top = 12,
+            halign = END,
+            homogeneous = true
+        };
 
-            body_label.label = stripped_body.strip ();
-            body_label.lines = 1;
-
-        }
-
+        grid.attach (image_overlay, 0, 0, 1, 2);
+        grid.attach (title_label, 1, 0);
+        grid.attach (time_label, 2, 0);
         grid.attach (body_label, 1, 1, 2);
-
-        if (notification.buttons.length () > 0) {
-            var action_area = new Gtk.Box (HORIZONTAL, 6) {
-                margin_top = 12,
-                halign = END,
-                homogeneous = true
-            };
-            grid.attach (action_area, 0, 2, 3);
-
-            foreach (var button in notification.buttons) {
-                action_area.append (button);
-            };
-        }
+        grid.attach (action_area, 0, 2, 3);
 
         var delete_left = new DeleteAffordance (END) {
             // Have to match with the grid
