@@ -51,8 +51,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
             title_label.label = fix_markup (entry_title);
 
-            time_label.label = Granite.DateTime.get_relative_datetime (value.timestamp);
-
             var entry_body = value.message_body;
 
             if (entry_body == "") {
@@ -93,7 +91,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     private Gtk.Image primary_image;
     private Gtk.Image secondary_image;
     private Gtk.Label body_label;
-    private Gtk.Label time_label;
     private Gtk.Label title_label;
     private Gtk.Revealer revealer;
     private uint timeout_id;
@@ -156,7 +153,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         title_label.add_css_class ("title");
 
-        time_label = new Gtk.Label ("") {
+        var time_label = new Gtk.Label ("") {
             margin_end = 6
         };
         time_label.add_css_class (Granite.CssClass.DIM);
@@ -261,10 +258,20 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         revealer.add_controller (motion_controller);
 
+        map.connect (() => {
+            time_label.label = Granite.DateTime.get_relative_datetime (notification.timestamp);
+            timeout_id = Timeout.add_seconds_full (Priority.DEFAULT, 60, () => {
+                time_label.label = Granite.DateTime.get_relative_datetime (notification.timestamp);
+                return GLib.Source.CONTINUE;
+            });
+        });
 
+        unmap.connect (() => {
+            Source.remove (timeout_id);
+        });
 
-        carousel.page_changed.connect (() => {
-            if (carousel.position != 1) {
+        notification.notify["server-id"].connect (() => {
+            if (notification.server_id == 0) {
                 dismiss ();
             }
         });
@@ -288,7 +295,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         return true;
     }
 
-    public void dismiss () {
+    private void dismiss () {
         if (!revealer.child_revealed) {
             remove ();
         } else {
