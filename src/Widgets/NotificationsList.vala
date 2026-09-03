@@ -10,7 +10,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     public const string ACTION_GROUP_PREFIX = "notifications-list";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
-    private GLib.HashTable<string, GLib.DateTime> app_datetime;
+    private static GLib.HashTable<string, GLib.DateTime> app_datetime;
     private Gee.HashMap<string, AppEntry> app_entries;
 
     private ListStore list_store;
@@ -36,11 +36,15 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         list_store = new GLib.ListStore (typeof (Notification));
 
+        var sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
+            section_sorter = new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) section_func)
+        };
+
         var listbox = new Gtk.ListBox () {
             activate_on_single_click = true,
             selection_mode = NONE
         };
-        listbox.bind_model (list_store, create_widget_func);
+        listbox.bind_model (sort_list_model, create_widget_func);
         listbox.set_placeholder (placeholder);
         listbox.set_header_func (header_func);
 
@@ -61,13 +65,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         });
     }
 
-    private int sort_func (Object obj1, Object obj2) {
-        var a = ((Notification) obj1);
-        var b = ((Notification) obj2);
-        if (a.desktop_id == b.desktop_id) {
-            return Notification.compare (a, b);
-        }
-
+    private static int section_func (Notification a, Notification b) {
         unowned GLib.DateTime? time_a = app_datetime[a.desktop_id];
         unowned GLib.DateTime? time_b = app_datetime[b.desktop_id];
 
@@ -117,7 +115,7 @@ public class Notifications.NotificationsList : Granite.Bin {
             app_datetime[notification.desktop_id] = notification.timestamp;
         }
 
-        list_store.insert_sorted (notification, sort_func);
+        list_store.append (notification);
 
         Idle.add (add_entry.callback);
         yield;
