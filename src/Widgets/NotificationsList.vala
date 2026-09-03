@@ -11,7 +11,6 @@ public class Notifications.NotificationsList : Granite.Bin {
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
     private static GLib.HashTable<string, GLib.DateTime> app_datetime;
-    private Gee.HashMap<string, AppEntry> app_entries;
 
     private ListStore list_store;
     public ListModel notification_items {
@@ -21,7 +20,6 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     construct {
-        app_entries = new Gee.HashMap<string, AppEntry> ();
         app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
 
         var placeholder = new Gtk.Label (_("No Notifications")) {
