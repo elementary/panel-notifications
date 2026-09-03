@@ -132,12 +132,8 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     public uint get_n_app_items () {
         var app_list = new GenericSet<string> (str_hash, str_equal);
-
         for (var i = 0; i < list_store.n_items; i++) {
-            var app_id = ((NotificationEntry) list_store.get_item (i)).notification.desktop_id;
-            if (!app_list.contains (app_id)) {
-                app_list.add (app_id);
-            }
+            app_list.add (((NotificationEntry) list_store.get_item (i)).notification.desktop_id);
         }
 
         return app_list.length;
