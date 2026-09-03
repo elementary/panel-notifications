@@ -6,7 +6,7 @@
 public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     public signal void remove ();
 
-    public Notification notification { get; construct; }
+    public Notification notification { get; private set; }
 
     private uint timeout_id;
 
@@ -23,10 +23,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     private Gtk.Label body_label;
     private Gtk.Label title_label;
     private Gtk.Revealer revealer;
-
-    public NotificationEntry (Notification notification) {
-        Object (notification: notification);
-    }
 
     static construct {
         try {
@@ -179,12 +175,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             delete_revealer.reveal_child = false;
         });
 
-        settings.bind_with_mapping (
-            "headers", revealer, "reveal-child", GET,
-            get_bind_func, () => false,
-            new Variant.string (notification.desktop_id), null
-        );
-
         revealer.add_controller (motion_controller);
 
         map.connect (() => {
@@ -202,7 +192,9 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         bind (notification);
     }
 
-    private void bind (Notification notification) {
+    public void bind (Notification value) {
+        notification = value;
+
         Icon app_icon = new ThemedIcon ("dialog-information");
         if (notification.app_icon.contains ("/")) {
             var file = File.new_for_uri (notification.app_icon);
@@ -267,6 +259,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                 action_area.append (button);
             };
         }
+
+        settings.bind_with_mapping (
+            "headers", revealer, "reveal-child", GET,
+            get_bind_func, () => false,
+            new Variant.string (notification.desktop_id), null
+        );
 
         notification.notify["server-id"].connect (() => {
             if (notification.server_id == 0) {
