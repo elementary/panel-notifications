@@ -92,15 +92,10 @@ public class Notifications.NotificationsList : Granite.Bin {
             return;
         }
 
-        var app_entry = app_entries[row_app_id];
-        if (app_entry == null) {
-            app_entry = new AppEntry (row_entry.notification.app_info);
-            app_entry.clear.connect (clear_app_entry);
+        var app_entry = new AppEntry (row_entry.notification.app_info);
+        app_entry.clear.connect (clear_app_entry);
 
-            app_entries[row_app_id] = app_entry;
-        }
-
-        row.set_header (app_entries[row_app_id]);
+        row.set_header (app_entry);
     }
 
     public async void add_entry (Notification notification) {
@@ -119,20 +114,13 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     public void clear_all () {
-        var iter = app_entries.map_iterator ();
-        while (iter.next ()) {
-            var entry = iter.get_value ();
-            iter.unset ();
-            clear_app_entry (entry);
-        }
-
+        Session.get_instance ().clear ();
         list_store.remove_all ();
         close_popover ();
     }
 
     private void clear_app_entry (AppEntry app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
-        app_entries.unset (app_entry.app_id);
 
         Notification[] to_remove = {};
         for (int i = 0; i < list_store.n_items; i++) {
@@ -144,10 +132,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
 
         Session.get_instance ().remove_notifications (to_remove);
-
-        if (app_entries.size == 0) {
-            Session.get_instance ().clear ();
-        }
     }
 
     private void remove_notification (NotificationEntry notification_entry) {
@@ -166,8 +150,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         );
 
         if (items_for_appid.n_items == 0) {
-            clear_app_entry (app_entries[app_id]);
-
             var settings = new Settings ("io.elementary.panel.notifications");
             var headers = (HashTable<string, bool>) settings.get_value ("headers");
             if (headers.remove (app_id)) {

@@ -50,7 +50,13 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             };
 
             nlist = new NotificationsList ();
-            nlist.items_changed.connect (set_display_icon_name);
+            nlist.items_changed.connect (() => {
+                set_display_icon_name ();
+
+                if (nlist.notification_items.get_n_items () == 0) {
+                    Session.get_instance ().clear ();
+                }
+            });
 
             monitor.notification_received.connect (on_notification_received);
             monitor.notification_closed.connect (on_notification_closed);
@@ -171,7 +177,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void update_clear_all_sensitivity () {
-        clear_all_btn.sensitive = nlist.app_entries.size > 0;
+        clear_all_btn.sensitive = nlist.notification_items.get_n_items () > 0;
     }
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
@@ -187,7 +193,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
-        } else if (nlist != null && nlist.app_entries.size > 0) {
+        } else if (nlist != null && nlist.notification_items.get_n_items () > 0) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
             dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
