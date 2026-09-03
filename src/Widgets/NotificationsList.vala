@@ -106,13 +106,16 @@ public class Notifications.NotificationsList : Granite.Bin {
     private Gtk.Widget create_widget_func (Object item) {
         var notification = (Notification) item;
 
-        var notification_entry = new NotificationEntry (notification);
+        var notification_entry = new NotificationEntry ();
+        notification_entry.bind (notification);
         notification_entry.remove.connect (remove_notification);
 
         return notification_entry;
     }
 
     public async void add_entry (Notification notification) {
+        list_store.insert_sorted (notification, sort_func);
+
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
         if (time == null || time.compare (notification.timestamp) <= 0) {
             app_datetime[notification.desktop_id] = notification.timestamp;
