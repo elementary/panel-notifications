@@ -84,6 +84,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                     action_area.remove (action_area.get_first_child ());
                 }
             }
+
+            value.notify["server-id"].connect (() => {
+                if (value.server_id == 0) {
+                    dismiss ();
+                }
+            });
         }
     }
 
@@ -268,12 +274,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         unmap.connect (() => {
             Source.remove (timeout_id);
-        });
-
-        notification.notify["server-id"].connect (() => {
-            if (notification.server_id == 0) {
-                dismiss ();
-            }
         });
 
         map.connect (() => {
