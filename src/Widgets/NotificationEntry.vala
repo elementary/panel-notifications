@@ -17,6 +17,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     private static Regex tag_regex;
     private static Settings settings;
 
+    private Granite.Box action_area;
     private Gtk.Image primary_image;
     private Gtk.Image secondary_image;
     private Gtk.Label body_label;
@@ -121,18 +122,13 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         grid.attach (body_label, 1, 1, 2);
 
-        if (notification.buttons.length () > 0) {
-            var action_area = new Gtk.Box (HORIZONTAL, 6) {
-                margin_top = 12,
-                halign = END,
-                homogeneous = true
-            };
-            grid.attach (action_area, 0, 2, 3);
-
-            foreach (var button in notification.buttons) {
-                action_area.append (button);
-            };
-        }
+        action_area = new Granite.Box (HORIZONTAL, HALF) {
+            margin_top = 12,
+            halign = END,
+            homogeneous = true,
+            visible = false
+        };
+        grid.attach (action_area, 0, 2, 3);
 
         var delete_left = new DeleteAffordance (END) {
             // Have to match with the grid
@@ -263,6 +259,14 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         }
 
         body_label.label = fix_markup (entry_body);
+
+        if (notification.buttons.length () > 0) {
+            action_area.visible = true;
+
+            foreach (var button in notification.buttons) {
+                action_area.append (button);
+            };
+        }
 
         notification.notify["server-id"].connect (() => {
             if (notification.server_id == 0) {
