@@ -7,7 +7,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     public signal void remove ();
 
     public Notification notification { get; construct; }
-    public Gtk.Revealer revealer { get; construct; }
+    private Gtk.Revealer revealer;
 
     private uint timeout_id;
 
