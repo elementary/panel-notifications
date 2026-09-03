@@ -143,9 +143,12 @@ public class Notifications.Notification : Object {
             }
         }
 
-        if (app_info == null) {
-            desktop_id = FALLBACK_DESKTOP_ID;
+        if (app_info != null) {
+            app_name = app_info.get_display_name ();
+        } else {
             app_info = new DesktopAppInfo (desktop_id);
+            app_name = _("Other");
+            desktop_id = FALLBACK_DESKTOP_ID;
         }
     }
 
