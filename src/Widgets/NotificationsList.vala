@@ -118,17 +118,17 @@ public class Notifications.NotificationsList : Granite.Bin {
         var app_entry =  new AppEntry ();
         app_entry.clear.connect (clear_app_entry);
 
-        var list_item = (Gtk.ListItem) item;
+        var list_item = (Gtk.ListHeader) item;
         list_item.child = app_entry;
     }
 
     private void bind_header_factory (Object item) {
-        var list_item = (Gtk.ListItem) item;
+        var list_item = (Gtk.ListHeader) item;
         var notification = (Notification) list_item.item;
 
-        var notification_entry = (AppEntry) list_item.child;
-        notification_entry.app_name = notification.app_name;
-        notification_entry.app_id = notification.desktop_id;
+        var app_entry = (AppEntry) list_item.child;
+        app_entry.app_name = notification.app_name;
+        app_entry.app_id = notification.desktop_id;
     }
 
     public async void add_entry (Notification notification) {
