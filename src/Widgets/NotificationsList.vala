@@ -99,7 +99,8 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     public async void add_entry (Notification notification) {
-        var entry = new NotificationEntry (notification);
+        var entry = new NotificationEntry ();
+        entry.bind (notification);
         entry.remove.connect (remove_notification);
 
         list_store.insert_sorted (entry, sort_func);
