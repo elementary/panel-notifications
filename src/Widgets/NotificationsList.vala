@@ -153,10 +153,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
 
         Session.get_instance ().remove_notifications (to_remove);
-
-        if (get_n_app_items () == 0) {
-            Session.get_instance ().clear ();
-        }
     }
 
     private void remove_notification (NotificationEntry notification_entry) {
