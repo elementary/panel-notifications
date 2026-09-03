@@ -6,8 +6,21 @@
 public class Notifications.AppEntry : Gtk.ListBoxRow {
     public signal void clear ();
 
-    public string app_id { get; construct; }
-    public string app_name { get; construct; }
+    private string _app_id = "";
+    public string app_id {
+        get {
+            return _app_id;
+        }
+        set {
+            _app_id = value;
+
+            if (value in headers) {
+                expander.active = headers[value];
+            }
+        }
+    }
+
+    public string app_name { get; set; default = ""; }
 
     private static Gtk.CssProvider provider;
     private static Settings settings;
@@ -26,13 +39,6 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
 
         settings = new Settings ("io.elementary.panel.notifications");
         headers = (HashTable<string, bool>) settings.get_value ("headers");
-    }
-
-    public AppEntry (string app_id, string app_name) {
-        Object (
-            app_id: app_id,
-            app_name: app_name
-        );
     }
 
     construct {
@@ -75,9 +81,7 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
         can_focus = false;
         child = box;
 
-        if (app_id in headers) {
-            expander.active = headers[app_id];
-        }
+        bind_property ("app-name", label, "label");
 
         expander.toggled.connect (() => {
             headers[app_id] = expander.active;
