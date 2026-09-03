@@ -7,7 +7,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     public signal void remove ();
 
     public Notification notification { get; construct; }
-    public Gtk.Revealer revealer { get; construct; }
 
     private uint timeout_id;
 
@@ -20,7 +19,9 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
     private Gtk.Image primary_image;
     private Gtk.Image secondary_image;
+    private Gtk.Label body_label;
     private Gtk.Label title_label;
+    private Gtk.Revealer revealer;
 
     public NotificationEntry (Notification notification) {
         Object (notification: notification);
@@ -89,7 +90,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         grid.add_css_class (Granite.CssClass.CARD);
 
-
         var delete_button = new Gtk.Button.from_icon_name ("window-close-symbolic") {
             halign = START,
             valign = START
@@ -110,35 +110,14 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         grid.attach (title_label, 1, 0);
         grid.attach (time_label, 2, 0);
 
-        var entry_body = notification.message_body;
-
-        if (entry_body == "") {
-            entry_body = notification.summary;
-        }
-
-        var body = fix_markup (entry_body);
-
-        var body_label = new Gtk.Label (body) {
+        body_label = new Gtk.Label ("") {
             ellipsize = END,
-            lines = 2,
             use_markup = true,
             valign = START,
             wrap_mode = WORD_CHAR,
             wrap = true,
             xalign = 0
         };
-
-        if ("\n" in body) {
-            string[] lines = body.split ("\n");
-            string stripped_body = lines[0] + "\n";
-            for (int i = 1; i < lines.length; i++) {
-                stripped_body += lines[i].strip () + " ";
-            }
-
-            body_label.label = stripped_body.strip ();
-            body_label.lines = 1;
-
-        }
 
         grid.attach (body_label, 1, 1, 2);
 
@@ -264,6 +243,26 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         }
 
         title_label.label = fix_markup (entry_title);
+
+        var entry_body = notification.message_body;
+        if (entry_body == "") {
+            entry_body = notification.summary;
+        }
+
+        if ("\n" in entry_body) {
+            string[] lines = entry_body.split ("\n");
+            string stripped_body = lines[0] + "\n";
+            for (int i = 1; i < lines.length; i++) {
+                stripped_body += lines[i].strip () + " ";
+            }
+
+            entry_body = stripped_body.strip ();
+            body_label.lines = 1;
+        } else {
+            body_label.lines = 2;
+        }
+
+        body_label.label = fix_markup (entry_body);
 
         notification.notify["server-id"].connect (() => {
             if (notification.server_id == 0) {
