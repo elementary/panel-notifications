@@ -6,8 +6,8 @@
 public class Notifications.AppEntry : Gtk.ListBoxRow {
     public signal void clear ();
 
-    public string app_id { get; private set; }
-    public AppInfo? app_info { get; construct; default = null; }
+    public string app_id { get; construct; }
+    public string app_name { get; construct; }
 
     private static Gtk.CssProvider provider;
     private static Settings settings;
@@ -28,23 +28,17 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
         headers = (HashTable<string, bool>) settings.get_value ("headers");
     }
 
-    public AppEntry (AppInfo? app_info) {
-        Object (app_info: app_info);
+    public AppEntry (string app_id, string app_name) {
+        Object (
+            app_id: app_id,
+            app_name: app_name
+        );
     }
 
     construct {
-        unowned string name;
-        if (app_info != null) {
-            app_id = app_info.get_id ();
-            name = app_info.get_name ();
-        } else {
-            app_id = "other";
-            name = _("Other");
-        }
-
         var image = new Gtk.Image.from_icon_name ("pan-end-symbolic");
 
-        var label = new Gtk.Label (name) {
+        var label = new Gtk.Label (app_name) {
             hexpand = true,
             xalign = 0
         };

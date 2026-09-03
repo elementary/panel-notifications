@@ -222,11 +222,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         var entry_title = notification.summary;
         if (notification.message_body == "") {
-            //FIXME: This should probably be done in Notification
-            if (notification.app_name == "" && notification.app_info != null) {
-                notification.app_name = notification.app_info.get_display_name ();
-            }
-
             entry_title = notification.app_name;
         }
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 17:32+0000\n"
+"POT-Creation-Date: 2026-09-03 20:36+0000\n"
 "PO-Revision-Date: 2023-09-09 09:08+0000\n"
 "Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/wingpanel/"
@@ -77,26 +77,26 @@ msgstr[2] "%u aplikacji"
 msgid "No Notifications"
 msgstr "Brak powiadomień"
 
-#: src/Widgets/NotificationEntry.vala:306
+#: src/Widgets/NotificationEntry.vala:312
 msgid "Delete"
 msgstr "Usuń"
 
-#: src/Widgets/AppEntry.vala:42
-msgid "Other"
-msgstr "Inne"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/AppEntry.vala:62
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Wyczyść wszystkie %s powiadomienia"
 
-#: src/Widgets/AppEntry.vala:102
+#: src/Widgets/AppEntry.vala:96
 msgid "Show less"
 msgstr "Pokaż mniej"
 
-#: src/Widgets/AppEntry.vala:102
+#: src/Widgets/AppEntry.vala:96
 msgid "Show more"
 msgstr "Pokaż więcej"
+
+#: src/Services/Notification.vala:150
+msgid "Other"
+msgstr "Inne"
 
 #~ msgid "now"
 #~ msgstr "teraz"
