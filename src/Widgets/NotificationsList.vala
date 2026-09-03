@@ -19,6 +19,8 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
     }
 
+    private Gtk.SortListModel sort_list_model;
+
     construct {
         app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
 
@@ -34,7 +36,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         list_store = new GLib.ListStore (typeof (Notification));
 
-        var sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
+        sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
             section_sorter = new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) section_func)
         };
 
