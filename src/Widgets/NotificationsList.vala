@@ -11,7 +11,6 @@ public class Notifications.NotificationsList : Granite.Bin {
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
     private static GLib.HashTable<string, GLib.DateTime> app_datetime;
-    private Gee.HashMap<string, AppEntry> app_entries;
 
     private ListStore list_store;
     public ListModel notification_items {
@@ -21,7 +20,6 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     construct {
-        app_entries = new Gee.HashMap<string, AppEntry> ();
         app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
 
         var placeholder = new Gtk.Label (_("No Notifications")) {
@@ -90,18 +88,13 @@ public class Notifications.NotificationsList : Granite.Bin {
             return;
         }
 
-        var app_entry = app_entries[row_app_id];
-        if (app_entry == null) {
-            app_entry = new AppEntry () {
-                app_name = row_entry.notification.app_name,
-                app_id = row_app_id
-            };
-            app_entry.clear.connect (clear_app_entry);
+        var app_entry = new AppEntry () {
+            app_name = row_entry.notification.app_name,
+            app_id = row_app_id
+        };
+        app_entry.clear.connect (clear_app_entry);
 
-            app_entries[row_app_id] = app_entry;
-        }
-
-        row.set_header (app_entries[row_app_id]);
+        row.set_header (app_entry);
     }
 
     private Gtk.Widget create_widget_func (Object item) {
@@ -127,13 +120,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     public void clear_all () {
-        var iter = app_entries.map_iterator ();
-        while (iter.next ()) {
-            var entry = iter.get_value ();
-            iter.unset ();
-            clear_app_entry (entry);
-        }
-
+        Session.get_instance ().clear ();
         list_store.remove_all ();
         close_popover ();
     }
@@ -149,7 +136,6 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     private void clear_app_entry (AppEntry app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
-        app_entries.unset (app_entry.app_id);
 
         Notification[] to_remove = {};
         for (int i = 0; i < list_store.n_items; i++) {
@@ -187,8 +173,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         );
 
         if (items_for_appid.n_items == 0) {
-            clear_app_entry (app_entries[app_id]);
-
             var settings = new Settings ("io.elementary.panel.notifications");
             var headers = (HashTable<string, bool>) settings.get_value ("headers");
             if (headers.remove (app_id)) {
