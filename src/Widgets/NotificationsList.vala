@@ -13,6 +13,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     private static GLib.HashTable<string, GLib.DateTime> app_datetime;
     private Gee.HashMap<string, AppEntry> app_entries;
 
+    private Gtk.Stack stack;
     private Gtk.SortListModel sort_list_model;
 
     private ListStore list_store;
@@ -55,15 +56,16 @@ public class Notifications.NotificationsList : Granite.Bin {
         header_factory.bind.connect (bind_header_factory);
 
         var list_view = new Gtk.ListView (new Gtk.NoSelection (sort_list_model), item_factory) {
-            header_factory = header_factory
+            header_factory = header_factory,
+            single_click_activate = true
         };
+        list_view.remove_css_class (Granite.STYLE_CLASS_VIEW);
 
-        // var listbox = new Gtk.ListBox () {
-        //     activate_on_single_click = true,
-        // };
-        // listbox.set_placeholder (placeholder);
+        stack = new Gtk.Stack ();
+        stack.add_named (placeholder, "placeholder");
+        stack.add_named (list_view, "list");
 
-        child = list_view;
+        child = stack;
 
         insert_action_group (ACTION_GROUP_PREFIX, new NotificationsMonitor ().notifications_action_group);
 
@@ -185,7 +187,10 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     private void on_items_changed () {
         if (list_store.n_items == 0) {
+            stack.visible_child_name = "placeholder";
             Session.get_instance ().clear ();
+        } else {
+            stack.visible_child_name = "list";
         }
 
         items_changed ();
