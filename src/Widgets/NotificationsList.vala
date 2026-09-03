@@ -158,12 +158,13 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private void remove_notification (NotificationEntry notification_entry) {
-        var app_id = notification_entry.notification.desktop_id;
+        var notification = notification_entry.notification;
+        var app_id = notification.desktop_id;
 
         uint pos = -1;
-        if (list_store.find (notification_entry, out pos)) {
+        if (list_store.find (notification, out pos)) {
             list_store.remove (pos);
-            Session.get_instance ().remove_notification (notification_entry.notification);
+            Session.get_instance ().remove_notification (notification);
         }
 
         var items_for_appid = new Gtk.FilterListModel (
