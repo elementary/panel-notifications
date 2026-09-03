@@ -261,11 +261,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             new Variant.string (notification.desktop_id), null
         );
 
-        notification.notify["server-id"].connect (() => {
-            if (notification.server_id == 0) {
-                dismiss ();
-            }
-        });
+        notification.notify["server-id"].connect (dismiss_if_stale);
+    }
+
+    public void unbind () {
+        notification.notify.disconnect (dismiss_if_stale);
+        Settings.unbind (settings, "headers");
     }
 
     private static bool get_bind_func (Value value, Variant variant, void* user_data) {
@@ -292,6 +293,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
                 NotificationsList.ACTION_PREFIX + "close",
                 new Variant.array (VariantType.UINT32, { notification.server_id })
             );
+        }
+    }
+
+    private void dismiss_if_stale () {
+        if (notification.server_id == 0) {
+            dismiss ();
         }
     }
 
