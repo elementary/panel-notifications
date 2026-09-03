@@ -50,13 +50,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             };
 
             nlist = new NotificationsList ();
-            nlist.items_changed.connect (() => {
-                set_display_icon_name ();
-
-                if (nlist.notification_items.get_n_items () == 0) {
-                    Session.get_instance ().clear ();
-                }
-            });
+            nlist.items_changed.connect (set_display_icon_name);
 
             monitor.notification_received.connect (on_notification_received);
             monitor.notification_closed.connect (on_notification_closed);
