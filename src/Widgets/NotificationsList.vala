@@ -50,7 +50,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         listbox.row_activated.connect (on_row_activated);
 
-        list_store.items_changed.connect (() => items_changed ());
+        list_store.items_changed.connect (on_items_changed);
 
         var previous_session = Session.get_instance ().get_session_notifications ();
         // Do not block animated drawing of wingpanel
@@ -154,10 +154,14 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
 
         Session.get_instance ().remove_notifications (to_remove);
+    }
 
-        if (get_n_app_items () == 0) {
+    private void on_items_changed () {
+        if (list_store.n_items == 0) {
             Session.get_instance ().clear ();
         }
+
+        items_changed ();
     }
 
     private void remove_notification (NotificationEntry notification_entry) {
