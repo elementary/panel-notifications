@@ -20,6 +20,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
     private Gtk.Image primary_image;
     private Gtk.Image secondary_image;
+    private Gtk.Label title_label;
 
     public NotificationEntry (Notification notification) {
         Object (notification: notification);
@@ -67,17 +68,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         };
         image_overlay.add_overlay (secondary_image);
 
-        var entry_title = notification.summary;
-
-        if (notification.message_body == "") {
-            if (notification.app_name == "" && notification.app_info != null) {
-                notification.app_name = notification.app_info.get_display_name ();
-            }
-
-            entry_title = notification.app_name;
-        }
-
-        var title_label = new Gtk.Label (fix_markup (entry_title)) {
+        title_label = new Gtk.Label ("") {
             ellipsize = END,
             hexpand = true,
             width_chars = 27,
@@ -261,6 +252,18 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             primary_image.gicon = app_icon;
             secondary_image.gicon = notification.badge_icon;
         }
+
+        var entry_title = notification.summary;
+        if (notification.message_body == "") {
+            //FIXME: This should probably be done in Notification
+            if (notification.app_name == "" && notification.app_info != null) {
+                notification.app_name = notification.app_info.get_display_name ();
+            }
+
+            entry_title = notification.app_name;
+        }
+
+        title_label.label = fix_markup (entry_title);
 
         notification.notify["server-id"].connect (() => {
             if (notification.server_id == 0) {
