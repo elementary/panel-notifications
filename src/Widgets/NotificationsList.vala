@@ -22,9 +22,12 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
     }
 
+    static construct {
+        app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
+    }
+
     construct {
         app_entries = new Gee.HashMap<string, AppEntry> ();
-        app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
 
         var placeholder = new Gtk.Label (_("No Notifications")) {
             margin_top = 24,
