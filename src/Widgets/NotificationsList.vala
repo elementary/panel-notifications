@@ -190,7 +190,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         var app_id = notification_entry.notification.desktop_id;
 
         uint pos = -1;
-        if (list_store.find (notification_entry, out pos)) {
+        if (list_store.find (notification_entry.notification, out pos)) {
             list_store.remove (pos);
             Session.get_instance ().remove_notification (notification_entry.notification);
         }
