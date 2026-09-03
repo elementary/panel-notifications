@@ -92,7 +92,10 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         var app_entry = app_entries[row_app_id];
         if (app_entry == null) {
-            app_entry = new AppEntry (row_app_id, row_entry.notification.app_name);
+            app_entry = new AppEntry () {
+                app_name = row_entry.notification.app_name,
+                app_id = row_app_id
+            };
             app_entry.clear.connect (clear_app_entry);
 
             app_entries[row_app_id] = app_entry;
