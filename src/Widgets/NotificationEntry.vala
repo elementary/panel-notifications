@@ -18,6 +18,9 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     private static Regex tag_regex;
     private static Settings settings;
 
+    private Gtk.Image primary_image;
+    private Gtk.Image secondary_image;
+
     public NotificationEntry (Notification notification) {
         Object (notification: notification);
     }
@@ -47,11 +50,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     }
 
     construct {
-        var primary_image = new Gtk.Image () {
+        primary_image = new Gtk.Image () {
             pixel_size = ICON_SIZE_PRIMARY,
             overflow = HIDDEN
         };
-        var secondary_image = new Gtk.Image () {
+
+        secondary_image = new Gtk.Image () {
             halign = END,
             valign = END,
             pixel_size = ICON_SIZE_SECONDARY
@@ -62,32 +66,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
             valign = START
         };
         image_overlay.add_overlay (secondary_image);
-
-
-        Icon app_icon = new ThemedIcon ("dialog-information");
-        if (notification.app_icon.contains ("/")) {
-            var file = File.new_for_uri (notification.app_icon);
-            if (file.query_exists ()) {
-                app_icon = new FileIcon (file);
-            }
-        } else if (notification.app_icon != "") {
-            app_icon = new ThemedIcon (notification.app_icon);
-        }
-
-        if (notification.image_path != null && notification.image_path != "") {
-            var file = File.new_for_path (notification.image_path);
-            if (file.query_exists ()) {
-                primary_image.gicon = new FileIcon (file);
-                primary_image.add_css_class (Granite.CssClass.CARD);
-                primary_image.add_css_class (Granite.CssClass.CHECKERBOARD);
-                secondary_image.gicon = app_icon;
-            } else {
-                primary_image.gicon = app_icon;
-            }
-        } else {
-            primary_image.gicon = app_icon;
-            secondary_image.gicon = notification.badge_icon;
-        }
 
         var entry_title = notification.summary;
 
@@ -254,6 +232,35 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
         unmap.connect (() => {
             Source.remove (timeout_id);
         });
+
+        bind (notification);
+    }
+
+    private void bind (Notification notification) {
+        Icon app_icon = new ThemedIcon ("dialog-information");
+        if (notification.app_icon.contains ("/")) {
+            var file = File.new_for_uri (notification.app_icon);
+            if (file.query_exists ()) {
+                app_icon = new FileIcon (file);
+            }
+        } else if (notification.app_icon != "") {
+            app_icon = new ThemedIcon (notification.app_icon);
+        }
+
+        if (notification.image_path != null && notification.image_path != "") {
+            var file = File.new_for_path (notification.image_path);
+            if (file.query_exists ()) {
+                primary_image.gicon = new FileIcon (file);
+                primary_image.add_css_class (Granite.CssClass.CARD);
+                primary_image.add_css_class (Granite.CssClass.CHECKERBOARD);
+                secondary_image.gicon = app_icon;
+            } else {
+                primary_image.gicon = app_icon;
+            }
+        } else {
+            primary_image.gicon = app_icon;
+            secondary_image.gicon = notification.badge_icon;
+        }
 
         notification.notify["server-id"].connect (() => {
             if (notification.server_id == 0) {
