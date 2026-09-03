@@ -176,9 +176,9 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
         for (int i = 0; i < nlist.notification_items.get_n_items (); i++) {
-            var entry = (NotificationEntry) nlist.notification_items.get_item (i);
-            if (id == entry.notification.server_id) {
-                entry.notification.server_id = 0; // Notification is now outdated
+            var notification = (Notification) nlist.notification_items.get_item (i);
+            if (id == notification.server_id) {
+                notification.server_id = 0; // Notification is now outdated
                 return;
             }
         }

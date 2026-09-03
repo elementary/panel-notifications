@@ -34,13 +34,13 @@ public class Notifications.NotificationsList : Granite.Bin {
         placeholder.add_css_class (Granite.STYLE_CLASS_H2_LABEL);
         placeholder.add_css_class (Granite.CssClass.DIM);
 
-        list_store = new GLib.ListStore (typeof (NotificationEntry));
+        list_store = new GLib.ListStore (typeof (Notification));
 
         var listbox = new Gtk.ListBox () {
             activate_on_single_click = true,
             selection_mode = NONE
         };
-        listbox.bind_model (list_store, (object) => (NotificationEntry) object);
+        listbox.bind_model (list_store, create_widget_func);
         listbox.set_placeholder (placeholder);
         listbox.set_header_func (header_func);
 
@@ -62,8 +62,8 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private int sort_func (Object obj1, Object obj2) {
-        var a = ((NotificationEntry) obj1).notification;
-        var b = ((NotificationEntry) obj2).notification;
+        var a = ((Notification) obj1);
+        var b = ((Notification) obj2);
         if (a.desktop_id == b.desktop_id) {
             return Notification.compare (a, b);
         }
@@ -106,17 +106,23 @@ public class Notifications.NotificationsList : Granite.Bin {
         row.set_header (app_entries[row_app_id]);
     }
 
+    private Gtk.Widget create_widget_func (Object item) {
+        var notification = (Notification) item;
+
+        var notification_entry = new NotificationEntry ();
+        notification_entry.bind (notification);
+        notification_entry.remove.connect (remove_notification);
+
+        return notification_entry;
+    }
+
     public async void add_entry (Notification notification) {
-        var entry = new NotificationEntry ();
-        entry.bind (notification);
-        entry.remove.connect (remove_notification);
-
-        list_store.insert_sorted (entry, sort_func);
-
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
         if (time == null || time.compare (notification.timestamp) <= 0) {
             app_datetime[notification.desktop_id] = notification.timestamp;
         }
+
+        list_store.insert_sorted (notification, sort_func);
 
         Idle.add (add_entry.callback);
         yield;
@@ -137,7 +143,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     public uint get_n_app_items () {
         var app_list = new GenericSet<string> (str_hash, str_equal);
         for (var i = 0; i < list_store.n_items; i++) {
-            app_list.add (((NotificationEntry) list_store.get_item (i)).notification.desktop_id);
+            app_list.add (((Notification) list_store.get_item (i)).desktop_id);
         }
 
         return app_list.length;
@@ -149,10 +155,10 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         Notification[] to_remove = {};
         for (int i = 0; i < list_store.n_items; i++) {
-            var entry = (NotificationEntry) list_store.get_item (i);
-            if (entry.notification.desktop_id == app_entry.app_id) {
-                entry.notification.server_id = 0;
-                to_remove += entry.notification;
+            var notification = (Notification) list_store.get_item (i);
+            if (notification.desktop_id == app_entry.app_id) {
+                notification.server_id = 0;
+                to_remove += notification;
             }
         }
 
@@ -178,7 +184,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         var items_for_appid = new Gtk.FilterListModel (
             list_store, new Gtk.CustomFilter ((item) => {
-                return ((NotificationEntry) item).notification.desktop_id == app_id;
+                return ((Notification) item).desktop_id == app_id;
             })
         );
 
