@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 17:32+0000\n"
+"POT-Creation-Date: 2026-09-03 20:36+0000\n"
 "PO-Revision-Date: 2026-08-29 09:01+0000\n"
 "Last-Translator: David M <rbndavid@gmail.com>\n"
 "Language-Team: Catalan <https://l10n.elementaryos.org/projects/wingpanel/"
@@ -74,26 +74,26 @@ msgstr[1] "%i aplicacions"
 msgid "No Notifications"
 msgstr "No hi ha notificacions"
 
-#: src/Widgets/NotificationEntry.vala:306
+#: src/Widgets/NotificationEntry.vala:312
 msgid "Delete"
 msgstr "Suprimeix"
 
-#: src/Widgets/AppEntry.vala:42
-msgid "Other"
-msgstr "Altres"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/AppEntry.vala:62
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Neteja totes les notificacions: %s"
 
-#: src/Widgets/AppEntry.vala:102
+#: src/Widgets/AppEntry.vala:96
 msgid "Show less"
 msgstr "Mostra'n menys"
 
-#: src/Widgets/AppEntry.vala:102
+#: src/Widgets/AppEntry.vala:96
 msgid "Show more"
 msgstr "Mostra'n més"
+
+#: src/Services/Notification.vala:150
+msgid "Other"
+msgstr "Altres"
 
 #~ msgid "now"
 #~ msgstr "ara"

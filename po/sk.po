@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 17:32+0000\n"
+"POT-Creation-Date: 2026-09-03 20:36+0000\n"
 "PO-Revision-Date: 2024-07-10 19:16+0000\n"
 "Last-Translator: JohnDumpling <john_dumpling@protonmail.com>\n"
 "Language-Team: Slovak <https://l10n.elementary.io/projects/wingpanel/"
@@ -76,26 +76,26 @@ msgstr[2] "%u aplikácie"
 msgid "No Notifications"
 msgstr "Žiadne oznámenia"
 
-#: src/Widgets/NotificationEntry.vala:306
+#: src/Widgets/NotificationEntry.vala:312
 msgid "Delete"
 msgstr "Vymazať"
 
-#: src/Widgets/AppEntry.vala:42
-msgid "Other"
-msgstr "Ostatné"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/AppEntry.vala:62
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Vymazať všetky %s oznámenia"
 
-#: src/Widgets/AppEntry.vala:102
+#: src/Widgets/AppEntry.vala:96
 msgid "Show less"
 msgstr "Zobraziť menej"
 
-#: src/Widgets/AppEntry.vala:102
+#: src/Widgets/AppEntry.vala:96
 msgid "Show more"
 msgstr "Zobraziť viac"
+
+#: src/Services/Notification.vala:150
+msgid "Other"
+msgstr "Ostatné"
 
 #~ msgid "now"
 #~ msgstr "teraz"

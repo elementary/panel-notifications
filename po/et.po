@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 17:32+0000\n"
+"POT-Creation-Date: 2026-09-03 20:36+0000\n"
 "PO-Revision-Date: 2024-08-07 18:16+0000\n"
 "Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Estonian <https://l10n.elementary.io/projects/wingpanel/"
@@ -79,27 +79,27 @@ msgstr[1] ""
 msgid "No Notifications"
 msgstr "Märguandeid pole"
 
-#: src/Widgets/NotificationEntry.vala:306
+#: src/Widgets/NotificationEntry.vala:312
 msgid "Delete"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:42
-msgid "Other"
-msgstr "Muu"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/AppEntry.vala:62
 #, fuzzy, c-format
 #| msgid "Clear All Notifications"
 msgid "Clear all %s notifications"
 msgstr "Kõikide märguannete puhastamine"
 
-#: src/Widgets/AppEntry.vala:102
+#: src/Widgets/AppEntry.vala:96
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:102
+#: src/Widgets/AppEntry.vala:96
 msgid "Show more"
 msgstr ""
+
+#: src/Services/Notification.vala:150
+msgid "Other"
+msgstr "Muu"
 
 #~ msgid "now"
 #~ msgstr "praegu"
