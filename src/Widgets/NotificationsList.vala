@@ -111,6 +111,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
         if (time == null || time.compare (notification.timestamp) <= 0) {
             app_datetime[notification.desktop_id] = notification.timestamp;
+            sort_list_model.section_sorter.changed (DIFFERENT);
         }
 
         list_store.append (notification);
