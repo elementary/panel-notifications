@@ -35,6 +35,7 @@ public class Notifications.Notification : Object {
     public string sender;
     public string[] actions;
     public List<Gtk.Button> buttons;
+    public string category { get; private set; }
     public string? default_action { get; private set; default = null; }
     public uint32 replaces_id;
     public uint32 server_id { get; construct set; default = 0; } // 0 means the notification is outdated i.e. not present in the server anymore
@@ -142,6 +143,9 @@ public class Notifications.Notification : Object {
                 has_temp_file = true;
             }
         }
+
+        // GLib.Notification.set_category ()
+        category = lookup_string (hints, "category");
 
         if (app_info == null) {
             desktop_id = FALLBACK_DESKTOP_ID;
