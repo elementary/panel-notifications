@@ -195,7 +195,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     public void bind (Notification value) {
         notification = value;
 
-        Icon app_icon = new ThemedIcon ("dialog-information");
+        Icon app_icon = new ThemedIcon ("io.elementary.notifications");
         if (notification.app_icon.contains ("/")) {
             var file = File.new_for_uri (notification.app_icon);
             if (file.query_exists ()) {
