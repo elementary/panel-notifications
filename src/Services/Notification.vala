@@ -40,9 +40,9 @@ public class Notifications.Notification : Object {
     public bool has_temp_file;
     public GLib.DateTime timestamp;
     public GLib.Icon badge_icon { get; construct set; }
-
     public string desktop_id;
-    public DesktopAppInfo? app_info = null;
+
+    private DesktopAppInfo app_info;
 
     private enum Column {
         APP_NAME = 0,
@@ -150,9 +150,9 @@ public class Notifications.Notification : Object {
         if (app_info != null) {
             app_name = app_info.get_display_name ();
         } else {
+            desktop_id = FALLBACK_DESKTOP_ID;
             app_info = new DesktopAppInfo (desktop_id);
             app_name = _("Other");
-            desktop_id = FALLBACK_DESKTOP_ID;
         }
     }
 
@@ -204,6 +204,11 @@ public class Notifications.Notification : Object {
         } catch (Error e) {
             return null;
         }
+    }
+
+    public void launch (Gdk.AppLaunchContext context) throws Error {
+        app_info.launch (null, context);
+        server_id = 0;
     }
 
     public string? store_pixbuf (Gdk.Pixbuf pixbuf) {
