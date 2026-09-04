@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2015-2025 elementary, Inc. (https://elementary.io)
 */
 
-public class Notifications.NotificationEntry : Granite.Bin {
+public class Notifications.ListItem : Granite.Bin {
     public signal void remove (Notification notification);
 
     public Notification notification { get; private set; }
@@ -38,7 +38,7 @@ public class Notifications.NotificationEntry : Granite.Bin {
         set_css_name ("notification");
 
         var provider = new Gtk.CssProvider ();
-        provider.load_from_resource ("io/elementary/wingpanel/notifications/NotificationEntry.css");
+        provider.load_from_resource ("io/elementary/wingpanel/notifications/ListItem.css");
 
         Gtk.StyleContext.add_provider_for_display (
             Gdk.Display.get_default (),
