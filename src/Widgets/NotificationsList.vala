@@ -5,6 +5,7 @@
 
 public class Notifications.NotificationsList : Granite.Bin {
     public signal void remove_notification (Notification notification);
+    public signal void clear_all ();
     public signal void close_popover ();
 
     public const string ACTION_GROUP_PREFIX = "notifications-list";
@@ -12,6 +13,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     public ListModel list_model { get; construct; }
 
+    private Gtk.Button clear_all_btn;
     private Gtk.Stack stack;
 
     public NotificationsList (ListModel list_model) {
@@ -19,6 +21,24 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     construct {
+        var not_disturb_switch = new Granite.SwitchModelButton (_("Do Not Disturb"));
+
+        var dnd_switch_separator = new Gtk.Separator (HORIZONTAL) {
+            margin_top = 3
+        };
+
+        var clear_all_btn_separator = new Gtk.Separator (HORIZONTAL) {
+            margin_bottom = 3
+        };
+
+        clear_all_btn = new Wingpanel.PopoverMenuItem () {
+            text = _("Clear All Notifications")
+        };
+
+        var settings_btn = new Wingpanel.PopoverMenuItem () {
+            text = _("Notifications Settings…")
+        };
+
         var placeholder = new Gtk.Label (_("No Notifications")) {
             margin_top = 24,
             margin_bottom = 24,
@@ -57,7 +77,17 @@ public class Notifications.NotificationsList : Granite.Bin {
         stack.add_named (placeholder, "placeholder");
         stack.add_named (scrolled, "list");
 
-        child = stack;
+        var main_box = new Gtk.Box (VERTICAL, 0) {
+            width_request = 360
+        };
+        main_box.append (not_disturb_switch);
+        main_box.append (dnd_switch_separator);
+        main_box.append (stack);
+        main_box.append (clear_all_btn_separator);
+        main_box.append (clear_all_btn);
+        main_box.append (settings_btn);
+
+        child = main_box;
 
         insert_action_group (ACTION_GROUP_PREFIX, new NotificationsMonitor ().notifications_action_group);
 
@@ -65,6 +95,12 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         list_model.items_changed.connect (on_items_changed);
         on_items_changed ();
+
+        var settings = new GLib.Settings ("io.elementary.notifications");
+        settings.bind ("do-not-disturb", not_disturb_switch, "active", DEFAULT);
+
+        clear_all_btn.clicked.connect (() => clear_all ());
+        settings_btn.clicked.connect (show_settings);
     }
 
     private void setup_factory (Object item) {
@@ -104,6 +140,19 @@ public class Notifications.NotificationsList : Granite.Bin {
         app_entry.app_id = notification.desktop_id;
     }
 
+    private void show_settings () {
+        close_popover ();
+
+        var uri_launcher = new Gtk.UriLauncher (Granite.SettingsUri.NOTIFICATIONS);
+        uri_launcher.launch.begin ((Gtk.Window) get_root (), null, (obj, res) => {
+            try {
+                uri_launcher.launch.end (res);
+            } catch (Error e) {
+                warning ("Failed to open notifications settings: %s", e.message);
+            }
+        });
+    }
+
     private void clear_app_entry (AppEntry app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
 
@@ -126,6 +175,8 @@ public class Notifications.NotificationsList : Granite.Bin {
         } else {
             stack.visible_child_name = "list";
         }
+
+        clear_all_btn.sensitive = list_model.get_n_items () > 0;
     }
 
     private void on_row_activated (uint pos) {

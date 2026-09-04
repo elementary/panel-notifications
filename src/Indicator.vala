@@ -16,9 +16,8 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     private GLib.ListStore list_store;
     private Gtk.SortListModel sort_list_model;
-    private Gtk.Box? main_box = null;
-    private Wingpanel.PopoverMenuItem clear_all_btn;
     private NotificationsIndicator.Symbol? dynamic_icon = null;
+    private NotificationsList nlist;
     private NotificationsMonitor monitor;
 
     public Indicator () {
@@ -104,60 +103,19 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     public override Gtk.Widget? get_widget () {
-        if (main_box == null) {
-            var not_disturb_switch = new Granite.SwitchModelButton (_("Do Not Disturb"));
-            not_disturb_switch.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
-
-            var dnd_switch_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
-                margin_top = 3
-            };
-
-            var nlist = new NotificationsList (sort_list_model);
-
-            var clear_all_btn_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
-                margin_bottom = 3
-            };
-
-            clear_all_btn = new Wingpanel.PopoverMenuItem () {
-                text = _("Clear All Notifications")
-            };
-
-            var settings_btn = new Wingpanel.PopoverMenuItem () {
-                text = _("Notifications Settings…")
-            };
-
-            main_box = new Gtk.Box (VERTICAL, 0) {
-                width_request = 360
-            };
-            main_box.append (not_disturb_switch);
-            main_box.append (dnd_switch_separator);
-            main_box.append (nlist);
-            main_box.append (clear_all_btn_separator);
-            main_box.append (clear_all_btn);
-            main_box.append (settings_btn);
-
-            notify_settings.bind ("do-not-disturb", not_disturb_switch, "active", GLib.SettingsBindFlags.DEFAULT);
-
+        if (nlist == null) {
+            nlist = new NotificationsList (sort_list_model);
+            nlist.clear_all.connect (clear_all);
             nlist.close_popover.connect (() => close ());
             nlist.remove_notification.connect (remove_notification);
-
-            list_store.items_changed.connect (update_clear_all_sensitivity);
-
-            clear_all_btn.clicked.connect (clear_all);
-
-            settings_btn.clicked.connect (show_settings);
         }
 
-        return main_box;
+        return nlist;
     }
 
-    public override void opened () {
-        update_clear_all_sensitivity ();
-    }
+    public override void opened () { }
 
-    public override void closed () {
-
-    }
+    public override void closed () { }
 
     private void on_notification_received (DBusMessage message, uint32 id) {
         var notification = new Notification.from_message (message, id);
@@ -218,10 +176,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         return app_datetime[b.desktop_id].compare (app_datetime[a.desktop_id]);
     }
 
-    private void update_clear_all_sensitivity () {
-        clear_all_btn.sensitive = list_store.get_n_items () > 0;
-    }
-
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
         for (int i = 0; i < list_store.get_n_items (); i++) {
             var notification = (Notification) list_store.get_item (i);
@@ -247,16 +201,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
         }
         update_tooltip ();
-    }
-
-    private void show_settings () {
-        close ();
-
-        try {
-            AppInfo.launch_default_for_uri ("settings://notifications", null);
-        } catch (Error e) {
-            warning ("Failed to open notifications settings: %s", e.message);
-        }
     }
 
     private void update_tooltip () {
