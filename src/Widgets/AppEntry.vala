@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2015-2026 elementary, Inc. (https://elementary.io)
 */
 
-public class Notifications.AppEntry : Gtk.ListBoxRow {
+public class Notifications.AppEntry : Granite.Bin {
     public signal void clear ();
 
     private string _app_id = "";
@@ -44,18 +44,18 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
     construct {
         var image = new Gtk.Image.from_icon_name ("pan-end-symbolic");
 
-        var label = new Gtk.Label (app_name) {
+        var label = new Granite.HeaderLabel (name) {
             hexpand = true,
-            xalign = 0
+            size = H3
         };
-        label.add_css_class (Granite.STYLE_CLASS_H3_LABEL);
 
-        var expander_content = new Gtk.Box (HORIZONTAL, 3);
+        var expander_content = new Granite.Box (HORIZONTAL, HALF);
         expander_content.append (label);
         expander_content.append (image);
 
         expander = new Gtk.ToggleButton () {
             child = expander_content,
+            has_frame = false,
             active = true
         };
         expander.add_css_class ("image-button");
@@ -70,13 +70,12 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
             has_frame = false
         };
 
-        var box = new Gtk.Box (HORIZONTAL, 6);
+        var box = new Granite.Box (HORIZONTAL, HALF);
         box.append (expander);
         box.append (clear_btn_entry);
 
         margin_bottom = 3;
         margin_top = 6;
-        can_focus = false;
         child = box;
 
         bind_property ("app-name", label, "label");
