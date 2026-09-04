@@ -20,6 +20,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private Gtk.SortListModel sort_list_model;
+    private Gtk.Stack stack;
 
     construct {
         app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
@@ -45,10 +46,13 @@ public class Notifications.NotificationsList : Granite.Bin {
             selection_mode = NONE
         };
         listbox.bind_model (sort_list_model, create_widget_func);
-        listbox.set_placeholder (placeholder);
         listbox.set_header_func (header_func);
 
-        child = listbox;
+        stack = new Gtk.Stack ();
+        stack.add_named (placeholder, "placeholder");
+        stack.add_named (listbox, "list");
+
+        child = stack;
 
         insert_action_group (ACTION_GROUP_PREFIX, new NotificationsMonitor ().notifications_action_group);
 
@@ -154,7 +158,10 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     private void on_items_changed () {
         if (list_store.n_items == 0) {
+            stack.visible_child_name = "placeholder";
             Session.get_instance ().clear ();
+        } else {
+            stack.visible_child_name = "list";
         }
 
         items_changed ();
