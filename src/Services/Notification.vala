@@ -26,22 +26,23 @@ public class Notifications.Notification : Object {
     public const string DEFAULT_ACTION_NAME = "default";
     public const string DESKTOP_ID_EXT = ".desktop";
 
-    public string internal_id { get; construct set; } // Format: "timestamp.server_id"
-    public string app_name;
-    public string summary;
-    public string message_body;
-    public string image_path { get; private set; default = ""; }
-    public string app_icon;
-    public string sender;
-    public string[] actions;
-    public string? default_action { get; private set; default = null; }
-    public uint32 replaces_id;
-    public uint32 server_id { get; construct set; default = 0; } // 0 means the notification is outdated i.e. not present in the server anymore
-    public bool has_temp_file;
-    public GLib.DateTime timestamp;
     public GLib.Icon badge_icon { get; construct set; }
+    public string internal_id { get; construct set; } // Format: "timestamp.server_id"
+    public uint32 server_id { get; construct set; default = 0; } // 0 means the notification is outdated i.e. not present in the server anymore
 
-    public string desktop_id;
+    public bool has_temp_file { get; private set; }
+    public GLib.DateTime timestamp { get; private set; }
+    public string[] actions { get; private set; }
+    public string app_icon { get; private set; }
+    public string app_name { get; private set; }
+    public string? default_action { get; private set; default = null; }
+    public string desktop_id { get; private set; }
+    public string image_path { get; private set; default = ""; }
+    public string message_body { get; private set; }
+    public string sender { get; private set; }
+    public string summary { get; private set; }
+    public uint32 replaces_id { get; private set; }
+
     public DesktopAppInfo? app_info = null;
 
     private enum Column {
@@ -206,7 +207,7 @@ public class Notifications.Notification : Object {
         }
     }
 
-    public string? store_pixbuf (Gdk.Pixbuf pixbuf) {
+    private string? store_pixbuf (Gdk.Pixbuf pixbuf) {
         string? tmpfile = make_temp_file ("wingpanel-XXXXXX.png");
         if (tmpfile != null) {
             try {
