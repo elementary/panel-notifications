@@ -92,12 +92,9 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         return nlist;
     }
 
-    public override void opened () {
-    }
+    public override void opened () { }
 
-    public override void closed () {
-
-    }
+    public override void closed () { }
 
     private void on_notification_received (DBusMessage message, uint32 id) {
         var notification = new Notification.from_message (message, id);
