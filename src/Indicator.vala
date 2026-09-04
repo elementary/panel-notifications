@@ -134,8 +134,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
             Session.get_instance ().add_notification (notification);
         }
-
-        set_display_icon_name ();
     }
 
     private void add_entry (Notification notification) {
@@ -177,7 +175,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
-        for (int i = 0; i < list_store.get_n_items (); i++) {
+        for (int i = 0; i < list_store.n_items; i++) {
             var notification = (Notification) list_store.get_item (i);
             if (id == notification.server_id) {
                 notification.server_id = 0; // Notification is now outdated
@@ -195,7 +193,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
-        } else if (list_store.get_n_items () > 0) {
+        } else if (list_store.n_items > 0) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
             dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
@@ -204,7 +202,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void update_tooltip () {
-        var number_of_notifications = list_store.get_n_items ();
+        var number_of_notifications = list_store.n_items;
         string[] accels = {};
         string description;
         string middle_click_label = "";
