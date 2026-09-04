@@ -19,6 +19,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
     }
 
+    private Gtk.SortListModel sort_list_model;
     private Gtk.Stack stack;
 
     construct {
@@ -36,7 +37,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         list_store = new GLib.ListStore (typeof (Notification));
 
-        var sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
+        sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
             section_sorter = new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) section_func)
         };
 
@@ -116,6 +117,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
         if (time == null || time.compare (notification.timestamp) <= 0) {
             app_datetime[notification.desktop_id] = notification.timestamp;
+            sort_list_model.section_sorter.changed (DIFFERENT);
         }
 
         list_store.append (notification);
