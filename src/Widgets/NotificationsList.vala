@@ -184,7 +184,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     private void show_settings () {
         close_popover ();
 
-        var uri_launcher = new Gtk.UriLauncher ("settings://notifications");
+        var uri_launcher = new Gtk.UriLauncher (Granite.SettingsUri.NOTIFICATIONS);
         uri_launcher.launch.begin ((Gtk.Window) get_root (), null, (obj, res) => {
             try {
                 uri_launcher.launch.end (res);
