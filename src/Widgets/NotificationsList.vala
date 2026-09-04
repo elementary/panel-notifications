@@ -31,7 +31,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         var not_disturb_switch = new Granite.SwitchModelButton (_("Do Not Disturb"));
 
         var dnd_switch_separator = new Gtk.Separator (HORIZONTAL) {
-            margin_top = 3,
+            margin_top = 3
         };
 
         var clear_all_btn_separator = new Gtk.Separator (HORIZONTAL) {
