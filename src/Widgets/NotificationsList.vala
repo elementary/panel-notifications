@@ -98,7 +98,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         var notification_entry = new NotificationEntry ();
         notification_entry.remove.connect (remove_notification);
 
-        ((Gtk.ListItem) item).child = notification_entry
+        ((Gtk.ListItem) item).child = notification_entry;
     }
 
     private void bind_factory (Object item) {
