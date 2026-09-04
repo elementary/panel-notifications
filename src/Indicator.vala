@@ -9,10 +9,13 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private const string KEYBINDING_SCHEMA = "io.elementary.panel.keybindings";
     private const string REMEMBER_KEY = "remember";
 
+    private static GLib.HashTable<string, GLib.DateTime> app_datetime;
     private static GLib.Settings? keybinding_settings;
     private Gee.HashMap<string, Settings> app_settings_cache;
     private GLib.Settings notify_settings;
 
+    private GLib.ListStore list_store;
+    private Gtk.SortListModel sort_list_model;
     private Gtk.Box? main_box = null;
     private Wingpanel.PopoverMenuItem clear_all_btn;
     private NotificationsIndicator.Symbol? dynamic_icon = null;
@@ -30,6 +33,8 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         if (SettingsSchemaSource.get_default ().lookup (KEYBINDING_SCHEMA, true) != null) {
             keybinding_settings = new GLib.Settings (KEYBINDING_SCHEMA);
         }
+
+        app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
     }
 
     construct {
@@ -40,6 +45,20 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         app_settings_cache = new Gee.HashMap<string, Settings> ();
 
         monitor = new NotificationsMonitor ();
+
+        list_store = new GLib.ListStore (typeof (Notification));
+
+        sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
+            section_sorter = new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) section_func)
+        };
+
+        var previous_session = Session.get_instance ().get_session_notifications ();
+        // Do not block animated drawing of wingpanel
+        Idle.add_once (() => {
+            foreach (unowned var notification in previous_session) {
+                add_entry (notification);
+            }
+        });
     }
 
     public override Gtk.Widget get_display_widget () {
@@ -49,8 +68,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 tooltip_markup = _("Updating notifications…")
             };
 
-            nlist = new NotificationsList ();
-            nlist.items_changed.connect (set_display_icon_name);
+            list_store.items_changed.connect (set_display_icon_name);
 
             monitor.notification_received.connect (on_notification_received);
             monitor.notification_closed.connect (on_notification_closed);
@@ -96,6 +114,8 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 margin_bottom = 3
             };
 
+            nlist = new NotificationsList (sort_list_model);
+
             var scrolled = new Gtk.ScrolledWindow () {
                 child = nlist,
                 hscrollbar_policy = NEVER,
@@ -131,9 +151,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             nlist.close_popover.connect (() => close ());
             nlist.items_changed.connect (update_clear_all_sensitivity);
 
-            clear_all_btn.clicked.connect (() => {
-                nlist.clear_all (); // This calls each appentry's clear method, which also clears session
-            });
+            clear_all_btn.clicked.connect (clear_all);
 
             settings_btn.clicked.connect (show_settings);
         }
@@ -162,7 +180,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         }
 
         if (app_settings == null || app_settings.get_boolean (REMEMBER_KEY)) {
-            nlist.add_entry.begin (notification);
+            add_entry (notification);
 
             Session.get_instance ().add_notification (notification);
         }
@@ -170,13 +188,71 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         set_display_icon_name ();
     }
 
+    private void add_entry (Notification notification) {
+        unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
+        if (time == null || time.compare (notification.timestamp) <= 0) {
+            app_datetime[notification.desktop_id] = notification.timestamp;
+            sort_list_model.section_sorter.changed (DIFFERENT);
+        }
+
+        list_store.append (notification);
+    }
+
+    private void remove_notification (Notification notification) {
+        var app_id = notification.desktop_id;
+
+        uint pos = -1;
+        if (list_store.find (notification, out pos)) {
+            list_store.remove (pos);
+            Session.get_instance ().remove_notification (notification);
+        }
+
+        var items_for_appid = new Gtk.FilterListModel (
+            list_store, new Gtk.CustomFilter ((item) => {
+                return ((Notification) item).desktop_id == app_id;
+            })
+        );
+
+        if (items_for_appid.n_items == 0) {
+            var settings = new Settings ("io.elementary.panel.notifications");
+            var headers = (HashTable<string, bool>) settings.get_value ("headers");
+            if (headers.remove (app_id)) {
+                settings.set_value ("headers", headers);
+            }
+        }
+    }
+
+    private static int section_func (Notification a, Notification b) {
+        unowned GLib.DateTime? time_a = app_datetime[a.desktop_id];
+        unowned GLib.DateTime? time_b = app_datetime[b.desktop_id];
+
+        if (time_a != null && time_b != null) {
+            return time_b.compare (time_a);
+        } else if (time_a != null) {
+            return -1;
+        } else if (time_b != null) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    private uint get_n_app_items () {
+        var app_list = new GenericSet<string> (str_hash, str_equal);
+        for (var i = 0; i < list_store.n_items; i++) {
+            app_list.add (((Notification) list_store.get_item (i)).desktop_id);
+        }
+
+        return app_list.length;
+    }
+
     private void update_clear_all_sensitivity () {
-        clear_all_btn.sensitive = nlist.notification_items.get_n_items () > 0;
+        clear_all_btn.sensitive = list_store.get_n_items () > 0;
     }
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
-        for (int i = 0; i < nlist.notification_items.get_n_items (); i++) {
-            var notification = (Notification) nlist.notification_items.get_item (i);
+        for (int i = 0; i < list_store.get_n_items (); i++) {
+            var notification = (Notification) list_store.get_item (i);
             if (id == notification.server_id) {
                 notification.server_id = 0; // Notification is now outdated
                 return;
@@ -184,10 +260,16 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         }
     }
 
+    private void clear_all () {
+        Session.get_instance ().clear ();
+        list_store.remove_all ();
+        close ();
+    }
+
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
-        } else if (nlist != null && nlist.notification_items.get_n_items () > 0) {
+        } else if (nlist != null && list_store.get_n_items () > 0) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
             dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
@@ -206,7 +288,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void update_tooltip () {
-        var number_of_notifications = nlist.notification_items.get_n_items ();
+        var number_of_notifications = list_store.get_n_items ();
         string[] accels = {};
         string description;
         string middle_click_label = "";
@@ -234,7 +316,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 description = _("1 notification");
                 break;
             default:
-                var number_of_apps = nlist.get_n_app_items ();
+                var number_of_apps = get_n_app_items ();
                 /// TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
                 /// e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
                 description = _("%s from %s").printf (
