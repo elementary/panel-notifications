@@ -29,7 +29,6 @@ public class Notifications.NotificationsList : Granite.Bin {
 
     construct {
         var not_disturb_switch = new Granite.SwitchModelButton (_("Do Not Disturb"));
-        not_disturb_switch.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
 
         var dnd_switch_separator = new Gtk.Separator (HORIZONTAL) {
             margin_top = 3,
@@ -185,11 +184,14 @@ public class Notifications.NotificationsList : Granite.Bin {
     private void show_settings () {
         close_popover ();
 
-        try {
-            AppInfo.launch_default_for_uri ("settings://notifications", null);
-        } catch (Error e) {
-            warning ("Failed to open notifications settings: %s", e.message);
-        }
+        var uri_launcher = new Gtk.UriLauncher ("settings://notifications");
+        uri_launcher.launch.begin ((Gtk.Window) get_root (), null, (obj, res) => {
+            try {
+                uri_launcher.launch.end (res);
+            } catch (Error e) {
+                warning ("Failed to open notifications settings: %s", e.message);
+            }
+        });
     }
 
     public uint get_n_app_items () {
