@@ -18,7 +18,7 @@ Homepage: https://github.com/elementary/panel-notifications
 
 Package: io.elementary.panel.notifications
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: io.elementary.notifications, ${misc:Depends}, ${shlibs:Depends}
 Enhances: wingpanel
 Description: WingPanel Notifications Indicator
  WingPanel Notifications Indicator
