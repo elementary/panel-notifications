@@ -9,10 +9,13 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private const string KEYBINDING_SCHEMA = "io.elementary.panel.keybindings";
     private const string REMEMBER_KEY = "remember";
 
+    private static GLib.HashTable<string, GLib.DateTime> app_datetime;
     private static GLib.Settings? keybinding_settings;
     private Gee.HashMap<string, Settings> app_settings_cache;
     private GLib.Settings notify_settings;
 
+    private GLib.ListStore list_store;
+    private Gtk.SortListModel sort_list_model;
     private NotificationsIndicator.Symbol? dynamic_icon = null;
     private NotificationsList nlist;
     private NotificationsMonitor monitor;
@@ -28,6 +31,8 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         if (SettingsSchemaSource.get_default ().lookup (KEYBINDING_SCHEMA, true) != null) {
             keybinding_settings = new GLib.Settings (KEYBINDING_SCHEMA);
         }
+
+        app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
     }
 
     construct {
@@ -38,6 +43,20 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         app_settings_cache = new Gee.HashMap<string, Settings> ();
 
         monitor = new NotificationsMonitor ();
+
+        list_store = new GLib.ListStore (typeof (Notification));
+
+        sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
+            section_sorter = new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) section_compare)
+        };
+
+        var previous_session = Session.get_instance ().get_session_notifications ();
+        // Do not block animated drawing of wingpanel
+        Idle.add_once (() => {
+            foreach (unowned var notification in previous_session) {
+                add_entry (notification);
+            }
+        });
     }
 
     public override Gtk.Widget get_display_widget () {
@@ -47,8 +66,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 tooltip_markup = _("Updating notifications…")
             };
 
-            nlist = new NotificationsList ();
-            nlist.items_changed.connect (set_display_icon_name);
+            list_store.items_changed.connect (set_display_icon_name);
 
             monitor.notification_received.connect (on_notification_received);
             monitor.notification_closed.connect (on_notification_closed);
@@ -86,7 +104,10 @@ public class Notifications.Indicator : Wingpanel.Indicator {
 
     public override Gtk.Widget? get_widget () {
         if (nlist == null) {
+            nlist = new NotificationsList (sort_list_model);
+            nlist.clear_all.connect (clear_all);
             nlist.close_popover.connect (() => close ());
+            nlist.remove_notification.connect (remove_notification);
         }
 
         return nlist;
@@ -109,17 +130,53 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         }
 
         if (app_settings == null || app_settings.get_boolean (REMEMBER_KEY)) {
-            nlist.add_entry.begin (notification);
+            add_entry (notification);
 
             Session.get_instance ().add_notification (notification);
         }
+    }
 
-        set_display_icon_name ();
+    private void add_entry (Notification notification) {
+        unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
+        if (time == null || time.compare (notification.timestamp) <= 0) {
+            app_datetime[notification.desktop_id] = notification.timestamp;
+            sort_list_model.section_sorter.changed (DIFFERENT);
+        }
+
+        list_store.append (notification);
+    }
+
+    private void remove_notification (Notification notification) {
+        var app_id = notification.desktop_id;
+
+        uint pos = -1;
+        if (list_store.find (notification, out pos)) {
+            list_store.remove (pos);
+            Session.get_instance ().remove_notification (notification);
+        }
+
+        var items_for_appid = new Gtk.FilterListModel (
+            list_store, new Gtk.CustomFilter ((item) => {
+                return ((Notification) item).desktop_id == app_id;
+            })
+        );
+
+        if (items_for_appid.n_items == 0) {
+            var settings = new Settings ("io.elementary.panel.notifications");
+            var headers = (HashTable<string, bool>) settings.get_value ("headers");
+            if (headers.remove (app_id)) {
+                settings.set_value ("headers", headers);
+            }
+        }
+    }
+
+    private static int section_compare (Notification a, Notification b) {
+        return app_datetime[b.desktop_id].compare (app_datetime[a.desktop_id]);
     }
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
-        for (int i = 0; i < nlist.notification_items.get_n_items (); i++) {
-            var notification = (Notification) nlist.notification_items.get_item (i);
+        for (int i = 0; i < list_store.n_items; i++) {
+            var notification = (Notification) list_store.get_item (i);
             if (id == notification.server_id) {
                 notification.server_id = 0; // Notification is now outdated
                 return;
@@ -127,10 +184,16 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         }
     }
 
+    private void clear_all () {
+        Session.get_instance ().clear ();
+        list_store.remove_all ();
+        close ();
+    }
+
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
-        } else if (nlist != null && nlist.notification_items.get_n_items () > 0) {
+        } else if (list_store.n_items > 0) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
             dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
@@ -139,7 +202,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void update_tooltip () {
-        var number_of_notifications = nlist.notification_items.get_n_items ();
+        var number_of_notifications = list_store.n_items;
         string[] accels = {};
         string description;
         string middle_click_label = "";
@@ -167,12 +230,16 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 description = _("1 notification");
                 break;
             default:
-                var number_of_apps = nlist.get_n_app_items ();
+                var app_list = new GenericSet<string> (str_hash, str_equal);
+                for (var i = 0; i < list_store.n_items; i++) {
+                    app_list.add (((Notification) list_store.get_item (i)).desktop_id);
+                }
+
                 /// TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
                 /// e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
                 description = _("%s from %s").printf (
                     dngettext (GETTEXT_PACKAGE, "%u notification", "%u notifications", number_of_notifications).printf (number_of_notifications),
-                    dngettext (GETTEXT_PACKAGE, "%i app", "%u apps", number_of_apps).printf (number_of_apps)
+                    dngettext (GETTEXT_PACKAGE, "%i app", "%u apps", app_list.length).printf (app_list.length)
                 );
                 break;
         }
