@@ -6,7 +6,6 @@
 public class Notifications.NotificationsList : Granite.Bin {
     public signal void remove_notification (Notification notification);
     public signal void close_popover ();
-    public signal void items_changed ();
 
     public const string ACTION_GROUP_PREFIX = "notifications-list";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
@@ -47,6 +46,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         listbox.row_activated.connect (on_row_activated);
 
         list_model.items_changed.connect (on_items_changed);
+        on_items_changed ();
     }
 
     private void header_func (Gtk.ListBoxRow row, Gtk.ListBoxRow? before) {
@@ -100,8 +100,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         } else {
             stack.visible_child_name = "list";
         }
-
-        items_changed ();
     }
 
     private void on_row_activated (Gtk.ListBoxRow row) {

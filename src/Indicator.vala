@@ -19,7 +19,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private Gtk.Box? main_box = null;
     private Wingpanel.PopoverMenuItem clear_all_btn;
     private NotificationsIndicator.Symbol? dynamic_icon = null;
-    private NotificationsList nlist;
     private NotificationsMonitor monitor;
 
     public Indicator () {
@@ -114,7 +113,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 margin_bottom = 3
             };
 
-            nlist = new NotificationsList (sort_list_model);
+            var nlist = new NotificationsList (sort_list_model);
 
             var scrolled = new Gtk.ScrolledWindow () {
                 child = nlist,
@@ -149,7 +148,9 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             notify_settings.bind ("do-not-disturb", not_disturb_switch, "active", GLib.SettingsBindFlags.DEFAULT);
 
             nlist.close_popover.connect (() => close ());
-            nlist.items_changed.connect (update_clear_all_sensitivity);
+            nlist.remove_notification.connect (remove_notification);
+
+            list_store.items_changed.connect (update_clear_all_sensitivity);
 
             clear_all_btn.clicked.connect (clear_all);
 
@@ -269,7 +270,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
-        } else if (nlist != null && list_store.get_n_items () > 0) {
+        } else if (list_store.get_n_items () > 0) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
             dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
