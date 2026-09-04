@@ -1,7 +1,7 @@
 src/Indicator.vala
 src/Widgets/NotificationsList.vala
-src/Widgets/NotificationEntry.vala
 src/Widgets/ListHeader.vala
+src/Widgets/ListItem.vala
 src/Services/NotificationsMonitor.vala
 src/Services/Notification.vala
 src/Services/Session.vala
