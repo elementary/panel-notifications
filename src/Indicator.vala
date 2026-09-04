@@ -48,7 +48,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         list_store = new GLib.ListStore (typeof (Notification));
 
         sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
-            section_sorter = new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) section_func)
+            section_sorter = new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) section_compare)
         };
 
         var previous_session = Session.get_instance ().get_session_notifications ();
@@ -214,19 +214,8 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         }
     }
 
-    private static int section_func (Notification a, Notification b) {
-        unowned GLib.DateTime? time_a = app_datetime[a.desktop_id];
-        unowned GLib.DateTime? time_b = app_datetime[b.desktop_id];
-
-        if (time_a != null && time_b != null) {
-            return time_b.compare (time_a);
-        } else if (time_a != null) {
-            return -1;
-        } else if (time_b != null) {
-            return 1;
-        }
-
-        return 0;
+    private static int section_compare (Notification a, Notification b) {
+        return app_datetime[b.desktop_id].compare (app_datetime[a.desktop_id]);
     }
 
     private void update_clear_all_sensitivity () {
