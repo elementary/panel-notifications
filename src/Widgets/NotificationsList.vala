@@ -19,11 +19,33 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
     }
 
+    private Gtk.Button clear_all_btn;
     private Gtk.SortListModel sort_list_model;
     private Gtk.Stack stack;
 
     construct {
         app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
+
+        var not_disturb_switch = new Granite.SwitchModelButton (_("Do Not Disturb"));
+        not_disturb_switch.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
+
+        var dnd_switch_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
+            margin_top = 3,
+            margin_bottom = 3
+        };
+
+        var clear_all_btn_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
+            margin_top = 3,
+            margin_bottom = 3
+        };
+
+        clear_all_btn = new Wingpanel.PopoverMenuItem () {
+            text = _("Clear All Notifications")
+        };
+
+        var settings_btn = new Wingpanel.PopoverMenuItem () {
+            text = _("Notifications Settings…")
+        };
 
         var placeholder = new Gtk.Label (_("No Notifications")) {
             margin_top = 24,
@@ -59,7 +81,17 @@ public class Notifications.NotificationsList : Granite.Bin {
         stack.add_named (placeholder, "placeholder");
         stack.add_named (scrolled, "list");
 
-        child = stack;
+        var main_box = new Gtk.Box (VERTICAL, 0) {
+            width_request = 360
+        };
+        main_box.append (not_disturb_switch);
+        main_box.append (dnd_switch_separator);
+        main_box.append (scrolled);
+        main_box.append (clear_all_btn_separator);
+        main_box.append (clear_all_btn);
+        main_box.append (settings_btn);
+
+        child = main_box;
 
         insert_action_group (ACTION_GROUP_PREFIX, new NotificationsMonitor ().notifications_action_group);
 
@@ -74,6 +106,12 @@ public class Notifications.NotificationsList : Granite.Bin {
                 add_entry (notification);
             }
         });
+
+        var settings = new GLib.Settings ("io.elementary.notifications");
+        settings.bind ("do-not-disturb", not_disturb_switch, "active", DEFAULT);
+
+        clear_all_btn.clicked.connect (clear_all);
+        settings_btn.clicked.connect (show_settings);
     }
 
     private static int section_compare (Notification a, Notification b) {
@@ -128,6 +166,16 @@ public class Notifications.NotificationsList : Granite.Bin {
         close_popover ();
     }
 
+    private void show_settings () {
+        close_popover ();
+
+        try {
+            AppInfo.launch_default_for_uri ("settings://notifications", null);
+        } catch (Error e) {
+            warning ("Failed to open notifications settings: %s", e.message);
+        }
+    }
+
     public uint get_n_app_items () {
         var app_list = new GenericSet<string> (str_hash, str_equal);
         for (var i = 0; i < list_store.n_items; i++) {
@@ -159,6 +207,8 @@ public class Notifications.NotificationsList : Granite.Bin {
         } else {
             stack.visible_child_name = "list";
         }
+
+        clear_all_btn.sensitive = list_store.n_items > 0;
 
         items_changed ();
     }
