@@ -11,6 +11,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
     public ListModel list_model { get; construct; }
+
     private Gtk.Stack stack;
 
     public NotificationsList (ListModel list_model) {
@@ -28,54 +29,79 @@ public class Notifications.NotificationsList : Granite.Bin {
         placeholder.add_css_class (Granite.STYLE_CLASS_H2_LABEL);
         placeholder.add_css_class (Granite.CssClass.DIM);
 
-        var listbox = new Gtk.ListBox () {
-            activate_on_single_click = true,
-            selection_mode = NONE
+        var item_factory = new Gtk.SignalListItemFactory ();
+        item_factory.setup.connect (setup_factory);
+        item_factory.bind.connect (bind_factory);
+        item_factory.unbind.connect (unbind_factory);
+
+        var header_factory = new Gtk.SignalListItemFactory ();
+        header_factory.setup.connect (setup_header_factory);
+        header_factory.bind.connect (bind_header_factory);
+
+        var list_view = new Gtk.ListView (new Gtk.NoSelection (list_model), item_factory) {
+            header_factory = header_factory,
+            margin_top = 3,
+            margin_bottom = 3,
+            single_click_activate = true
         };
-        listbox.bind_model (list_model, create_widget_func);
-        listbox.set_header_func (header_func);
+        list_view.remove_css_class (Granite.STYLE_CLASS_VIEW);
+
+        var scrolled = new Gtk.ScrolledWindow () {
+            child = list_view,
+            hscrollbar_policy = NEVER,
+            max_content_height = 500,
+            propagate_natural_height = true
+        };
 
         stack = new Gtk.Stack ();
         stack.add_named (placeholder, "placeholder");
-        stack.add_named (listbox, "list");
+        stack.add_named (scrolled, "list");
 
         child = stack;
 
         insert_action_group (ACTION_GROUP_PREFIX, new NotificationsMonitor ().notifications_action_group);
 
-        listbox.row_activated.connect (on_row_activated);
+        list_view.activate.connect (on_row_activated);
 
         list_model.items_changed.connect (on_items_changed);
         on_items_changed ();
     }
 
-    private void header_func (Gtk.ListBoxRow row, Gtk.ListBoxRow? before) {
-        unowned var row_entry = (NotificationEntry) row;
-        unowned NotificationEntry? before_entry = (NotificationEntry) before;
-        unowned string row_app_id = row_entry.notification.desktop_id;
+    private void setup_factory (Object item) {
+        var notification_entry = new NotificationEntry ();
+        notification_entry.remove.connect ((notification) => remove_notification (notification));
 
-        if (before != null && row_app_id == before_entry.notification.desktop_id) {
-            row.set_header (null);
-            return;
-        }
-
-        var app_entry = new AppEntry () {
-            app_name = row_entry.notification.app_name,
-            app_id = row_app_id
-        };
-        app_entry.clear.connect (clear_app_entry);
-
-        row.set_header (app_entry);
+        ((Gtk.ListItem) item).child = notification_entry;
     }
 
-    private Gtk.Widget create_widget_func (Object item) {
-        var notification = (Notification) item;
+    private void bind_factory (Object item) {
+        var list_item = (Gtk.ListItem) item;
 
-        var notification_entry = new NotificationEntry ();
-        notification_entry.bind (notification);
-        notification_entry.remove.connect (() => remove_notification (notification));
+        var notification_entry = (NotificationEntry) list_item.child;
+        notification_entry.bind ((Notification) list_item.item);
+    }
 
-        return notification_entry;
+    private void unbind_factory (Object item) {
+        var list_item = (Gtk.ListItem) item;
+
+        var notification_entry = (NotificationEntry) list_item.child;
+        notification_entry.unbind ();
+    }
+
+    private void setup_header_factory (Object item) {
+        var app_entry = new AppEntry ();
+        app_entry.clear.connect (clear_app_entry);
+
+        ((Gtk.ListHeader) item).child = app_entry;
+    }
+
+    private void bind_header_factory (Object item) {
+        var list_item = (Gtk.ListHeader) item;
+        var notification = (Notification) list_item.item;
+
+        var app_entry = (AppEntry) list_item.child;
+        app_entry.app_name = notification.app_name;
+        app_entry.app_id = notification.desktop_id;
     }
 
     private void clear_app_entry (AppEntry app_entry) {
@@ -102,25 +128,22 @@ public class Notifications.NotificationsList : Granite.Bin {
         }
     }
 
-    private void on_row_activated (Gtk.ListBoxRow row) {
-        if (row is NotificationEntry) {
-            unowned var notification_entry = (NotificationEntry) row;
-
-            if (notification_entry.notification.default_action != null) {
-                activate_action (
-                    ACTION_PREFIX + notification_entry.notification.default_action,
-                    null
-                );
+    private void on_row_activated (uint pos) {
+        var notification = (Notification) list_model.get_item (pos);
+        if (notification.default_action != null) {
+            activate_action (
+                ACTION_PREFIX + notification.default_action,
+                null
+            );
+            close_popover ();
+        } else {
+            try {
+                var context = get_display ().get_app_launch_context ();
+                notification.app_info.launch (null, context);
+                notification.server_id = 0;
                 close_popover ();
-            } else {
-                try {
-                    var context = notification_entry.get_display ().get_app_launch_context ();
-                    notification_entry.notification.app_info.launch (null, context);
-                    notification_entry.notification.server_id = 0;
-                    close_popover ();
-                } catch (Error e) {
-                    warning ("Unable to launch app: %s", e.message);
-                }
+            } catch (Error e) {
+                warning ("Unable to launch app: %s", e.message);
             }
         }
     }
