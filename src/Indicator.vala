@@ -229,15 +229,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         return 0;
     }
 
-    private uint get_n_app_items () {
-        var app_list = new GenericSet<string> (str_hash, str_equal);
-        for (var i = 0; i < list_store.n_items; i++) {
-            app_list.add (((Notification) list_store.get_item (i)).desktop_id);
-        }
-
-        return app_list.length;
-    }
-
     private void update_clear_all_sensitivity () {
         clear_all_btn.sensitive = list_store.get_n_items () > 0;
     }
@@ -308,12 +299,16 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 description = _("1 notification");
                 break;
             default:
-                var number_of_apps = get_n_app_items ();
+                var app_list = new GenericSet<string> (str_hash, str_equal);
+                for (var i = 0; i < list_store.n_items; i++) {
+                    app_list.add (((Notification) list_store.get_item (i)).desktop_id);
+                }
+
                 /// TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
                 /// e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
                 description = _("%s from %s").printf (
                     dngettext (GETTEXT_PACKAGE, "%u notification", "%u notifications", number_of_notifications).printf (number_of_notifications),
-                    dngettext (GETTEXT_PACKAGE, "%i app", "%u apps", number_of_apps).printf (number_of_apps)
+                    dngettext (GETTEXT_PACKAGE, "%i app", "%u apps", app_list.length).printf (app_list.length)
                 );
                 break;
         }
