@@ -107,7 +107,7 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         var notification_entry = new NotificationEntry ();
         notification_entry.bind (notification);
-        notification_entry.remove.connect (remove_notification);
+        notification_entry.remove.connect (() => remove_notification (notification));
 
         return notification_entry;
     }
@@ -165,8 +165,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         items_changed ();
     }
 
-    private void remove_notification (NotificationEntry notification_entry) {
-        var notification = notification_entry.notification;
+    private void remove_notification (Notification notification) {
         var app_id = notification.desktop_id;
 
         uint pos = -1;
