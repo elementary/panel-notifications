@@ -74,8 +74,6 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
         box.append (expander);
         box.append (clear_btn_entry);
 
-        margin_start = 12;
-        margin_end = 12;
         margin_bottom = 3;
         margin_top = 6;
         can_focus = false;
