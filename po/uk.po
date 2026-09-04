@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 20:36+0000\n"
+"POT-Creation-Date: 2026-09-04 16:38+0000\n"
 "PO-Revision-Date: 2026-09-03 00:01+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementaryos.org/projects/wingpanel/"
@@ -16,46 +16,34 @@ msgstr ""
 "X-Generator: Weblate 2026.5\n"
 "X-Launchpad-Export-Date: 2017-03-14 07:32+0000\n"
 
-#: src/Indicator.vala:49
+#: src/Indicator.vala:47
 msgid "Updating notifications…"
 msgstr "Оновлення сповіщень…"
 
-#: src/Indicator.vala:91
-msgid "Do Not Disturb"
-msgstr "Не турбувати"
-
-#: src/Indicator.vala:112
-msgid "Clear All Notifications"
-msgstr "Очистити всі сповіщення"
-
-#: src/Indicator.vala:116
-msgid "Notifications Settings…"
-msgstr "Налаштування сповіщень…"
-
-#: src/Indicator.vala:222
+#: src/Indicator.vala:155
 msgid "Middle-click to disable Do Not Disturb"
 msgstr "Клацніть середньою клавішею, щоб вимкнути режим «Не турбувати»"
 
-#: src/Indicator.vala:224
+#: src/Indicator.vala:157
 msgid "Middle-click to enable Do Not Disturb"
 msgstr "Клацніть середньою клавішею, щоб увімкнути режим «Не турбувати»"
 
-#: src/Indicator.vala:231
+#: src/Indicator.vala:164
 msgid "No notifications"
 msgstr "Немає сповіщень"
 
-#: src/Indicator.vala:234
+#: src/Indicator.vala:167
 msgid "1 notification"
 msgstr "1 сповіщення"
 
 #. / TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
 #. / e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
-#: src/Indicator.vala:240
+#: src/Indicator.vala:173
 #, c-format
 msgid "%s from %s"
 msgstr "%s від %s"
 
-#: src/Indicator.vala:241
+#: src/Indicator.vala:174
 #, c-format
 msgid "%u notification"
 msgid_plural "%u notifications"
@@ -63,7 +51,7 @@ msgstr[0] "%u сповіщення"
 msgstr[1] "%u сповіщення"
 msgstr[2] "%u сповіщень"
 
-#: src/Indicator.vala:242
+#: src/Indicator.vala:175
 #, fuzzy, c-format
 #| msgid "%i app"
 #| msgid_plural "%i apps"
@@ -73,24 +61,36 @@ msgstr[0] "%i застосунок"
 msgstr[1] "%i застосунки"
 msgstr[2] "%i застосунків"
 
-#: src/Widgets/NotificationsList.vala:27
+#: src/Widgets/NotificationsList.vala:31
+msgid "Do Not Disturb"
+msgstr "Не турбувати"
+
+#: src/Widgets/NotificationsList.vala:42
+msgid "Clear All Notifications"
+msgstr "Очистити всі сповіщення"
+
+#: src/Widgets/NotificationsList.vala:46
+msgid "Notifications Settings…"
+msgstr "Налаштування сповіщень…"
+
+#: src/Widgets/NotificationsList.vala:49
 msgid "No Notifications"
 msgstr "Немає сповіщень"
 
-#: src/Widgets/NotificationEntry.vala:312
+#: src/Widgets/NotificationEntry.vala:319
 msgid "Delete"
 msgstr "Видалити"
 
-#: src/Widgets/AppEntry.vala:62
+#: src/Widgets/AppEntry.vala:68
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Очистити всі %s сповіщень"
 
-#: src/Widgets/AppEntry.vala:96
+#: src/Widgets/AppEntry.vala:98
 msgid "Show less"
 msgstr "Згорнути"
 
-#: src/Widgets/AppEntry.vala:96
+#: src/Widgets/AppEntry.vala:98
 msgid "Show more"
 msgstr "Розгорнути"
 
