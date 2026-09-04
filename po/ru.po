@@ -2,60 +2,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 05:15+0000\n"
-"PO-Revision-Date: 2024-07-15 07:16+0000\n"
+"POT-Creation-Date: 2026-09-03 20:36+0000\n"
+"PO-Revision-Date: 2026-09-03 17:32+0000\n"
 "Last-Translator: кубик круглый <megarainbow29@gmail.com>\n"
-"Language-Team: Russian <https://l10n.elementary.io/projects/wingpanel/"
-"wingpanel-indicator-notifications/ru/>\n"
+"Language-Team: Russian <https://l10n.elementaryos.org/projects/wingpanel/"
+"notifications/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 2026.5\n"
 "X-Launchpad-Export-Date: 2017-03-14 07:32+0000\n"
 
-#: src/Indicator.vala:41
+#: src/Indicator.vala:49
 msgid "Updating notifications…"
 msgstr "Обновление уведомлений…"
 
-#: src/Indicator.vala:79
+#: src/Indicator.vala:91
 msgid "Do Not Disturb"
 msgstr "Не беспокоить"
 
-#: src/Indicator.vala:100
+#: src/Indicator.vala:112
 msgid "Clear All Notifications"
 msgstr "Очистить все уведомления"
 
-#: src/Indicator.vala:104
+#: src/Indicator.vala:116
 msgid "Notifications Settings…"
 msgstr "Параметры уведомлений…"
 
-#: src/Indicator.vala:203
+#: src/Indicator.vala:222
 msgid "Middle-click to disable Do Not Disturb"
 msgstr "Нажмите средней кнопкой мыши, чтобы выключить режим «Не беспокоить»"
 
-#: src/Indicator.vala:205
+#: src/Indicator.vala:224
 msgid "Middle-click to enable Do Not Disturb"
 msgstr "Нажмите средней кнопкой мыши, чтобы включить режим «Не беспокоить»"
 
-#: src/Indicator.vala:212
+#: src/Indicator.vala:231
 msgid "No notifications"
 msgstr "Уведомлений нет"
 
-#: src/Indicator.vala:215
+#: src/Indicator.vala:234
 msgid "1 notification"
 msgstr "1 уведомление"
 
 #. / TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
 #. / e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
-#: src/Indicator.vala:221
+#: src/Indicator.vala:240
 #, c-format
 msgid "%s from %s"
 msgstr "%s от %s"
 
-#: src/Indicator.vala:222
+#: src/Indicator.vala:241
 #, c-format
 msgid "%u notification"
 msgid_plural "%u notifications"
@@ -63,40 +63,40 @@ msgstr[0] "%u уведомление"
 msgstr[1] "%u уведомления"
 msgstr[2] "%u уведомлений"
 
-#: src/Indicator.vala:223
+#: src/Indicator.vala:242
 #, fuzzy, c-format
-#| msgid "%u app"
-#| msgid_plural "%u apps"
+#| msgid "%i app"
+#| msgid_plural "%i apps"
 msgid "%i app"
-msgid_plural "%i apps"
-msgstr[0] "%u приложения"
-msgstr[1] "%u приложений"
-msgstr[2] "%u приложений"
+msgid_plural "%u apps"
+msgstr[0] "%i приложения"
+msgstr[1] "%i приложений"
+msgstr[2] "%i приложений"
 
-#: src/Widgets/NotificationsList.vala:39
+#: src/Widgets/NotificationsList.vala:27
 msgid "No Notifications"
 msgstr "Уведомлений нет"
 
-#: src/Widgets/NotificationEntry.vala:308
+#: src/Widgets/NotificationEntry.vala:312
 msgid "Delete"
 msgstr "Удалить"
 
-#: src/Widgets/AppEntry.vala:57
-msgid "Other"
-msgstr "Прочее"
-
-#: src/Widgets/AppEntry.vala:83
+#: src/Widgets/AppEntry.vala:62
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Очистить все уведомления от «%s»"
 
-#: src/Widgets/AppEntry.vala:117
+#: src/Widgets/AppEntry.vala:96
 msgid "Show less"
 msgstr "Свернуть"
 
-#: src/Widgets/AppEntry.vala:117
+#: src/Widgets/AppEntry.vala:96
 msgid "Show more"
 msgstr "Развернуть"
+
+#: src/Services/Notification.vala:150
+msgid "Other"
+msgstr "Прочее"
 
 #~ msgid "now"
 #~ msgstr "сейчас"

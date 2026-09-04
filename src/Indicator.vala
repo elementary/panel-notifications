@@ -92,19 +92,10 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             not_disturb_switch.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
 
             var dnd_switch_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
-                margin_top = 3,
-                margin_bottom = 3
-            };
-
-            var scrolled = new Gtk.ScrolledWindow () {
-                child = nlist,
-                hscrollbar_policy = NEVER,
-                max_content_height = 500,
-                propagate_natural_height = true
+                margin_top = 3
             };
 
             var clear_all_btn_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
-                margin_top = 3,
                 margin_bottom = 3
             };
 
@@ -121,7 +112,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             };
             main_box.append (not_disturb_switch);
             main_box.append (dnd_switch_separator);
-            main_box.append (scrolled);
+            main_box.append (nlist);
             main_box.append (clear_all_btn_separator);
             main_box.append (clear_all_btn);
             main_box.append (settings_btn);
@@ -171,15 +162,14 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void update_clear_all_sensitivity () {
-        clear_all_btn.sensitive = nlist.app_entries.size > 0;
+        clear_all_btn.sensitive = nlist.notification_items.get_n_items () > 0;
     }
 
     private void on_notification_closed (uint32 id, Notification.CloseReason reason) {
         for (int i = 0; i < nlist.notification_items.get_n_items (); i++) {
-            var entry = (NotificationEntry) nlist.notification_items.get_item (i);
-            if (id == entry.notification.server_id) {
-                entry.notification.server_id = 0; // Notification is now outdated
-                entry.clear ();
+            var notification = (Notification) nlist.notification_items.get_item (i);
+            if (id == notification.server_id) {
+                notification.server_id = 0; // Notification is now outdated
                 return;
             }
         }
@@ -188,7 +178,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private void set_display_icon_name () {
         if (notify_settings.get_boolean ("do-not-disturb")) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.DISABLED;
-        } else if (nlist != null && nlist.app_entries.size > 0) {
+        } else if (nlist != null && nlist.notification_items.get_n_items () > 0) {
             dynamic_icon.state = NotificationsIndicator.SymbolState.ACTIVE;
         } else {
             dynamic_icon.state = NotificationsIndicator.SymbolState.NORMAL;
@@ -235,12 +225,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 description = _("1 notification");
                 break;
             default:
-                var number_of_apps = nlist.app_entries.size;
+                var number_of_apps = nlist.get_n_app_items ();
                 /// TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
                 /// e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
                 description = _("%s from %s").printf (
                     dngettext (GETTEXT_PACKAGE, "%u notification", "%u notifications", number_of_notifications).printf (number_of_notifications),
-                    dngettext (GETTEXT_PACKAGE, "%i app", "%i apps", number_of_apps).printf (number_of_apps)
+                    dngettext (GETTEXT_PACKAGE, "%i app", "%u apps", number_of_apps).printf (number_of_apps)
                 );
                 break;
         }

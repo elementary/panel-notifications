@@ -3,11 +3,24 @@
 * SPDX-FileCopyrightText: 2015-2026 elementary, Inc. (https://elementary.io)
 */
 
-public class Notifications.AppEntry : Gtk.ListBoxRow {
+public class Notifications.AppEntry : Granite.Bin {
     public signal void clear ();
 
-    public string app_id { get; private set; }
-    public AppInfo? app_info { get; construct; default = null; }
+    private string _app_id = "";
+    public string app_id {
+        get {
+            return _app_id;
+        }
+        set {
+            _app_id = value;
+
+            if (value in headers) {
+                expander.active = headers[value];
+            }
+        }
+    }
+
+    public string app_name { get; set; default = ""; }
 
     private static Gtk.CssProvider provider;
     private static Settings settings;
@@ -28,20 +41,7 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
         headers = (HashTable<string, bool>) settings.get_value ("headers");
     }
 
-    public AppEntry (AppInfo? app_info) {
-        Object (app_info: app_info);
-    }
-
     construct {
-        unowned string name;
-        if (app_info != null) {
-            app_id = app_info.get_id ();
-            name = app_info.get_name ();
-        } else {
-            app_id = "other";
-            name = _("Other");
-        }
-
         var image = new Gtk.Image.from_icon_name ("pan-end-symbolic");
 
         var label = new Granite.HeaderLabel (name) {
@@ -74,15 +74,11 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
         box.append (expander);
         box.append (clear_btn_entry);
 
-        margin_start = 12;
-        margin_end = 12;
-        margin_top = 3;
-        can_focus = false;
+        margin_bottom = 3;
+        margin_top = 6;
         child = box;
 
-        if (app_id in headers) {
-            expander.active = headers[app_id];
-        }
+        bind_property ("app-name", label, "label");
 
         expander.toggled.connect (() => {
             headers[app_id] = expander.active;
@@ -100,18 +96,6 @@ public class Notifications.AppEntry : Gtk.ListBoxRow {
         expander.bind_property ("active", image, "tooltip-text", SYNC_CREATE, (binding, srcval, ref targetval) => {
             targetval = (bool) srcval ? _("Show less") : _("Show more");
             return true;
-        });
-
-        notify["parent"].connect (() => {
-            if (parent != null) {
-                return;
-            }
-
-            if (headers.remove (app_id)) {
-                settings.set_value ("headers", headers);
-            }
-
-            clear ();
         });
     }
 }

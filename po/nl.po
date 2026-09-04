@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 05:15+0000\n"
+"POT-Creation-Date: 2026-09-03 20:36+0000\n"
 "PO-Revision-Date: 2024-04-25 16:13+0000\n"
 "Last-Translator: Dennis ten Hoove <dennistenhoove@protonmail.com>\n"
 "Language-Team: Dutch <https://l10n.elementary.io/projects/wingpanel/"
@@ -15,85 +15,85 @@ msgstr ""
 "X-Generator: Weblate 5.0.2\n"
 "X-Launchpad-Export-Date: 2017-03-14 07:32+0000\n"
 
-#: src/Indicator.vala:41
+#: src/Indicator.vala:49
 msgid "Updating notifications…"
 msgstr "Meldingen worden geüpdatet…"
 
-#: src/Indicator.vala:79
+#: src/Indicator.vala:91
 msgid "Do Not Disturb"
 msgstr "Niet storen"
 
-#: src/Indicator.vala:100
+#: src/Indicator.vala:112
 msgid "Clear All Notifications"
 msgstr "Alle meldingen verwijderen"
 
-#: src/Indicator.vala:104
+#: src/Indicator.vala:116
 msgid "Notifications Settings…"
 msgstr "Instellingen voor meldingen…"
 
-#: src/Indicator.vala:203
+#: src/Indicator.vala:222
 msgid "Middle-click to disable Do Not Disturb"
 msgstr "Middelklik om Niet Storen uit te schakelen"
 
-#: src/Indicator.vala:205
+#: src/Indicator.vala:224
 msgid "Middle-click to enable Do Not Disturb"
 msgstr "Middelklik om Niet Storen aan te zetten"
 
-#: src/Indicator.vala:212
+#: src/Indicator.vala:231
 msgid "No notifications"
 msgstr "Geen meldingen"
 
-#: src/Indicator.vala:215
+#: src/Indicator.vala:234
 msgid "1 notification"
 msgstr "1 melding"
 
 #. / TRANSLATORS: A tooltip text for the indicator representing the number of notifications.
 #. / e.g. "2 notifications from 1 app" or "5 notifications from 3 apps"
-#: src/Indicator.vala:221
+#: src/Indicator.vala:240
 #, c-format
 msgid "%s from %s"
 msgstr "%s van %s"
 
-#: src/Indicator.vala:222
+#: src/Indicator.vala:241
 #, c-format
 msgid "%u notification"
 msgid_plural "%u notifications"
 msgstr[0] "%u melding"
 msgstr[1] "%u meldingen"
 
-#: src/Indicator.vala:223
+#: src/Indicator.vala:242
 #, fuzzy, c-format
 #| msgid "%u app"
 #| msgid_plural "%u apps"
 msgid "%i app"
-msgid_plural "%i apps"
+msgid_plural "%u apps"
 msgstr[0] "%u app"
 msgstr[1] "%u apps"
 
-#: src/Widgets/NotificationsList.vala:39
+#: src/Widgets/NotificationsList.vala:27
 msgid "No Notifications"
 msgstr "Geen meldingen"
 
-#: src/Widgets/NotificationEntry.vala:308
+#: src/Widgets/NotificationEntry.vala:312
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: src/Widgets/AppEntry.vala:57
-msgid "Other"
-msgstr "Overige"
-
-#: src/Widgets/AppEntry.vala:83
+#: src/Widgets/AppEntry.vala:62
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Alle %s meldingen verwijderen"
 
-#: src/Widgets/AppEntry.vala:117
+#: src/Widgets/AppEntry.vala:96
 msgid "Show less"
 msgstr "Minder tonen"
 
-#: src/Widgets/AppEntry.vala:117
+#: src/Widgets/AppEntry.vala:96
 msgid "Show more"
 msgstr "Meer tonen"
+
+#: src/Services/Notification.vala:150
+msgid "Other"
+msgstr "Overige"
 
 #~ msgid "now"
 #~ msgstr "nu"
