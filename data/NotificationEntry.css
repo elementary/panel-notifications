@@ -56,3 +56,7 @@ notification .close image {
     color: #fff;
     -gtk-icon-shadow: 0 1px 1px alpha(#000, 0.6);
 }
+
+notification button.text-button {
+    min-width: 6rem;
+}
