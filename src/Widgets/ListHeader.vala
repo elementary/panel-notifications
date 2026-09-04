@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2015-2026 elementary, Inc. (https://elementary.io)
 */
 
-public class Notifications.AppEntry : Granite.Bin {
+public class Notifications.ListHeader : Granite.Bin {
     public signal void clear ();
 
     private string _app_id = "";
@@ -30,7 +30,7 @@ public class Notifications.AppEntry : Granite.Bin {
 
     static construct {
         provider = new Gtk.CssProvider ();
-        provider.load_from_resource ("/io/elementary/wingpanel/notifications/AppEntry.css");
+        provider.load_from_resource ("/io/elementary/wingpanel/notifications/ListHeader.css");
         Gtk.StyleContext.add_provider_for_display (
             Gdk.Display.get_default (),
             provider,
