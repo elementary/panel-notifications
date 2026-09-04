@@ -27,7 +27,6 @@ public class Notifications.Notification : Object {
     public const string DESKTOP_ID_EXT = ".desktop";
 
     public GLib.Icon badge_icon { get; construct set; }
-    public string internal_id { get; construct set; } // Format: "timestamp.server_id"
     public uint32 server_id { get; construct set; default = 0; } // 0 means the notification is outdated i.e. not present in the server anymore
 
     public bool has_temp_file { get; private set; }
@@ -65,7 +64,6 @@ public class Notifications.Notification : Object {
         string _internal_id, string _app_name, string _app_icon, string _summary, string _message_body, string _image_path,
         string[] _actions, string _desktop_id, int64 _unix_time, uint64 _replaces_id, string _sender, bool _has_temp_file
     ) {
-        internal_id = _internal_id;
         app_name = _app_name;
         app_icon = _app_icon;
         summary = _summary;
@@ -105,8 +103,6 @@ public class Notifications.Notification : Object {
         }
 
         timestamp = new GLib.DateTime.now_local ();
-
-        internal_id = timestamp.to_unix ().to_string () + "." + server_id.to_string ();
 
         desktop_id = lookup_string (hints, DESKTOP_ENTRY_KEY);
         if (desktop_id != null && desktop_id != "") {
