@@ -48,9 +48,16 @@ public class Notifications.NotificationsList : Granite.Bin {
         listbox.bind_model (sort_list_model, create_widget_func);
         listbox.set_header_func (header_func);
 
+        var scrolled = new Gtk.ScrolledWindow () {
+            child = listbox,
+            hscrollbar_policy = NEVER,
+            max_content_height = 500,
+            propagate_natural_height = true
+        };
+
         stack = new Gtk.Stack ();
         stack.add_named (placeholder, "placeholder");
-        stack.add_named (listbox, "list");
+        stack.add_named (scrolled, "list");
 
         child = stack;
 
