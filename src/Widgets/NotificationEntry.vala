@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2015-2025 elementary, Inc. (https://elementary.io)
 */
 
-public class Notifications.NotificationEntry : Gtk.ListBoxRow {
+public class Notifications.NotificationEntry : Granite.Bin {
     public signal void remove (Notification notification);
 
     public Notification notification { get; private set; }
