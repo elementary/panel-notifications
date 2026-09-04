@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 16:38+0000\n"
+"POT-Creation-Date: 2026-09-04 20:13+0000\n"
 "PO-Revision-Date: 2023-09-26 22:08+0000\n"
 "Last-Translator: TomiOhl <ohlslager.tom@gmail.com>\n"
 "Language-Team: Hungarian <https://l10n.elementary.io/projects/wingpanel/"
@@ -74,24 +74,24 @@ msgstr "Értesítésbeállítások…"
 msgid "No Notifications"
 msgstr "Nincsenek értesítések"
 
-#: src/Widgets/NotificationEntry.vala:319
-msgid "Delete"
-msgstr "Törlés"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/ListHeader.vala:68
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Az összes %s értesítés törlése"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show less"
 msgstr "Kevesebb mutatása"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show more"
 msgstr "Több mutatása"
 
-#: src/Services/Notification.vala:150
+#: src/Widgets/ListItem.vala:337
+msgid "Delete"
+msgstr "Törlés"
+
+#: src/Services/Notification.vala:154
 msgid "Other"
 msgstr "Egyéb"
 

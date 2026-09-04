@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 16:38+0000\n"
+"POT-Creation-Date: 2026-09-04 20:13+0000\n"
 "PO-Revision-Date: 2022-01-12 19:06+0000\n"
 "Last-Translator: p-bo <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://l10n.elementary.io/projects/wingpanel/"
@@ -78,24 +78,24 @@ msgstr "Nastavení oznamování…"
 msgid "No Notifications"
 msgstr "Žádná oznámení"
 
-#: src/Widgets/NotificationEntry.vala:319
-msgid "Delete"
-msgstr "Vymazat"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/ListHeader.vala:68
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Vyčistit všechna %s oznámení"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show more"
 msgstr ""
 
-#: src/Services/Notification.vala:150
+#: src/Widgets/ListItem.vala:337
+msgid "Delete"
+msgstr "Vymazat"
+
+#: src/Services/Notification.vala:154
 msgid "Other"
 msgstr "Ostatní"
 

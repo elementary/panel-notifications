@@ -125,7 +125,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private void setup_header_factory (Object item) {
-        var app_entry = new AppEntry ();
+        var app_entry = new ListHeader ();
         app_entry.clear.connect (clear_app_entry);
 
         ((Gtk.ListHeader) item).child = app_entry;
@@ -135,7 +135,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         var list_item = (Gtk.ListHeader) item;
         var notification = (Notification) list_item.item;
 
-        var app_entry = (AppEntry) list_item.child;
+        var app_entry = (ListHeader) list_item.child;
         app_entry.app_name = notification.app_name;
         app_entry.app_id = notification.desktop_id;
     }
@@ -153,7 +153,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         });
     }
 
-    private void clear_app_entry (AppEntry app_entry) {
+    private void clear_app_entry (ListHeader app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
 
         Notification[] to_remove = {};

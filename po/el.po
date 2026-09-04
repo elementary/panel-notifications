@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 16:38+0000\n"
+"POT-Creation-Date: 2026-09-04 20:13+0000\n"
 "PO-Revision-Date: 2026-07-25 22:01+0000\n"
 "Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
 "Language-Team: Greek <https://l10n.elementaryos.org/projects/wingpanel/"
@@ -74,25 +74,25 @@ msgstr "Ρυθμίσεις ειδοποιήσεων…"
 msgid "No Notifications"
 msgstr "Δεν έχετε ειδοποιήσεις"
 
-#: src/Widgets/NotificationEntry.vala:319
-msgid "Delete"
-msgstr "Διαγραφή"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/ListHeader.vala:68
 #, fuzzy, c-format
 #| msgid "Clear All Notifications"
 msgid "Clear all %s notifications"
 msgstr "Εκκαθάριση όλων των ειδοποιήσεων"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show less"
 msgstr "Εμφάνιση λιγότερων"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show more"
 msgstr "Εμφάνιση περισσότερων"
 
-#: src/Services/Notification.vala:150
+#: src/Widgets/ListItem.vala:337
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: src/Services/Notification.vala:154
 msgid "Other"
 msgstr "Άλλα"
 

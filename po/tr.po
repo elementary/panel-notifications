@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 16:38+0000\n"
+"POT-Creation-Date: 2026-09-04 20:13+0000\n"
 "PO-Revision-Date: 2022-06-08 18:07+0000\n"
 "Last-Translator: Özgür Baskin <queeup@zoho.com>\n"
 "Language-Team: Turkish <https://l10n.elementary.io/projects/wingpanel/"
@@ -74,24 +74,24 @@ msgstr "Bildirim Ayarları…"
 msgid "No Notifications"
 msgstr "Bildirim Yok"
 
-#: src/Widgets/NotificationEntry.vala:319
-msgid "Delete"
-msgstr "Sil"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/ListHeader.vala:68
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "Bütün %s bildirimi temizle"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show more"
 msgstr ""
 
-#: src/Services/Notification.vala:150
+#: src/Widgets/ListItem.vala:337
+msgid "Delete"
+msgstr "Sil"
+
+#: src/Services/Notification.vala:154
 msgid "Other"
 msgstr "Diğer"
 

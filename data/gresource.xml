@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/io/elementary/wingpanel/notifications">
-    <file compressed="true">AppEntry.css</file>
+    <file compressed="true">ListHeader.css</file>
     <file compressed="true">ListItem.css</file>
     <file compressed="true" preprocess="xml-stripblanks">icons/notification.svg</file>
   </gresource>
