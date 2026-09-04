@@ -73,6 +73,8 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         var list_view = new Gtk.ListView (new Gtk.NoSelection (sort_list_model), item_factory) {
             header_factory = header_factory,
+            margin_top = 3,
+            margin_bottom = 3,
             single_click_activate = true
         };
         list_view.remove_css_class (Granite.STYLE_CLASS_VIEW);
