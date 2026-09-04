@@ -42,6 +42,7 @@ shared_module(
     'src/Widgets/NotificationsList.vala',
     'src/Widgets/ListHeader.vala',
     'src/Widgets/ListItem.vala',
+    'src/Widgets/SettingsToggle.vala',
     'src/Widgets/Symbol.vala',
     'src/Services/NotificationsMonitor.vala',
     'src/Services/Notification.vala',
