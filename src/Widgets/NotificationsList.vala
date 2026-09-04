@@ -43,6 +43,8 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         var listbox = new Gtk.ListBox () {
             activate_on_single_click = true,
+            margin_top = 3,
+            margin_bottom = 3,
             selection_mode = NONE
         };
         listbox.bind_model (sort_list_model, create_widget_func);

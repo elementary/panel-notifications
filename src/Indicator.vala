@@ -92,12 +92,10 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             not_disturb_switch.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
 
             var dnd_switch_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
-                margin_top = 3,
-                margin_bottom = 3
+                margin_top = 3
             };
 
             var clear_all_btn_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
-                margin_top = 3,
                 margin_bottom = 3
             };
 
