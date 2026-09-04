@@ -98,8 +98,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         var notification_entry = new NotificationEntry ();
         notification_entry.remove.connect (remove_notification);
 
-        var list_item = (Gtk.ListItem) item;
-        list_item.child = notification_entry;
+        ((Gtk.ListItem) item).child = notification_entry
     }
 
     private void bind_factory (Object item) {
@@ -117,11 +116,10 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private void setup_header_factory (Object item) {
-        var app_entry =  new AppEntry ();
+        var app_entry = new AppEntry ();
         app_entry.clear.connect (clear_app_entry);
 
-        var list_item = (Gtk.ListHeader) item;
-        list_item.child = app_entry;
+        ((Gtk.ListHeader) item).child = app_entry;
     }
 
     private void bind_header_factory (Object item) {
