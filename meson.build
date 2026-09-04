@@ -40,7 +40,7 @@ shared_module(
     meson.project_name(),
     'src/Indicator.vala',
     'src/Widgets/NotificationsList.vala',
-    'src/Widgets/NotificationEntry.vala',
+    'src/Widgets/ListItem.vala',
     'src/Widgets/AppEntry.vala',
     'src/Widgets/Symbol.vala',
     'src/Services/NotificationsMonitor.vala',

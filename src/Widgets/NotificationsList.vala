@@ -104,7 +104,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private void setup_factory (Object item) {
-        var notification_entry = new NotificationEntry ();
+        var notification_entry = new ListItem ();
         notification_entry.remove.connect ((notification) => remove_notification (notification));
 
         ((Gtk.ListItem) item).child = notification_entry;
@@ -113,14 +113,14 @@ public class Notifications.NotificationsList : Granite.Bin {
     private void bind_factory (Object item) {
         var list_item = (Gtk.ListItem) item;
 
-        var notification_entry = (NotificationEntry) list_item.child;
+        var notification_entry = (ListItem) list_item.child;
         notification_entry.bind ((Notification) list_item.item);
     }
 
     private void unbind_factory (Object item) {
         var list_item = (Gtk.ListItem) item;
 
-        var notification_entry = (NotificationEntry) list_item.child;
+        var notification_entry = (ListItem) list_item.child;
         notification_entry.unbind ();
     }
 
