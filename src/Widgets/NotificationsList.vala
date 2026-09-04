@@ -268,8 +268,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         } else {
             try {
                 var context = get_display ().get_app_launch_context ();
-                notification.app_info.launch (null, context);
-                notification.server_id = 0;
+                notification.launch (context);
                 close_popover ();
             } catch (Error e) {
                 warning ("Unable to launch app: %s", e.message);
