@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: notifications-indicator\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 16:38+0000\n"
+"POT-Creation-Date: 2026-09-04 20:13+0000\n"
 "PO-Revision-Date: 2024-08-07 18:16+0000\n"
 "Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Urdu <https://l10n.elementary.io/projects/wingpanel/wingpanel-"
@@ -76,23 +76,23 @@ msgstr ""
 msgid "No Notifications"
 msgstr ""
 
-#: src/Widgets/NotificationEntry.vala:319
-msgid "Delete"
-msgstr ""
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/ListHeader.vala:68
 #, c-format
 msgid "Clear all %s notifications"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show more"
 msgstr ""
 
-#: src/Services/Notification.vala:150
+#: src/Widgets/ListItem.vala:337
+msgid "Delete"
+msgstr ""
+
+#: src/Services/Notification.vala:154
 msgid "Other"
 msgstr "دیگر"

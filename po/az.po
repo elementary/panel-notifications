@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 16:38+0000\n"
+"POT-Creation-Date: 2026-09-04 20:13+0000\n"
 "PO-Revision-Date: 2017-12-20 00:11+0000\n"
 "Last-Translator: Вагиф Кязым <vaqif134@gmail.com>\n"
 "Language-Team: Azerbaijani <https://weblate.elementary.io/projects/wingpanel/"
@@ -79,25 +79,25 @@ msgstr "Bildiriş ayarları…"
 msgid "No Notifications"
 msgstr "Bildiriş yoxdur"
 
-#: src/Widgets/NotificationEntry.vala:319
-msgid "Delete"
-msgstr ""
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/ListHeader.vala:68
 #, fuzzy, c-format
 #| msgid "Clear All Notifications"
 msgid "Clear all %s notifications"
 msgstr "Bütün bildirişləri sil"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show more"
 msgstr ""
 
-#: src/Services/Notification.vala:150
+#: src/Widgets/ListItem.vala:337
+msgid "Delete"
+msgstr ""
+
+#: src/Services/Notification.vala:154
 msgid "Other"
 msgstr ""
 

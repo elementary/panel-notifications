@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 16:38+0000\n"
+"POT-Creation-Date: 2026-09-04 20:13+0000\n"
 "PO-Revision-Date: 2016-04-30 11:17+0000\n"
 "Last-Translator: Rockworld <sumoisrock@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,25 +76,25 @@ msgstr "ค่าตั้งการแจ้งเหตุ..."
 msgid "No Notifications"
 msgstr "ไม่มีการแจ้งเหตุ"
 
-#: src/Widgets/NotificationEntry.vala:319
-msgid "Delete"
-msgstr ""
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/ListHeader.vala:68
 #, fuzzy, c-format
 #| msgid "Clear All Notifications"
 msgid "Clear all %s notifications"
 msgstr "ล้างการแจ้งเหตุทั้งหมด"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show less"
 msgstr ""
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show more"
 msgstr ""
 
-#: src/Services/Notification.vala:150
+#: src/Widgets/ListItem.vala:337
+msgid "Delete"
+msgstr ""
+
+#: src/Services/Notification.vala:154
 msgid "Other"
 msgstr ""
 

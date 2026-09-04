@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 16:38+0000\n"
+"POT-Creation-Date: 2026-09-04 20:13+0000\n"
 "PO-Revision-Date: 2024-09-05 16:16+0000\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese (Traditional) <https://l10n.elementary.io/projects/"
@@ -72,24 +72,24 @@ msgstr "通知設定值…"
 msgid "No Notifications"
 msgstr "沒有通知"
 
-#: src/Widgets/NotificationEntry.vala:319
-msgid "Delete"
-msgstr "刪除"
-
-#: src/Widgets/AppEntry.vala:68
+#: src/Widgets/ListHeader.vala:68
 #, c-format
 msgid "Clear all %s notifications"
 msgstr "清除所有 %s 的通知"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show less"
 msgstr "顯示更少"
 
-#: src/Widgets/AppEntry.vala:98
+#: src/Widgets/ListHeader.vala:97
 msgid "Show more"
 msgstr "顯示更多"
 
-#: src/Services/Notification.vala:150
+#: src/Widgets/ListItem.vala:337
+msgid "Delete"
+msgstr "刪除"
+
+#: src/Services/Notification.vala:154
 msgid "Other"
 msgstr "其他"
 
