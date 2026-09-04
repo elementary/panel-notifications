@@ -95,7 +95,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         };
         main_box.append (not_disturb_switch);
         main_box.append (dnd_switch_separator);
-        main_box.append (scrolled);
+        main_box.append (stack);
         main_box.append (clear_all_btn_separator);
         main_box.append (clear_all_btn);
         main_box.append (settings_btn);
