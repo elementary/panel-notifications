@@ -10,17 +10,17 @@ public class Notifications.NotificationsList : Granite.Bin {
     public const string ACTION_GROUP_PREFIX = "notifications-list";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
-    private static GLib.HashTable<string, GLib.DateTime> app_datetime;
-
-    private Gtk.Stack stack;
-    private Gtk.SortListModel sort_list_model;
-
     private ListStore list_store;
     public ListModel notification_items {
         get {
             return list_store;
         }
     }
+
+    private static GLib.HashTable<string, GLib.DateTime> app_datetime;
+
+    private Gtk.SortListModel sort_list_model;
+    private Gtk.Stack stack;
 
     static construct {
         app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
