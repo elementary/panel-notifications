@@ -8,8 +8,6 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
     public Notification notification { get; private set; }
 
-    private uint timeout_id;
-
     private const int ICON_SIZE_PRIMARY = 48;
     private const int ICON_SIZE_SECONDARY = 24;
 
@@ -17,6 +15,7 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
     private static Regex tag_regex;
     private static Settings settings;
 
+    private uint timeout_id;
     private Granite.Box action_area;
     private Gtk.Image primary_image;
     private Gtk.Image secondary_image;
@@ -247,12 +246,31 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
         body_label.label = fix_markup (entry_body);
 
-        if (notification.buttons.length () > 0) {
-            action_area.visible = true;
+        for (int i = 0; i < notification.actions.length; i += 2) {
+            if (notification.actions[i] == Notification.DEFAULT_ACTION_NAME) {
+                continue;
+            }
 
-            foreach (var button in notification.buttons) {
-                action_area.append (button);
+            var label = notification.actions[i + 1].strip ();
+            if (label == "") {
+                warning ("Action '%s' sent without label, skipping…", notification.actions[i]);
+                continue;
+            }
+
+            var button = new Gtk.Button.with_label (label) {
+                action_name = string.join (
+                    ".",
+                    NotificationsList.ACTION_GROUP_PREFIX,
+                    notification.server_id.to_string (),
+                    notification.actions[i]
+                )
             };
+
+            action_area.append (button);
+        }
+
+        if (notification.actions.length >= 2) {
+            action_area.visible = true;
         }
 
         settings.bind_with_mapping (
