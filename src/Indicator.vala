@@ -96,13 +96,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 margin_bottom = 3
             };
 
-            var scrolled = new Gtk.ScrolledWindow () {
-                child = nlist,
-                hscrollbar_policy = NEVER,
-                max_content_height = 500,
-                propagate_natural_height = true
-            };
-
             var clear_all_btn_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
                 margin_top = 3,
                 margin_bottom = 3
@@ -121,7 +114,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             };
             main_box.append (not_disturb_switch);
             main_box.append (dnd_switch_separator);
-            main_box.append (scrolled);
+            main_box.append (nlist);
             main_box.append (clear_all_btn_separator);
             main_box.append (clear_all_btn);
             main_box.append (settings_btn);

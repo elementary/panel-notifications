@@ -58,9 +58,16 @@ public class Notifications.NotificationsList : Granite.Bin {
         };
         list_view.remove_css_class (Granite.STYLE_CLASS_VIEW);
 
+        var scrolled = new Gtk.ScrolledWindow () {
+            child = list_view,
+            hscrollbar_policy = NEVER,
+            max_content_height = 500,
+            propagate_natural_height = true
+        };
+
         stack = new Gtk.Stack ();
         stack.add_named (placeholder, "placeholder");
-        stack.add_named (list_view, "list");
+        stack.add_named (scrolled, "list");
 
         child = stack;
 
@@ -185,13 +192,13 @@ public class Notifications.NotificationsList : Granite.Bin {
         items_changed ();
     }
 
-    private void remove_notification (NotificationEntry notification_entry) {
-        var app_id = notification_entry.notification.desktop_id;
+    private void remove_notification (Notification notification) {
+        var app_id = notification.desktop_id;
 
         uint pos = -1;
-        if (list_store.find (notification_entry.notification, out pos)) {
+        if (list_store.find (notification, out pos)) {
             list_store.remove (pos);
-            Session.get_instance ().remove_notification (notification_entry.notification);
+            Session.get_instance ().remove_notification (notification);
         }
 
         var items_for_appid = new Gtk.FilterListModel (

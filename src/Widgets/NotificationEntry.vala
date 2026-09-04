@@ -4,7 +4,7 @@
 */
 
 public class Notifications.NotificationEntry : Gtk.ListBoxRow {
-    public signal void remove ();
+    public signal void remove (Notification notification);
 
     public Notification notification { get; private set; }
 
@@ -278,11 +278,11 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
     private void dismiss () {
         if (!revealer.child_revealed) {
-            remove ();
+            remove (notification);
         } else {
             revealer.notify["child-revealed"].connect (() => {
                 if (!revealer.child_revealed) {
-                    remove ();
+                    remove (notification);
                 }
             });
             revealer.reveal_child = false;
