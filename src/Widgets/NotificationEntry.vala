@@ -296,10 +296,12 @@ public class Notifications.NotificationEntry : Gtk.ListBoxRow {
 
     private void dismiss () {
         if (!revealer.child_revealed) {
+            activate_action (Wingpanel.Indicator.MESSAGES + ".remove-notification");
             remove (notification);
         } else {
             revealer.notify["child-revealed"].connect (() => {
                 if (!revealer.child_revealed) {
+                    activate_action (Wingpanel.Indicator.MESSAGES + ".remove-notification");
                     remove (notification);
                 }
             });

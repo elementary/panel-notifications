@@ -17,6 +17,8 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private NotificationsList nlist;
     private NotificationsMonitor monitor;
 
+    private SimpleActionGroup action_group;
+
     public Indicator () {
         Object (
             code_name: Wingpanel.Indicator.MESSAGES,
@@ -37,6 +39,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         notify_settings = new GLib.Settings ("io.elementary.notifications");
         app_settings_cache = new Gee.HashMap<string, Settings> ();
 
+        var remove_notification_action = new SimpleAction ("remove-notification", VariantType.STRING);
+        // remove_notification_action.activate.connect (action_remove_notification);
+
+        action_group = new SimpleActionGroup ();
+        action_group.add_action (remove_notification_action);
+
         monitor = new NotificationsMonitor ();
     }
 
@@ -48,6 +56,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             };
 
             nlist = new NotificationsList ();
+            nlist.insert_action_group (Wingpanel.Indicator.MESSAGES, action_group);
             nlist.items_changed.connect (set_display_icon_name);
 
             monitor.notification_received.connect (on_notification_received);
