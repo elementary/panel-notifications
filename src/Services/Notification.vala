@@ -23,7 +23,7 @@ public class Notifications.Notification : Object {
         UNDEFINED = 4
     }
 
-    public const string DEFAULT_ACTION = "default";
+    public const string DEFAULT_ACTION_NAME = "default";
     public const string DESKTOP_ID_EXT = ".desktop";
 
     public string internal_id { get; construct set; } // Format: "timestamp.server_id"
@@ -34,7 +34,6 @@ public class Notifications.Notification : Object {
     public string app_icon;
     public string sender;
     public string[] actions;
-    public List<Gtk.Button> buttons;
     public string? default_action { get; private set; default = null; }
     public uint32 replaces_id;
     public uint32 server_id { get; construct set; default = 0; } // 0 means the notification is outdated i.e. not present in the server anymore
@@ -75,7 +74,10 @@ public class Notifications.Notification : Object {
         sender = _sender;
 
         actions = _actions;
-        buttons = validate_actions (actions);
+        if (actions[0] == DEFAULT_ACTION_NAME) {
+            //FIXME: server_id not saved??
+            default_action = server_id.to_string () + "." + DEFAULT_ACTION_NAME;
+        }
 
         timestamp = new GLib.DateTime.from_unix_local (_unix_time);
 
@@ -97,7 +99,9 @@ public class Notifications.Notification : Object {
         sender = message.get_sender ();
 
         actions = body.get_child_value (Column.ACTIONS).dup_strv ();
-        buttons = validate_actions (actions);
+        if (actions[0] == DEFAULT_ACTION_NAME) {
+            default_action = _id.to_string () + "." + DEFAULT_ACTION_NAME;
+        }
 
         timestamp = new GLib.DateTime.now_local ();
 
@@ -150,32 +154,6 @@ public class Notifications.Notification : Object {
             app_name = _("Other");
             desktop_id = FALLBACK_DESKTOP_ID;
         }
-    }
-
-    private List<Gtk.Button> validate_actions (string[] actions) {
-        var list = new List<Gtk.Button> ();
-
-        for (int i = 0; i < actions.length; i += 2) {
-            if (actions[i] == DEFAULT_ACTION) {
-                default_action = server_id.to_string () + "." + DEFAULT_ACTION;
-                continue;
-            }
-
-            var label = actions[i + 1].strip ();
-            if (label == "") {
-                warning ("Action '%s' sent without label, skipping…", actions[i]);
-                continue;
-            }
-
-            var button = new Gtk.Button.with_label (label) {
-                action_name = NotificationsList.ACTION_PREFIX + server_id.to_string () + "." + actions[i],
-                width_request = 86
-            };
-
-            list.append (button);
-        }
-
-        return list;
     }
 
     private string get_string (Variant tuple, int column) {
