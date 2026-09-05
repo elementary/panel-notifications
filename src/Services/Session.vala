@@ -92,7 +92,7 @@ public class Notifications.Session : GLib.Object {
     }
 
     public void add_notification (Notification notification, bool write_file = true) {
-        string id = notification.internal_id;
+        string id = "%i.%u".printf ((int) notification.timestamp.to_unix (), notification.server_id);
         key.set_int64 (id, UNIX_TIME_KEY, notification.timestamp.to_unix ());
         key.set_string (id, APP_ICON_KEY, notification.app_icon);
         key.set_string (id, APP_NAME_KEY, notification.app_name);
@@ -120,7 +120,9 @@ public class Notifications.Session : GLib.Object {
                     critical ("Unable to delete tmpfile: %s", notification.image_path);
                 }
             }
-            key.remove_group (notification.internal_id);
+
+            var id = "%i.%u".printf ((int) notification.timestamp.to_unix (), notification.server_id);
+            key.remove_group (id);
         } catch (KeyFileError e) {
             warning (e.message);
         }
