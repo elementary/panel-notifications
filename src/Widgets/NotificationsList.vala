@@ -4,27 +4,20 @@
 */
 
 public class Notifications.NotificationsList : Granite.Bin {
+    public signal void remove_notification (Notification notification);
+    public signal void clear_all ();
     public signal void close_popover ();
-    public signal void items_changed ();
 
     public const string ACTION_GROUP_PREFIX = "notifications-list";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
-    private ListStore list_store;
-    public ListModel notification_items {
-        get {
-            return list_store;
-        }
-    }
-
-    private static GLib.HashTable<string, GLib.DateTime> app_datetime;
+    public ListModel list_model { get; construct; }
 
     private Gtk.Button clear_all_btn;
-    private Gtk.SortListModel sort_list_model;
     private Gtk.Stack stack;
 
-    static construct {
-        app_datetime = new GLib.HashTable<string, GLib.DateTime> (str_hash, str_equal);
+    public NotificationsList (ListModel list_model) {
+        Object (list_model: list_model);
     }
 
     construct {
@@ -56,12 +49,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         placeholder.add_css_class (Granite.STYLE_CLASS_H2_LABEL);
         placeholder.add_css_class (Granite.CssClass.DIM);
 
-        list_store = new GLib.ListStore (typeof (Notification));
-
-        sort_list_model = new Gtk.SortListModel (list_store, new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) Notification.compare)) {
-            section_sorter = new Gtk.CustomSorter ((GLib.CompareDataFunc<GLib.Object>) section_compare)
-        };
-
         var item_factory = new Gtk.SignalListItemFactory ();
         item_factory.setup.connect (setup_factory);
         item_factory.bind.connect (bind_factory);
@@ -71,7 +58,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         header_factory.setup.connect (setup_header_factory);
         header_factory.bind.connect (bind_header_factory);
 
-        var list_view = new Gtk.ListView (new Gtk.NoSelection (sort_list_model), item_factory) {
+        var list_view = new Gtk.ListView (new Gtk.NoSelection (list_model), item_factory) {
             header_factory = header_factory,
             margin_top = 3,
             margin_bottom = 3,
@@ -106,30 +93,19 @@ public class Notifications.NotificationsList : Granite.Bin {
 
         list_view.activate.connect (on_row_activated);
 
-        list_store.items_changed.connect (on_items_changed);
-
-        var previous_session = Session.get_instance ().get_session_notifications ();
-        // Do not block animated drawing of wingpanel
-        Idle.add_once (() => {
-            foreach (unowned var notification in previous_session) {
-                add_entry (notification);
-            }
-        });
+        list_model.items_changed.connect (on_items_changed);
+        on_items_changed ();
 
         var settings = new GLib.Settings ("io.elementary.notifications");
         settings.bind ("do-not-disturb", not_disturb_switch, "active", DEFAULT);
 
-        clear_all_btn.clicked.connect (clear_all);
+        clear_all_btn.clicked.connect (() => clear_all ());
         settings_btn.clicked.connect (show_settings);
-    }
-
-    private static int section_compare (Notification a, Notification b) {
-        return app_datetime[b.desktop_id].compare (app_datetime[a.desktop_id]);
     }
 
     private void setup_factory (Object item) {
         var notification_entry = new ListItem ();
-        notification_entry.remove.connect (remove_notification);
+        notification_entry.remove.connect ((notification) => remove_notification (notification));
 
         ((Gtk.ListItem) item).child = notification_entry;
     }
@@ -164,25 +140,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         app_entry.app_id = notification.desktop_id;
     }
 
-    public async void add_entry (Notification notification) {
-        unowned GLib.DateTime? time = app_datetime[notification.desktop_id];
-        if (time == null || time.compare (notification.timestamp) <= 0) {
-            app_datetime[notification.desktop_id] = notification.timestamp;
-            sort_list_model.section_sorter.changed (DIFFERENT);
-        }
-
-        list_store.append (notification);
-
-        Idle.add (add_entry.callback);
-        yield;
-    }
-
-    public void clear_all () {
-        Session.get_instance ().clear ();
-        list_store.remove_all ();
-        close_popover ();
-    }
-
     private void show_settings () {
         close_popover ();
 
@@ -196,21 +153,12 @@ public class Notifications.NotificationsList : Granite.Bin {
         });
     }
 
-    public uint get_n_app_items () {
-        var app_list = new GenericSet<string> (str_hash, str_equal);
-        for (var i = 0; i < list_store.n_items; i++) {
-            app_list.add (((Notification) list_store.get_item (i)).desktop_id);
-        }
-
-        return app_list.length;
-    }
-
     private void clear_app_entry (ListHeader app_entry) {
         app_entry.clear.disconnect (clear_app_entry);
 
         Notification[] to_remove = {};
-        for (int i = 0; i < list_store.n_items; i++) {
-            var notification = (Notification) list_store.get_item (i);
+        for (int i = 0; i < list_model.get_n_items (); i++) {
+            var notification = (Notification) list_model.get_item (i);
             if (notification.desktop_id == app_entry.app_id) {
                 notification.server_id = 0;
                 to_remove += notification;
@@ -221,44 +169,18 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private void on_items_changed () {
-        if (list_store.n_items == 0) {
+        if (list_model.get_n_items () == 0) {
             stack.visible_child_name = "placeholder";
             Session.get_instance ().clear ();
         } else {
             stack.visible_child_name = "list";
         }
 
-        clear_all_btn.sensitive = list_store.n_items > 0;
-
-        items_changed ();
-    }
-
-    private void remove_notification (Notification notification) {
-        var app_id = notification.desktop_id;
-
-        uint pos = -1;
-        if (list_store.find (notification, out pos)) {
-            list_store.remove (pos);
-            Session.get_instance ().remove_notification (notification);
-        }
-
-        var items_for_appid = new Gtk.FilterListModel (
-            list_store, new Gtk.CustomFilter ((item) => {
-                return ((Notification) item).desktop_id == app_id;
-            })
-        );
-
-        if (items_for_appid.n_items == 0) {
-            var settings = new Settings ("io.elementary.panel.notifications");
-            var headers = (HashTable<string, bool>) settings.get_value ("headers");
-            if (headers.remove (app_id)) {
-                settings.set_value ("headers", headers);
-            }
-        }
+        clear_all_btn.sensitive = list_model.get_n_items () > 0;
     }
 
     private void on_row_activated (uint pos) {
-        var notification = (Notification) sort_list_model.get_item (pos);
+        var notification = (Notification) list_model.get_item (pos);
         if (notification.default_action != null) {
             activate_action (
                 ACTION_PREFIX + notification.default_action,
