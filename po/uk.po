@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-04 20:13+0000\n"
-"PO-Revision-Date: 2026-09-03 00:01+0000\n"
+"PO-Revision-Date: 2026-09-11 17:01+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementaryos.org/projects/wingpanel/"
 "notifications/uk/>\n"
@@ -52,14 +52,12 @@ msgstr[1] "%u сповіщення"
 msgstr[2] "%u сповіщень"
 
 #: src/Indicator.vala:175
-#, fuzzy, c-format
-#| msgid "%i app"
-#| msgid_plural "%i apps"
+#, c-format
 msgid "%i app"
 msgid_plural "%u apps"
 msgstr[0] "%i застосунок"
-msgstr[1] "%i застосунки"
-msgstr[2] "%i застосунків"
+msgstr[1] "%u застосунки"
+msgstr[2] "%u застосунків"
 
 #: src/Widgets/NotificationsList.vala:31
 msgid "Do Not Disturb"
