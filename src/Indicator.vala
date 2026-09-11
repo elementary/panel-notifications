@@ -59,10 +59,14 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             }
         });
 
+        var clear_all_action = new SimpleAction ("clear-all", null);
+        clear_all_action.activate.connect (clear_all);
+
         var clear_app_action = new SimpleAction ("clear-app", VariantType.STRING);
         clear_app_action.activate.connect (clear_app);
 
         action_group = new SimpleActionGroup ();
+        action_group.add_action (clear_all_action);
         action_group.add_action (clear_app_action);
     }
 
@@ -112,7 +116,6 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     public override Gtk.Widget? get_widget () {
         if (nlist == null) {
             nlist = new NotificationsList (sort_list_model);
-            nlist.clear_all.connect (clear_all);
             nlist.close_popover.connect (() => close ());
             nlist.remove_notification.connect (remove_notification);
             nlist.insert_action_group (Wingpanel.Indicator.MESSAGES, action_group);

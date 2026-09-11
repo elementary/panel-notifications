@@ -5,7 +5,6 @@
 
 public class Notifications.NotificationsList : Granite.Bin {
     public signal void remove_notification (Notification notification);
-    public signal void clear_all ();
     public signal void close_popover ();
 
     public const string ACTION_GROUP_PREFIX = "notifications-list";
@@ -32,6 +31,7 @@ public class Notifications.NotificationsList : Granite.Bin {
         };
 
         clear_all_btn = new Wingpanel.PopoverMenuItem () {
+            action_name = Wingpanel.Indicator.MESSAGES + ".clear-all",
             text = _("Clear All Notifications")
         };
 
@@ -99,7 +99,6 @@ public class Notifications.NotificationsList : Granite.Bin {
         var settings = new GLib.Settings ("io.elementary.notifications");
         settings.bind ("do-not-disturb", not_disturb_switch, "active", DEFAULT);
 
-        clear_all_btn.clicked.connect (() => clear_all ());
         settings_btn.clicked.connect (show_settings);
     }
 
