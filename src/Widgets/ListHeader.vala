@@ -4,8 +4,6 @@
 */
 
 public class Notifications.ListHeader : Granite.Bin {
-    public signal void clear ();
-
     private string _app_id = "";
     public string app_id {
         get {
@@ -13,6 +11,11 @@ public class Notifications.ListHeader : Granite.Bin {
         }
         set {
             _app_id = value;
+
+            if (value != null) {
+                clear_btn_entry.action_target = new Variant.string (value);
+            }
+
 
             if (value in headers) {
                 expander.active = headers[value];
@@ -26,6 +29,7 @@ public class Notifications.ListHeader : Granite.Bin {
     private static Settings settings;
     private static HashTable<string, bool> headers;
 
+    private Gtk.Button clear_btn_entry;
     private Gtk.ToggleButton expander;
 
     static construct {
@@ -64,7 +68,8 @@ public class Notifications.ListHeader : Granite.Bin {
         var clear_btn_image = new Gtk.Image.from_icon_name ("edit-clear-all-symbolic");
         clear_btn_image.add_css_class ("sweep-animation");
 
-        var clear_btn_entry = new Gtk.Button () {
+        clear_btn_entry = new Gtk.Button () {
+            action_name = Wingpanel.Indicator.MESSAGES + ".clear-app",
             tooltip_text = _("Clear all %s notifications").printf (app_name),
             child = clear_btn_image,
             has_frame = false
@@ -80,11 +85,12 @@ public class Notifications.ListHeader : Granite.Bin {
 
         bind_property ("app-name", label, "label");
         bind_property ("app-name", clear_btn_entry, "tooltip-text", DEFAULT,
-                       (binding, _app_name, ref _tooltip_text) => {
-                           _tooltip_text = _("Clear all %s notifications").printf ((string) _app_name);
-                           return true;
-                       },
-                       () => { return false; });
+           (binding, _app_name, ref _tooltip_text) => {
+               _tooltip_text = _("Clear all %s notifications").printf ((string) _app_name);
+               return true;
+           },
+           () => { return false; }
+       );
 
         expander.toggled.connect (() => {
             headers[app_id] = expander.active;
@@ -93,10 +99,6 @@ public class Notifications.ListHeader : Granite.Bin {
 
         clear_btn_entry.clicked.connect (() => {
             clear_btn_image.add_css_class ("active");
-            GLib.Timeout.add (600, () => {
-                clear (); // Causes notification list to destroy this app entry after clearing its notification entries
-                return GLib.Source.REMOVE;
-            });
         });
 
         expander.bind_property ("active", image, "tooltip-text", SYNC_CREATE, (binding, srcval, ref targetval) => {

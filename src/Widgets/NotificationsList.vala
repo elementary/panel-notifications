@@ -124,10 +124,7 @@ public class Notifications.NotificationsList : Granite.Bin {
     }
 
     private void setup_header_factory (Object item) {
-        var app_entry = new ListHeader ();
-        app_entry.clear.connect (clear_app_entry);
-
-        ((Gtk.ListHeader) item).child = app_entry;
+        ((Gtk.ListHeader) item).child = new ListHeader ();
     }
 
     private void bind_header_factory (Object item) {
@@ -150,21 +147,6 @@ public class Notifications.NotificationsList : Granite.Bin {
                 warning ("Failed to open notifications settings: %s", e.message);
             }
         });
-    }
-
-    private void clear_app_entry (ListHeader app_entry) {
-        app_entry.clear.disconnect (clear_app_entry);
-
-        Notification[] to_remove = {};
-        for (int i = 0; i < list_model.get_n_items (); i++) {
-            var notification = (Notification) list_model.get_item (i);
-            if (notification.desktop_id == app_entry.app_id) {
-                notification.server_id = 0;
-                to_remove += notification;
-            }
-        }
-
-        Session.get_instance ().remove_notifications (to_remove);
     }
 
     private void on_items_changed () {

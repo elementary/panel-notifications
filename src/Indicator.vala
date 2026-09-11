@@ -62,8 +62,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         var clear_all_action = new SimpleAction ("clear-all", null);
         clear_all_action.activate.connect (clear_all);
 
+        var clear_app_action = new SimpleAction ("clear-app", VariantType.STRING);
+        clear_app_action.activate.connect (clear_app);
+
         action_group = new SimpleActionGroup ();
         action_group.add_action (clear_all_action);
+        action_group.add_action (clear_app_action);
     }
 
     public override Gtk.Widget get_display_widget () {
@@ -154,14 +158,14 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 
     private void remove_notification (Notification notification) {
-        var app_id = notification.desktop_id;
+        Session.get_instance ().remove_notification (notification);
 
         uint pos = -1;
         if (list_store.find (notification, out pos)) {
             list_store.remove (pos);
-            Session.get_instance ().remove_notification (notification);
         }
 
+        var app_id = notification.desktop_id;
         var items_for_appid = new Gtk.FilterListModel (
             list_store, new Gtk.CustomFilter ((item) => {
                 return ((Notification) item).desktop_id == app_id;
@@ -195,6 +199,19 @@ public class Notifications.Indicator : Wingpanel.Indicator {
         Session.get_instance ().clear ();
         list_store.remove_all ();
         close ();
+    }
+
+    private void clear_app (SimpleAction action, Variant? parameter) {
+        var app_id = parameter.get_string ();
+        for (int i = 0; i < list_store.n_items; i++) {
+            var notification = (Notification) list_store.get_item (i);
+            if (notification.desktop_id == app_id) {
+                // Wait so that the header won't be removed before its animation finishes
+                Timeout.add_once (600, () => {
+                    remove_notification (notification);
+                });
+            }
+        }
     }
 
     private void set_display_icon_name () {
