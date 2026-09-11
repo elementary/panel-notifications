@@ -13,6 +13,7 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     private static GLib.Settings? keybinding_settings;
     private Gee.HashMap<string, Settings> app_settings_cache;
     private GLib.Settings notify_settings;
+    private SimpleActionGroup action_group;
 
     private GLib.ListStore list_store;
     private Gtk.SortListModel sort_list_model;
@@ -57,6 +58,12 @@ public class Notifications.Indicator : Wingpanel.Indicator {
                 add_entry (notification);
             }
         });
+
+        var clear_all_action = new SimpleAction ("clear-all", null);
+        clear_all_action.activate.connect (clear_all);
+
+        action_group = new SimpleActionGroup ();
+        action_group.add_action (clear_all_action);
     }
 
     public override Gtk.Widget get_display_widget () {
@@ -105,9 +112,9 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     public override Gtk.Widget? get_widget () {
         if (nlist == null) {
             nlist = new NotificationsList (sort_list_model);
-            nlist.clear_all.connect (clear_all);
             nlist.close_popover.connect (() => close ());
             nlist.remove_notification.connect (remove_notification);
+            nlist.insert_action_group (Wingpanel.Indicator.MESSAGES, action_group);
         }
 
         return nlist;
