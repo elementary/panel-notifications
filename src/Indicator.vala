@@ -154,6 +154,14 @@ public class Notifications.Indicator : Wingpanel.Indicator {
             sort_list_model.section_sorter.changed (DIFFERENT);
         }
 
+        // Create value if it doesn't exist and set true
+        var settings = new Settings ("io.elementary.panel.notifications");
+        var headers = (HashTable<string, bool>) settings.get_value ("headers");
+        if (!headers.contains (notification.desktop_id)) {
+            headers[notification.desktop_id] = true;
+            settings.set_value ("headers", headers);
+        }
+
         list_store.append (notification);
     }
 
