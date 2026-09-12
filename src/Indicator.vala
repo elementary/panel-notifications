@@ -272,10 +272,10 @@ public class Notifications.Indicator : Wingpanel.Indicator {
     }
 }
 
-public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorManager.ServerType server_type) {
+public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.ServerType server_type) {
     debug ("Activating Notifications Indicator");
 
-    if (server_type != Wingpanel.IndicatorManager.ServerType.SESSION) {
+    if (server_type != Wingpanel.ServerType.SESSION) {
         return null;
     }
 
