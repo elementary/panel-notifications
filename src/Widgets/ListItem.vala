@@ -164,6 +164,12 @@ public class Notifications.ListItem : Granite.Bin {
             dismiss ();
         });
 
+        carousel.page_changed.connect (() => {
+            if (carousel.position != 1) {
+                dismiss ();
+            }
+        });
+
         var motion_controller = new Gtk.EventControllerMotion ();
 
         motion_controller.enter.connect (() => {

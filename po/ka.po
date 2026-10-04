@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-04 20:13+0000\n"
-"PO-Revision-Date: 2026-09-03 00:01+0000\n"
+"PO-Revision-Date: 2026-09-25 03:03+0000\n"
 "Last-Translator: NorwayFun <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://l10n.elementaryos.org/projects/wingpanel/"
 "notifications/ka/>\n"
@@ -49,9 +49,7 @@ msgid_plural "%u notifications"
 msgstr[0] "%u გაფრთხლება"
 
 #: src/Indicator.vala:175
-#, fuzzy, c-format
-#| msgid "%i app"
-#| msgid_plural "%i apps"
+#, c-format
 msgid "%i app"
 msgid_plural "%u apps"
 msgstr[0] "%i აპი"
